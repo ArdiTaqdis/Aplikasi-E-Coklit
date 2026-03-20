@@ -58,9 +58,14 @@
     resetForm(modal?.querySelector("form") || modal);
     show(modal);
 
-    // 🔥 AUTO SET HUBUNGAN
+    // hubungan auto
     const hub = document.getElementById("b_hubungan");
     if (hub) hub.value = "Kepala Keluarga";
+
+    // 🔥 INIT SYNC
+    setTimeout(() => {
+      initAutoSyncKK();
+    }, 50);
   };
 
   window.closeModal = function () {
