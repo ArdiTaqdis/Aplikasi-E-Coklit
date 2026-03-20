@@ -57,6 +57,11 @@
     const modal = $("modalKK");
     resetForm(modal?.querySelector("form") || modal);
     show(modal);
+
+    // 🔥 WAJIB INI
+    if (typeof initWilayah === "function") {
+      initWilayah();
+    }
   };
 
   window.closeModal = function () {
@@ -67,7 +72,13 @@
    * MODAL EDIT KK
    * ===================== */
 
-  window.openModalEditKK = () => show($("modalEditKK"));
+  window.openModalEditKK = () => {
+    show($("modalEditKK"));
+
+    if (typeof initWilayah === "function") {
+      initWilayah();
+    }
+  };
   window.closeModalEditKK = () => hide($("modalEditKK"));
 
   /* =====================

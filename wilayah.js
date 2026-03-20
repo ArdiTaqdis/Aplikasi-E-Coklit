@@ -97,16 +97,16 @@
    * PUBLIC INIT
    * ===================== */
   window.initWilayah = async function () {
-    if (window.__wilayahReady) return;
+    // LOAD DATA CUMA SEKALI
+    if (!window.__wilayahDataLoaded) {
+      await loadWilayah();
+      window.__wilayahDataLoaded = true;
+    }
 
-    await loadWilayah();
-
+    // 🔥 INIT CASCADE SELALU DIJALANKAN
     initCascade("sel_");
     initCascade("edtA_");
-
-    window.__wilayahReady = true;
   };
-
   /* =====================
    * AUTO LOAD
    * ===================== */
