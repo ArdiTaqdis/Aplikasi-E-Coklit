@@ -2,7 +2,7 @@
 BASE URL (WAJIB GANTI)
 ========================= */
 const BASE_URL =
-  "https://script.google.com/macros/s/AKfycbx7votzMXwnDhVbf_LvDB0SAqe6HMa841GhHinEatxsFdnGKLlSlJ6fBP6NJePBMkDl/exec";
+  "https://script.google.com/macros/s/AKfycbzid3-ncn3bJ19PRMtSzik2v_8t82sYbUgAeagLEozpF0q5mNiJ2jJvP4sDvuTkQkGC/exec";
 
 /* =========================
 CORE API
