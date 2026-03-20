@@ -629,6 +629,37 @@ if (!localStorage.getItem("userSession") && app) {
     }, 50);
   };
 
+  /* =====================
+   * AUTO SYNC KK → ANGGOTA
+   * ===================== */
+
+  function syncKepalaToAnggota() {
+    const noKK = document.getElementById("kk_no")?.value;
+    const nik = document.getElementById("kk_nik")?.value;
+    const nama = document.getElementById("kk_nama")?.value;
+
+    const b_noKK = document.getElementById("b_noKK");
+    const b_nik = document.getElementById("b_nik");
+    const b_nama = document.getElementById("b_nama");
+
+    if (b_noKK) b_noKK.value = noKK || "";
+    if (b_nik) b_nik.value = nik || "";
+    if (b_nama) b_nama.value = nama || "";
+  }
+
+  /* =====================
+   * REGISTER EVENT
+   * ===================== */
+
+  function initAutoSyncKK() {
+    ["kk_no", "kk_nik", "kk_nama"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      el.addEventListener("input", syncKepalaToAnggota);
+    });
+  }
+
   window.resetFormAnggota = function () {
     const fields = [
       "agt_nik",

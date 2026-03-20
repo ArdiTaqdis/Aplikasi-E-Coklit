@@ -58,10 +58,9 @@
     resetForm(modal?.querySelector("form") || modal);
     show(modal);
 
-    // 🔥 WAJIB INI
-    if (typeof initWilayah === "function") {
-      initWilayah();
-    }
+    // 🔥 AUTO SET HUBUNGAN
+    const hub = document.getElementById("b_hubungan");
+    if (hub) hub.value = "Kepala Keluarga";
   };
 
   window.closeModal = function () {
