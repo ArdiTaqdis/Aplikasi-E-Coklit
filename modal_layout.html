@@ -1,0 +1,1081 @@
+<!-- ===================== MODAL PREMIUM TAMBAH KEPALA KELUARGA ===================== -->
+<div
+  class="modal-overlay"
+  id="modalKK"
+  aria-hidden="true"
+  style="display: none"
+>
+  <div
+    class="modal-premium"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalKKTitle"
+    style="max-width: 820px; width: 95%"
+  >
+    <div class="modal-premium-header modal-title-colored">
+      <div class="modal-title-flex">
+        <span class="modal-icon">👨‍👩‍👧</span>
+        <h2
+          id="modalKKTitle"
+          style="margin: 0; font-size: 18px; color: #0b60d0"
+        >
+          Tambah Kepala Keluarga
+        </h2>
+      </div>
+      <button
+        class="modal-premium-close"
+        onclick="closeModal()"
+        aria-label="Tutup modal"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div
+      class="modal-premium-body"
+      style="padding: 18px 20px; max-height: 70vh; overflow: auto"
+    >
+      <!-- A -->
+      <h3 class="modalKK-section-title" style="margin-top: 0">
+        A. Data Kepala Keluarga
+      </h3>
+
+      <div class="modalKK-group">
+        <label for="kk_no">NO KK</label>
+        <input
+          type="text"
+          id="kk_no"
+          maxlength="16"
+          placeholder="16 digit (hanya angka)"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="kk_nik">NIK</label>
+        <input
+          type="text"
+          id="kk_nik"
+          maxlength="16"
+          placeholder="16 digit (hanya angka)"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="kk_nama">Nama Kepala Keluarga</label>
+        <input
+          type="text"
+          id="kk_nama"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="kk_alamat">Alamat</label>
+        <textarea
+          id="kk_alamat"
+          rows="2"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        ></textarea>
+      </div>
+
+      <!-- WILAYAH SELECTS -->
+      <div class="modalKK-group">
+        <label for="sel_prov">Provinsi</label>
+        <select
+          id="sel_prov"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        ></select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="sel_kab">Kabupaten / Kota</label>
+        <select
+          id="sel_kab"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        ></select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="sel_kec">Kecamatan</label>
+        <select
+          id="sel_kec"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        ></select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="sel_desa">Desa / Kelurahan</label>
+        <select
+          id="sel_desa"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        ></select>
+      </div>
+
+      <div style="display: flex; gap: 12px">
+        <div style="flex: 1">
+          <label for="sel_rw">RW</label>
+          <select
+            id="sel_rw"
+            style="
+              width: 100%;
+              padding: 10px;
+              border-radius: 10px;
+              border: 1px solid #e6eef7;
+            "
+          ></select>
+        </div>
+        <div style="flex: 1">
+          <label for="sel_rt">RT</label>
+          <select
+            id="sel_rt"
+            style="
+              width: 100%;
+              padding: 10px;
+              border-radius: 10px;
+              border: 1px solid #e6eef7;
+            "
+          ></select>
+        </div>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="kk_kodepos">Kode Pos</label>
+        <input
+          type="text"
+          id="kk_kodepos"
+          maxlength="6"
+          placeholder="Hanya angka"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="kk_statuswarga">Status Warga</label>
+        <select id="kk_statuswarga" onchange="toggleAlamatAsal()">
+          <option value="">-- Pilih Status --</option>
+          <option value="Asli">Warga Asli</option>
+          <option value="Domisili">Domisili</option>
+          <option value="Kos/Kontrak">Kos/Kontrak</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group" id="kk_asalktp_group" style="display: none">
+        <label for="kk_asalkota">
+          Alamat Asal Sesuai KTP <span style="color: red">*</span>
+        </label>
+        <textarea
+          id="kk_asalkota"
+          rows="2"
+          placeholder="Isi alamat sesuai KTP asli"
+        ></textarea>
+      </div>
+
+      <div
+        class="modalKK-divider"
+        style="height: 1px; background: #eef2f7; margin: 16px 0"
+      ></div>
+
+      <!-- B -->
+      <h3 class="modalKK-section-title">B. Data Anggota (Kepala Keluarga)</h3>
+
+      <div class="modalKK-group">
+        <label for="b_noKK">NO KK</label>
+        <input
+          type="text"
+          id="b_noKK"
+          readonly
+          class="readonly-field"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_nik">NIK</label>
+        <input
+          type="text"
+          id="b_nik"
+          readonly
+          class="readonly-field"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_nama">Nama Lengkap</label>
+        <input
+          type="text"
+          id="b_nama"
+          readonly
+          class="readonly-field"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_hubungan">Hubungan dalam Keluarga</label>
+        <input
+          type="text"
+          id="b_hubungan"
+          readonly
+          class="readonly-field"
+          value="Kepala Keluarga"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_kelamin">Jenis Kelamin</label>
+        <select
+          id="b_kelamin"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        >
+          <option value="">-- Pilih --</option>
+          <option value="Laki-laki">Laki-laki</option>
+          <option value="Perempuan">Perempuan</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_tempatlahir">Tempat Lahir</label>
+        <input
+          type="text"
+          id="b_tempatlahir"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div style="display: flex; gap: 12px">
+        <div style="flex: 1">
+          <label for="b_tgllahir">Tanggal Lahir</label>
+          <input
+            type="date"
+            id="b_tgllahir"
+            style="
+              width: 100%;
+              padding: 10px;
+              border-radius: 10px;
+              border: 1px solid #e6eef7;
+            "
+          />
+        </div>
+        <div style="flex: 1">
+          <label for="b_agama">Agama</label>
+          <select
+            id="b_agama"
+            style="
+              width: 100%;
+              padding: 10px;
+              border-radius: 10px;
+              border: 1px solid #e6eef7;
+            "
+          >
+            <option value="">-- Pilih --</option>
+            <option>Islam</option>
+            <option>Kristen Protestan</option>
+            <option>Katolik</option>
+            <option>Hindu</option>
+            <option>Buddha</option>
+            <option>Konghucu</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_pendidikan">Pendidikan</label>
+        <select
+          id="b_pendidikan"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        >
+          <option value="">-- Pilih --</option>
+          <option>Tidak / Belum Sekolah</option>
+          <option>Tidak Tamat SD / Sederajat</option>
+          <option>SD / Sederajat</option>
+          <option>SMP / Sederajat</option>
+          <option>SMA / Sederajat</option>
+          <option>Paket A</option>
+          <option>Paket B</option>
+          <option>Paket C</option>
+          <option>SLB</option>
+          <option>D1</option>
+          <option>D2</option>
+          <option>D3</option>
+          <option>S1</option>
+          <option>S2</option>
+          <option>S3</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_pekerjaan">Jenis Pekerjaan</label>
+        <input
+          type="text"
+          id="b_pekerjaan"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_status">Status Perkawinan</label>
+        <select
+          id="b_status"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        >
+          <option value="">-- Pilih --</option>
+          <option>Belum Kawin</option>
+          <option>Kawin</option>
+          <option>Cerai Hidup</option>
+          <option>Cerai Mati</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_kewarganegaraan">Kewarganegaraan</label>
+        <select
+          id="b_kewarganegaraan"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        >
+          <option value="">-- Pilih --</option>
+          <option>WNI</option>
+          <option>WNA</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_paspor">No Paspor</label>
+        <input
+          type="text"
+          id="b_paspor"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_kitap">No KITAP/KITAS</label>
+        <input
+          type="text"
+          id="b_kitap"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_ayah">Ayah Kandung</label>
+        <input
+          type="text"
+          id="b_ayah"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="b_ibu">Ibu Kandung</label>
+        <input
+          type="text"
+          id="b_ibu"
+          style="
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e6eef7;
+          "
+        />
+      </div>
+    </div>
+    <!-- END BODY -->
+
+    <div class="modal-premium-footer">
+      <button class="btn ghost" onclick="closeModal()">Batal</button>
+      <!-- <button class="btn" id="btnSimpanKK" onclick="simpanKepalaKeluarga()">💾 Simpan</button> -->
+      <button class="btn primary" onclick="simpanKepalaDanAnggota()">
+        💾 Simpan
+      </button>
+    </div>
+  </div>
+  <!-- END MODAL -->
+</div>
+<!-- END OVERLAY -->
+
+<!-- global loading overlay + toast -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loader"></div>
+</div>
+<div class="toast" id="toastSuccess">Berhasil</div>
+
+<!-- ===================== MODAL ANGGOTA (TAMBAH) - PREMIUM ===================== -->
+<div
+  class="modal-overlay"
+  id="modalAnggota"
+  aria-hidden="true"
+  style="display: none"
+>
+  <div
+    class="modal-premium"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalAnggotaTitle"
+    style="max-width: 820px; width: 95%"
+  >
+    <!-- HEADER PREMIUM -->
+    <div class="modal-premium-header modal-title-colored">
+      <div class="modal-title-flex">
+        <span
+          class="modal-icon"
+          style="
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            box-shadow: 0 6px 18px rgba(245, 158, 11, 0.25);
+            color: #ffffff;
+          "
+        >
+          👤
+        </span>
+
+        <h2
+          id="modalAnggotaTitle"
+          style="margin: 0; font-size: 18px; color: #0b60d0"
+        >
+          Tambah Anggota Keluarga
+        </h2>
+      </div>
+      <button class="modal-premium-close" onclick="closeModalAnggota()">
+        ✕
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div
+      class="modal-premium-body"
+      style="padding: 18px 20px; max-height: 70vh; overflow: auto"
+    >
+      <h3 class="modalKK-section-title">A. Data Anggota</h3>
+
+      <div class="modalKK-group">
+        <label for="agt_noKK">NO KK</label>
+        <input type="text" id="agt_noKK" readonly class="readonly-field" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_nik">NIK</label>
+        <input
+          type="text"
+          id="agt_nik"
+          maxlength="16"
+          oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+          placeholder="16 digit"
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_nama">Nama Lengkap</label>
+        <input
+          type="text"
+          id="agt_nama"
+          oninput="this.value = this.value.toUpperCase()"
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_hubungan">Hubungan dlm Klg</label>
+        <select id="agt_hubungan">
+          <option value="">-- Pilih --</option>
+          <option>Kepala Keluarga</option>
+          <option>Istri</option>
+          <option>Suami</option>
+          <option>Anak</option>
+          <option>Cucu</option>
+          <option>Menantu</option>
+          <option>Mertua</option>
+          <option>Pembantu</option>
+          <option>Famili Lain</option>
+          <option>Lainnya</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_kelamin">Jenis Kelamin</label>
+        <select id="agt_kelamin">
+          <option value="">-- Pilih --</option>
+          <option>Laki-laki</option>
+          <option>Perempuan</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_tempat">Tempat Lahir</label>
+        <input
+          type="text"
+          id="agt_tempat"
+          oninput="this.value = this.value.toUpperCase()"
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_tanggal">Tanggal Lahir</label>
+        <input type="date" id="agt_tanggal" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_agama">Agama</label>
+        <select id="agt_agama">
+          <option value="">-- Pilih --</option>
+          <option>Islam</option>
+          <option>Kristen Protestan</option>
+          <option>Katolik</option>
+          <option>Hindu</option>
+          <option>Buddha</option>
+          <option>Konghucu</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_pendidikan">Pendidikan</label>
+        <select id="agt_pendidikan">
+          <option value="">-- Pilih --</option>
+          <option>Tidak / Belum Sekolah</option>
+          <option>SD / Sederajat</option>
+          <option>SMP / Sederajat</option>
+          <option>SMA / Sederajat</option>
+          <option>D1</option>
+          <option>D2</option>
+          <option>D3</option>
+          <option>S1</option>
+          <option>S2</option>
+          <option>S3</option>
+          <option>Paket A</option>
+          <option>Paket B</option>
+          <option>Paket C</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_pekerjaan">Jenis Pekerjaan</label>
+        <input
+          type="text"
+          id="agt_pekerjaan"
+          oninput="this.value = this.value.toUpperCase()"
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_status">Status Perkawinan</label>
+        <select id="agt_status">
+          <option value="">-- Pilih --</option>
+          <option>Belum Kawin</option>
+          <option>Kawin</option>
+          <option>Cerai Hidup</option>
+          <option>Cerai Mati</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_kewarganegaraan">Kewarganegaraan</label>
+        <select id="agt_kewarganegaraan">
+          <option value="">-- Pilih --</option>
+          <option>WNI</option>
+          <option>WNA</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_paspor">No Paspor</label>
+        <input type="text" id="agt_paspor" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_kitap">No KITAP/KITAS</label>
+        <input type="text" id="agt_kitap" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_ayah">Ayah Kandung</label>
+        <input
+          type="text"
+          id="agt_ayah"
+          oninput="this.value = this.value.toUpperCase()"
+        />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="agt_ibu">Ibu Kandung</label>
+        <input
+          type="text"
+          id="agt_ibu"
+          oninput="this.value = this.value.toUpperCase()"
+        />
+      </div>
+    </div>
+
+    <!-- FOOTER PREMIUM -->
+    <div class="modal-premium-footer">
+      <button class="btn ghost" onclick="closeModalAnggota()">Batal</button>
+      <button
+        class="btn"
+        id="btnSimpanAnggota"
+        onclick="simpanAnggotaKeluarga()"
+      >
+        💾 Simpan Anggota
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL EDIT ANGGOTA - PREMIUM ===================== -->
+<div
+  class="modal-overlay"
+  id="modalEditAnggota"
+  aria-hidden="true"
+  style="display: none"
+>
+  <div
+    class="modal-premium"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalEditAnggotaTitle"
+    style="max-width: 820px; width: 95%"
+  >
+    <!-- HEADER PREMIUM WITH GOLD ICON -->
+    <div class="modal-premium-header modal-title-colored">
+      <div class="modal-title-flex">
+        <span
+          class="modal-icon"
+          style="
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            box-shadow: 0 6px 18px rgba(245, 158, 11, 0.25);
+            color: #fff;
+          "
+        >
+          👤
+        </span>
+        <h2
+          id="modalEditAnggotaTitle"
+          style="margin: 0; font-size: 18px; color: #0b60d0"
+        >
+          Edit Anggota Keluarga
+        </h2>
+      </div>
+      <button class="modal-premium-close" onclick="closeModalEditAnggota()">
+        ✕
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div
+      class="modal-premium-body"
+      style="padding: 18px 20px; max-height: 70vh; overflow: auto"
+    >
+      <h3 class="modalKK-section-title">A. Data Anggota</h3>
+
+      <div class="modalKK-group">
+        <label for="edt_noKK">NO KK</label>
+        <input type="text" id="edt_noKK" class="readonly-field" readonly />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_nik">NIK</label>
+        <input type="text" id="edt_nik" class="readonly-field" readonly />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_nama">Nama Lengkap</label>
+        <input type="text" id="edt_nama" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_hubungan">Hubungan dlm Keluarga</label>
+        <select id="edt_hubungan">
+          <option value="">-- Pilih --</option>
+          <option value="Kepala Keluarga">Kepala Keluarga</option>
+          <option value="Istri">Istri</option>
+          <option value="Suami">Suami</option>
+          <option value="Anak">Anak</option>
+          <option value="Cucu">Cucu</option>
+          <option value="Menantu">Menantu</option>
+          <option value="Mertua">Mertua</option>
+          <option value="Orang Tua">Orang Tua</option>
+          <option value="Famili Lain">Famili Lain</option>
+          <option value="Pembantu">Pembantu</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_kelamin">Jenis Kelamin</label>
+        <select id="edt_kelamin">
+          <option value="">-- Pilih --</option>
+          <option>Laki-laki</option>
+          <option>Perempuan</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_tempat">Tempat Lahir</label>
+        <input type="text" id="edt_tempat" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_tanggal">Tanggal Lahir</label>
+        <input type="date" id="edt_tanggal" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_agama">Agama</label>
+        <select id="edt_agama">
+          <option value="">-- Pilih --</option>
+          <option>Islam</option>
+          <option>Kristen Protestan</option>
+          <option>Katolik</option>
+          <option>Hindu</option>
+          <option>Buddha</option>
+          <option>Konghucu</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_pendidikan">Pendidikan</label>
+        <select id="edt_pendidikan">
+          <option value="">-- Pilih --</option>
+          <option>Tidak / Belum Sekolah</option>
+          <option>SD / Sederajat</option>
+          <option>SMP / Sederajat</option>
+          <option>SMA / Sederajat</option>
+          <option>D1</option>
+          <option>D2</option>
+          <option>D3</option>
+          <option>S1</option>
+          <option>S2</option>
+          <option>S3</option>
+          <option>Paket A</option>
+          <option>Paket B</option>
+          <option>Paket C</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_pekerjaan">Jenis Pekerjaan</label>
+        <input type="text" id="edt_pekerjaan" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_status">Status Perkawinan</label>
+        <select id="edt_status">
+          <option value="">-- Pilih --</option>
+          <option>Belum Kawin</option>
+          <option>Kawin</option>
+          <option>Cerai Hidup</option>
+          <option>Cerai Mati</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_kewarganegaraan">Kewarganegaraan</label>
+        <select id="edt_kewarganegaraan">
+          <option value="">-- Pilih --</option>
+          <option>WNI</option>
+          <option>WNA</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_paspor">No Paspor</label>
+        <input type="text" id="edt_paspor" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_kitap">No KITAP/KITAS</label>
+        <input type="text" id="edt_kitap" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_ayah">Ayah Kandung</label>
+        <input type="text" id="edt_ayah" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edt_ibu">Ibu Kandung</label>
+        <input type="text" id="edt_ibu" />
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="modal-premium-footer">
+      <button class="btn ghost" onclick="closeModalEditAnggota()">Batal</button>
+      <button class="btn" onclick="updateAnggotaKeluargaClient()">
+        💾 Update Anggota
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL EDIT KEPALA KELUARGA (FULL) ===================== -->
+<div
+  class="modal-overlay"
+  id="modalEditKK"
+  aria-hidden="true"
+  style="display: none"
+>
+  <div
+    class="modal-premium"
+    role="dialog"
+    aria-modal="true"
+    style="max-width: 820px; width: 95%"
+  >
+    <div class="modal-premium-header modal-title-colored">
+      <div class="modal-title-flex">
+        <span class="modal-icon">📝</span>
+        <h2 style="margin: 0; font-size: 18px; color: #0b60d0">
+          Edit Kepala Keluarga
+        </h2>
+      </div>
+      <button class="modal-premium-close" onclick="closeModalEditKK()">
+        ✕
+      </button>
+    </div>
+
+    <div
+      class="modal-premium-body"
+      style="padding: 18px 20px; max-height: 70vh; overflow: auto"
+    >
+      <h3 class="modalKK-section-title">A. Edit Data Kepala Keluarga</h3>
+
+      <div class="modalKK-group">
+        <label for="edtA_noKK">NO KK</label>
+        <input type="text" id="edtA_noKK" readonly />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edtA_nik">NIK</label>
+        <input type="text" id="edtA_nik" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edtA_nama">Nama Kepala Keluarga</label>
+        <input type="text" id="edtA_nama" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edtA_alamat">Alamat</label>
+        <textarea id="edtA_alamat" rows="2"></textarea>
+      </div>
+
+      <!-- WILAYAH SELECTS -->
+      <div class="modalKK-group">
+        <label for="edtA_provinsi">Provinsi</label>
+        <select id="edtA_provinsi"></select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edtA_kabupaten">Kabupaten / Kota</label>
+        <select id="edtA_kabupaten"></select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edtA_kecamatan">Kecamatan</label>
+        <select id="edtA_kecamatan"></select>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edtA_desa">Desa / Kelurahan</label>
+        <select id="edtA_desa"></select>
+      </div>
+
+      <div style="display: flex; gap: 12px">
+        <div style="flex: 1">
+          <label for="edtA_rw">RW</label>
+          <select id="edtA_rw"></select>
+        </div>
+        <div style="flex: 1">
+          <label for="edtA_rt">RT</label>
+          <select id="edtA_rt"></select>
+        </div>
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edtA_kodepos">Kode Pos</label>
+        <input type="text" id="edtA_kodepos" />
+      </div>
+
+      <div class="modalKK-group">
+        <label for="edtA_statuswarga">Status Warga</label>
+        <select id="edtA_statuswarga" onchange="toggleAlamatAsalEdit()">
+          <option value="">-- Pilih Status --</option>
+          <option value="Asli">Warga Asli</option>
+          <option value="Domisili">Domisili</option>
+          <option value="Kos/Kontrak">Kos/Kontrak</option>
+        </select>
+      </div>
+
+      <div class="modalKK-group" id="edtA_asalkota_group" style="display: none">
+        <label for="edtA_asalkota">
+          Alamat Asal Sesuai KTP <span style="color: red">*</span>
+        </label>
+        <textarea id="edtA_asalkota" rows="2"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-premium-footer">
+      <button class="btn ghost" onclick="closeModalEditKK()">Batal</button>
+      <button class="btn" id="btnUpdateKK" onclick="updateKepalaKeluarga()">
+        💾 Update
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL DETAIL ANGGOTA ===================== -->
+<div class="modal-overlay" id="modalDetailAnggota" style="display: none">
+  <div class="modal-premium" style="max-width: 820px; width: 95%">
+    <div class="modal-premium-header modal-title-colored">
+      <div class="modal-title-flex">
+        <span class="modal-icon">👁️</span>
+        <h2>Detail Anggota Keluarga</h2>
+      </div>
+      <button class="modal-premium-close" onclick="closeDetailAnggota()">
+        ✕
+      </button>
+    </div>
+
+    <div class="modal-premium-body">
+      <div class="kk-info" id="detailAnggotaBox">
+        <!-- diisi via JS -->
+      </div>
+    </div>
+
+    <div class="modal-premium-footer">
+      <button class="btn ghost" onclick="closeDetailAnggota()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL DETAIL KEPALA KELUARGA ===================== -->
+<div class="modal-overlay" id="modalDetailKK" style="display: none">
+  <div class="modal-premium" style="max-width: 820px; width: 95%">
+    <div class="modal-premium-header modal-title-colored">
+      <div class="modal-title-flex">
+        <span class="modal-icon">🏠</span>
+        <h2>Detail Kepala Keluarga</h2>
+      </div>
+      <button class="modal-premium-close" onclick="closeDetailKK()">✕</button>
+    </div>
+
+    <div class="modal-premium-body">
+      <div class="kk-info" id="detailKKBox">
+        <!-- diisi via JS -->
+      </div>
+    </div>
+
+    <div class="modal-premium-footer">
+      <button class="btn ghost" onclick="closeDetailKK()">Tutup</button>
+    </div>
+  </div>
+</div>
