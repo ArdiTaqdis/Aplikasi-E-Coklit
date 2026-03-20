@@ -234,7 +234,21 @@ window.simpanKepalaDanAnggota = function () {
 
       toastSuccess("Berhasil disimpan");
 
-      // reset manual
+      // 🔥 AUTO SEARCH
+      const noKK = dataA["NO KK"];
+
+      const inputSearch = $("searchKK");
+      if (inputSearch) {
+        inputSearch.value = noKK;
+      }
+
+      if (typeof cariKeluarga === "function") {
+        cariKeluarga();
+      }
+
+      show($("btnTambahAnggota"));
+
+      // reset
       [
         "kk_no",
         "kk_nik",
