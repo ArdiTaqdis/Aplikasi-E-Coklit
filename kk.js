@@ -642,13 +642,15 @@ if (!localStorage.getItem("userSession") && app) {
     const nik = document.getElementById("kk_nik")?.value;
     const nama = document.getElementById("kk_nama")?.value;
 
-    const b1 = document.getElementById("b_noKK");
-    const b2 = document.getElementById("b_nik");
-    const b3 = document.getElementById("b_nama");
+    const b_noKK = document.getElementById("b_noKK");
+    const b_nik = document.getElementById("b_nik");
+    const b_nama = document.getElementById("b_nama");
 
-    if (b1) b1.value = noKK || "";
-    if (b2) b2.value = nik || "";
-    if (b3) b3.value = nama || "";
+    if (b_noKK) b_noKK.value = noKK || "";
+    if (b_nik) b_nik.value = nik || "";
+    if (b_nama) b_nama.value = nama || "";
+
+    console.log("SYNC OK:", noKK, nik, nama);
   };
 
   /* =====================
