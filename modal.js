@@ -53,19 +53,23 @@
    * MODAL KK
    * ===================== */
 
-  window.openModal = function () {
+  window.openModal = async function () {
     const modal = $("modalKK");
+
+    showLoading(); // tampilkan loader
+
     resetForm(modal?.querySelector("form") || modal);
+
+    await initWilayah();
+
+    hideLoading();
+
     show(modal);
 
-    // hubungan auto
     const hub = document.getElementById("b_hubungan");
     if (hub) hub.value = "Kepala Keluarga";
 
-    // 🔥 INIT SYNC
-    setTimeout(() => {
-      initAutoSyncKK();
-    }, 50);
+    initAutoSyncKK();
   };
 
   window.closeModal = function () {
@@ -77,6 +81,10 @@
       const el = document.getElementById(id);
       if (!el) return;
 
+      // ❌ hapus event lama dulu
+      el.removeEventListener("input", syncKepalaToAnggota);
+
+      // ✅ pasang ulang
       el.addEventListener("input", syncKepalaToAnggota);
     });
   }
