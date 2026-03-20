@@ -16,10 +16,23 @@ function apiGet(action, params = {}) {
     url.searchParams.append(key, params[key]);
   });
 
-  return fetch(url).then((res) => {
-    if (!res.ok) throw new Error("HTTP Error");
-    return res.json();
-  });
+  console.log("🌐 URL:", url.toString());
+
+  return fetch(url)
+    .then((res) => {
+      console.log("📡 STATUS:", res.status);
+      return res.text(); // 🔥 ambil raw dulu
+    })
+    .then((text) => {
+      console.log("📦 RAW:", text); // 🔥 ini kunci
+
+      try {
+        return JSON.parse(text);
+      } catch (err) {
+        console.error("❌ BUKAN JSON:", text);
+        throw new Error("Response bukan JSON");
+      }
+    });
 }
 
 function apiPost(action, data = {}) {
