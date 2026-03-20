@@ -175,9 +175,9 @@ window.simpanKepalaDanAnggota = function () {
 
   showLoading();
 
-  apiGet("simpanKK", {
-    dataA: safeString(dataA),
-    dataB: safeString(dataB),
+  apiPost("simpanKK", {
+    dataA,
+    dataB,
   })
     .then((res) => {
       hideLoading();
@@ -189,8 +189,9 @@ window.simpanKepalaDanAnggota = function () {
 
       toastSuccess("Berhasil disimpan");
     })
-    .catch(() => {
+    .catch((err) => {
       hideLoading();
+      console.error(err);
       toastError("Server error");
     });
 };
