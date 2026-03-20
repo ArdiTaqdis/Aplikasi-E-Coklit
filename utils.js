@@ -165,12 +165,35 @@ window.simpanKepalaDanAnggota = function () {
     "NO KK": $("kk_no")?.value,
     NIK: $("kk_nik")?.value,
     "Nama Kepala Klg": $("kk_nama")?.value,
+    Alamat: $("kk_alamat")?.value,
+    RT: $("sel_rt")?.value,
+    RW: $("sel_rw")?.value,
+    Desa_Kelurahan: $("sel_desa")?.value,
+    Kecamatan: $("sel_kecamatan")?.value,
+    Kabupaten_Kota: $("sel_kabupaten")?.value,
+    Provinsi: $("sel_provinsi")?.value,
+    "Kode Pos": $("kk_kodepos")?.value,
+    "Status Warga": $("kk_statuswarga")?.value,
+    "Asal Kota": $("kk_asalkota")?.value,
   };
 
   const dataB = {
     "NO KK": dataA["NO KK"],
     NIK: dataA["NIK"],
     "Nama Lengkap": dataA["Nama Kepala Klg"],
+    "Hubungan dlm Klg": "Kepala Keluarga",
+    "Jenis Kelamin": $("b_kelamin")?.value,
+    "Tempat Lahir": $("b_tempatlahir")?.value,
+    "Tanggal Lahir": $("b_tgllahir")?.value,
+    Agama: $("b_agama")?.value,
+    Pendidikan: $("b_pendidikan")?.value,
+    "Jenis Pekerjaan": $("b_pekerjaan")?.value,
+    "Status Perkawinan": $("b_status")?.value,
+    Kewarganegaraan: $("b_kewarganegaraan")?.value,
+    "No Paspor": $("b_paspor")?.value,
+    "No KITAP_KITAS": $("b_kitap")?.value,
+    "Ayah Kandung": $("b_ayah")?.value,
+    "Ibu Kandung": $("b_ibu")?.value,
   };
 
   showLoading();
