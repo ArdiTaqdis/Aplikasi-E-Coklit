@@ -189,6 +189,19 @@ window.simpanKepalaDanAnggota = function () {
     });
 };
 
+function toggleAlamatAsal() {
+  const status = document.getElementById("kk_statuswarga").value;
+  const box = document.getElementById("kk_asalktp_group");
+
+  if (!box) return;
+
+  if (status === "Domisili" || status === "Kos/Kontrak") {
+    box.style.display = "block";
+  } else {
+    box.style.display = "none";
+  }
+}
+
 /* =========================
 INIT
 ========================= */
