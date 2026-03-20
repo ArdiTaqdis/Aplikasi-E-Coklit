@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Database & e-COKLIT</title>
+
+    <link rel="stylesheet" href="style_coklit.css" />
+    <link rel="stylesheet" href="style_validasi.css" />
+
+    <script src="api.js"></script>
+  </head>
+
+  <body class="login-mode">
+    <!-- LOGIN -->
+    <div id="loginWrapper">
+      <div class="login-card">
+        <div class="login-logo">🏠</div>
+
+        <div class="login-title">Database Warga & e-COKLIT</div>
+
+        <div class="login-subtitle">Sistem Manajemen Data RT</div>
+
+        <input id="username" type="text" placeholder="Username" />
+        <input id="password" type="password" placeholder="Password" />
+
+        <button id="loginBtn" onclick="login()">Login</button>
+
+        <div
+          id="loginError"
+          style="color: #dc2626; font-size: 12px; text-align: center"
+        ></div>
+
+        <div class="login-footer">RT 001 / RW 002</div>
+      </div>
+    </div>
+
+    <!-- APP -->
+    <div id="appSection" style="display: none">
+      <div id="layout"></div>
+      <div id="modalLayout"></div>
+      <div id="modalValidasi"></div>
+    </div>
+
+    <!-- JS MODULE -->
+    <script src="state.js"></script>
+    <script src="validation.js"></script>
+    <script src="wilayah.js"></script>
+    <script src="modal.js"></script>
+    <script src="utils.js"></script>
+    <script src="summary.js"></script>
+    <script src="kk.js"></script>
+    <script src="tervalidasi_js.js"></script>
+    <script src="anggota.js"></script>
+
+    <!-- =========================
+LOADER HTML (FIX)
+========================= -->
+    <script>
+      function loadHTML(id, file, callback) {
+        fetch(file)
+          .then((res) => res.text())
+          .then((html) => {
+            document.getElementById(id).innerHTML = html;
+            if (callback) callback();
+          });
+      }
+    </script>
+
+    <!-- =========================
+APP LOGIC
+========================= -->
+    <script>
+      /* =========================
+SESSION
+========================= */
+      function checkSession() {
+        const session = localStorage.getItem("userSession");
+
+        if (session) {
+          loginWrapper.style.display = "none";
+          appSection.style.display = "block";
+
+          // load layout + render user + init app
+          loadHTML("layout", "layout.html", () => {
+            renderUser();
+            initApp();
+          });
+
+          loadHTML("modalLayout", "modal_layout.html");
+          loadHTML("modalValidasi", "modal_validasi.html");
+        } else {
+          loginWrapper.style.display = "block";
+          appSection.style.display = "none";
+        }
+      }
+
+      /* =========================
+LOGIN
+========================= */
+      function login() {
+        const user = username.value.trim();
+        const pass = password.value.trim();
+
+        const btn = loginBtn;
+        const err = loginError;
+
+        err.innerText = "";
+
+        if (!user || !pass) {
+          err.innerText = "Username & password wajib";
+          return;
+        }
+
+        btn.innerHTML = "Loading...";
+        btn.disabled = true;
+
+        apiGet("login", {
+          username: user,
+          password: pass,
+        })
+          .then((res) => {
+            btn.innerHTML = "Login";
+            btn.disabled = false;
+
+            if (res.success) {
+              localStorage.setItem("userSession", JSON.stringify(res.user));
+              checkSession();
+            } else {
+              err.innerText = "Username atau password salah";
+            }
+          })
+          .catch(() => {
+            btn.innerHTML = "Login";
+            btn.disabled = false;
+            err.innerText = "Server error";
+          });
+      }
+
+      /* =========================
+RENDER USER
+========================= */
+      function renderUser() {
+        const session = JSON.parse(localStorage.getItem("userSession") || "{}");
+
+        if (session.username) {
+          const el = document.getElementById("userInfo");
+          if (el) {
+            el.innerText = "👤 " + session.username + " (" + session.role + ")";
+          }
+        }
+      }
+
+      /* =========================
+INIT APP (LOAD DATA)
+========================= */
+      function initApp() {
+        apiGet("getSummary").then((res) => {
+          if (!res) return;
+
+          if (sm_total) sm_total.innerText = res.total || 0;
+          if (sm_laki) sm_laki.innerText = res.laki || 0;
+          if (sm_perempuan) sm_perempuan.innerText = res.perempuan || 0;
+
+          if (sm_asli) sm_asli.innerText = res.asli || 0;
+          if (sm_domisili) sm_domisili.innerText = res.domisili || 0;
+          if (sm_kos) sm_kos.innerText = res.kos || 0;
+        });
+      }
+
+      /* =========================
+LOGOUT
+========================= */
+      function logout() {
+        if (!confirm("Yakin logout?")) return;
+
+        localStorage.removeItem("userSession");
+        checkSession();
+      }
+
+      /* =========================
+INIT
+========================= */
+      document.addEventListener("DOMContentLoaded", () => {
+        checkSession();
+
+        password.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") login();
+        });
+      });
+    </script>
+  </body>
+</html>
