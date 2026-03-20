@@ -3,6 +3,9 @@ HELPER
 ========================= */
 
 window.$ = (id) => document.getElementById(id);
+function safeString(obj) {
+  return encodeURIComponent(JSON.stringify(obj));
+}
 
 /* =========================
 LOADING
@@ -33,7 +36,7 @@ window.toastSuccess = (msg = "Berhasil") => {
 };
 
 window.toastError = (msg = "Terjadi kesalahan") => {
-  const toast = $("toastSuccess");
+  const toast = $("toastError");
   if (!toast) return;
 
   toast.style.background = "#f97316";
@@ -110,7 +113,7 @@ function renderAnggotaKeluarga(list) {
         ${
           a["Hubungan dlm Klg"] === "Kepala Keluarga"
             ? `🔒`
-            : `<button onclick="hapusAnggota('${a.NIK}')">🗑️</button>`
+            : `<button onclick="api.hapusAnggota('${a.NIK}')">🗑️</button>`
         }
       </td>
     `;
@@ -172,7 +175,10 @@ window.simpanKepalaDanAnggota = function () {
 
   showLoading();
 
-  apiPost("simpanKK", { dataA, dataB })
+  apiGet("simpanKK", {
+    dataA: safeString(dataA),
+    dataB: safeString(dataB),
+  })
     .then((res) => {
       hideLoading();
 

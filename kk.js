@@ -657,15 +657,6 @@ if (!localStorage.getItem("userSession") && app) {
    * REGISTER EVENT
    * ===================== */
 
-  function initAutoSyncKK() {
-    ["kk_no", "kk_nik", "kk_nama"].forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-
-      el.addEventListener("input", syncKepalaToAnggota);
-    });
-  }
-
   window.resetFormAnggota = function () {
     const fields = [
       "agt_nik",
