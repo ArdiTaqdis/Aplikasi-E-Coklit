@@ -139,7 +139,6 @@ function renderAnggotaKeluarga(list) {
 /* =========================
 API CALL (FIX FETCH)
 ========================= */
-
 window.cariKeluarga = function () {
   const noKK = $("searchKK")?.value?.trim();
 
@@ -154,7 +153,9 @@ window.cariKeluarga = function () {
     .then((res) => {
       hideLoading();
 
-      if (!res) {
+      console.log("RESULT:", res); // 🔥 DEBUG
+
+      if (!res || !res.kepala) {
         toastError("Data tidak ditemukan");
         return;
       }
@@ -163,9 +164,12 @@ window.cariKeluarga = function () {
       renderAnggotaKeluarga(res.anggota || []);
 
       show($("btnTambahAnggota"));
+      show($("btnHapusKK"));
+      show($("btnEditKK"));
     })
-    .catch(() => {
+    .catch((err) => {
       hideLoading();
+      console.error(err);
       toastError("Gagal mengambil data");
     });
 };
