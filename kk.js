@@ -428,7 +428,7 @@ if (!localStorage.getItem("userSession") && app) {
     // =====================
     // PASTIKAN WILAYAH READY
     // =====================
-    if (!window.__wilayahLoaded) {
+    if (typeof initWilayah === "function" && !window.__wilayahLoaded) {
       initWilayah();
       window.__wilayahLoaded = true;
     }

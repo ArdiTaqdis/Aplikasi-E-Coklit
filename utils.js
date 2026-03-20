@@ -175,6 +175,11 @@ SIMPAN KK (FIX FETCH)
 ========================= */
 
 window.simpanKepalaDanAnggota = function () {
+  if (!isValidFormKK()) {
+    toastError("Lengkapi semua data dulu broo 😅");
+    return;
+  }
+
   const val = (id) => $(id)?.value || "";
 
   const dataA = {
@@ -212,28 +217,57 @@ window.simpanKepalaDanAnggota = function () {
     "Ibu Kandung": val("b_ibu"),
   };
 
-  console.log("DATA A:", dataA);
-  console.log("DATA B:", dataB);
-
   showLoading();
+
+  const btn = $("btnSimpanKK");
+  if (btn) btn.disabled = true;
 
   apiPost("simpanKK", { dataA, dataB })
     .then((res) => {
       hideLoading();
 
-      console.log("RESPONSE:", res);
-
       if (!res.status) {
         toastError(res.message);
+        updateButtonState();
         return;
       }
 
       toastSuccess("Berhasil disimpan");
+
+      // reset manual
+      [
+        "kk_no",
+        "kk_nik",
+        "kk_nama",
+        "kk_alamat",
+        "kk_kodepos",
+        "kk_asalkota",
+        "b_kelamin",
+        "b_tempatlahir",
+        "b_tgllahir",
+        "b_agama",
+        "b_pendidikan",
+        "b_pekerjaan",
+        "b_status",
+        "b_kewarganegaraan",
+        "b_paspor",
+        "b_kitap",
+        "b_ayah",
+        "b_ibu",
+      ].forEach((id) => {
+        if ($(id)) $(id).value = "";
+      });
+
+      syncKepalaToAnggota();
+
+      closeModal();
+      updateButtonState();
     })
     .catch((err) => {
       hideLoading();
       console.error(err);
       toastError("Server error");
+      updateButtonState();
     });
 };
 
@@ -319,8 +353,12 @@ INIT
 document.addEventListener("DOMContentLoaded", () => {
   ["kk_no", "kk_nik", "kk_nama"].forEach((id) => {
     const el = $(id);
-    if (el) el.addEventListener("input", syncKepalaKeAnggota);
+    if (el) el.addEventListener("input", syncKepalaToAnggota); // ✅ FIX
   });
+
+  // 🔥 TAMBAHAN WAJIB
+  initValidationWatcher();
+  updateButtonState();
 
   const btn = $("btnCariKK");
   if (btn) {
