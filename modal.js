@@ -70,6 +70,8 @@
     if (hub) hub.value = "Kepala Keluarga";
 
     initAutoSyncKK();
+    initValidationWatcher();
+    updateButtonState();
   };
 
   window.closeModal = function () {

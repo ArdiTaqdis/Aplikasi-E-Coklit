@@ -60,11 +60,25 @@ window.hide = (el) => el && (el.style.display = "none");
 SYNC KK → ANGGOTA
 ========================= */
 
-function syncKepalaKeAnggota() {
-  if ($("b_noKK")) $("b_noKK").value = $("kk_no")?.value || "";
-  if ($("b_nik")) $("b_nik").value = $("kk_nik")?.value || "";
-  if ($("b_nama")) $("b_nama").value = $("kk_nama")?.value || "";
-}
+/* =====================
+ * AUTO SYNC KK → ANGGOTA
+ * ===================== */
+
+window.syncKepalaToAnggota = function () {
+  const noKK = document.getElementById("kk_no")?.value;
+  const nik = document.getElementById("kk_nik")?.value;
+  const nama = document.getElementById("kk_nama")?.value;
+
+  const b_noKK = document.getElementById("b_noKK");
+  const b_nik = document.getElementById("b_nik");
+  const b_nama = document.getElementById("b_nama");
+
+  if (b_noKK) b_noKK.value = noKK || "";
+  if (b_nik) b_nik.value = nik || "";
+  if (b_nama) b_nama.value = nama || "";
+
+  console.log("SYNC OK:", noKK, nik, nama);
+};
 
 /* =========================
 RENDER
@@ -161,20 +175,22 @@ SIMPAN KK (FIX FETCH)
 ========================= */
 
 window.simpanKepalaDanAnggota = function () {
+  const val = (id) => $(id)?.value || "";
+
   const dataA = {
-    "NO KK": $("kk_no")?.value,
-    NIK: $("kk_nik")?.value,
-    "Nama Kepala Klg": $("kk_nama")?.value,
-    Alamat: $("kk_alamat")?.value,
-    RT: $("sel_rt")?.value,
-    RW: $("sel_rw")?.value,
-    Desa_Kelurahan: $("sel_desa")?.value,
-    Kecamatan: $("sel_kecamatan")?.value,
-    Kabupaten_Kota: $("sel_kabupaten")?.value,
-    Provinsi: $("sel_provinsi")?.value,
-    "Kode Pos": $("kk_kodepos")?.value,
-    "Status Warga": $("kk_statuswarga")?.value,
-    "Asal Kota": $("kk_asalkota")?.value,
+    "NO KK": val("kk_no"),
+    NIK: val("kk_nik"),
+    "Nama Kepala Klg": val("kk_nama"),
+    Alamat: val("kk_alamat"),
+    RT: val("sel_rt"),
+    RW: val("sel_rw"),
+    Desa_Kelurahan: val("sel_desa"),
+    Kecamatan: val("sel_kecamatan"),
+    Kabupaten_Kota: val("sel_kabupaten"),
+    Provinsi: val("sel_provinsi"),
+    "Kode Pos": val("kk_kodepos"),
+    "Status Warga": val("kk_statuswarga"),
+    "Asal Kota": val("kk_asalkota"),
   };
 
   const dataB = {
@@ -182,28 +198,30 @@ window.simpanKepalaDanAnggota = function () {
     NIK: dataA["NIK"],
     "Nama Lengkap": dataA["Nama Kepala Klg"],
     "Hubungan dlm Klg": "Kepala Keluarga",
-    "Jenis Kelamin": $("b_kelamin")?.value,
-    "Tempat Lahir": $("b_tempatlahir")?.value,
-    "Tanggal Lahir": $("b_tgllahir")?.value,
-    Agama: $("b_agama")?.value,
-    Pendidikan: $("b_pendidikan")?.value,
-    "Jenis Pekerjaan": $("b_pekerjaan")?.value,
-    "Status Perkawinan": $("b_status")?.value,
-    Kewarganegaraan: $("b_kewarganegaraan")?.value,
-    "No Paspor": $("b_paspor")?.value,
-    "No KITAP_KITAS": $("b_kitap")?.value,
-    "Ayah Kandung": $("b_ayah")?.value,
-    "Ibu Kandung": $("b_ibu")?.value,
+    "Jenis Kelamin": val("b_kelamin"),
+    "Tempat Lahir": val("b_tempatlahir"),
+    "Tanggal Lahir": val("b_tgllahir"),
+    Agama: val("b_agama"),
+    Pendidikan: val("b_pendidikan"),
+    "Jenis Pekerjaan": val("b_pekerjaan"),
+    "Status Perkawinan": val("b_status"),
+    Kewarganegaraan: val("b_kewarganegaraan"),
+    "No Paspor": val("b_paspor"),
+    "No KITAP_KITAS": val("b_kitap"),
+    "Ayah Kandung": val("b_ayah"),
+    "Ibu Kandung": val("b_ibu"),
   };
+
+  console.log("DATA A:", dataA);
+  console.log("DATA B:", dataB);
 
   showLoading();
 
-  apiPost("simpanKK", {
-    dataA,
-    dataB,
-  })
+  apiPost("simpanKK", { dataA, dataB })
     .then((res) => {
       hideLoading();
+
+      console.log("RESPONSE:", res);
 
       if (!res.status) {
         toastError(res.message);
@@ -218,6 +236,68 @@ window.simpanKepalaDanAnggota = function () {
       toastError("Server error");
     });
 };
+
+function isValidFormKK() {
+  const val = (id) => $(id)?.value?.trim();
+
+  // wajib isi
+  if (!val("kk_no") || val("kk_no").length !== 16) return false;
+  if (!val("kk_nik") || val("kk_nik").length !== 16) return false;
+  if (!val("kk_nama")) return false;
+  if (!val("kk_alamat")) return false;
+
+  // wilayah
+  if (!val("sel_provinsi")) return false;
+  if (!val("sel_kabupaten")) return false;
+  if (!val("sel_kecamatan")) return false;
+  if (!val("sel_desa")) return false;
+  if (!val("sel_rw")) return false;
+  if (!val("sel_rt")) return false;
+
+  // anggota minimal
+  if (!val("b_kelamin")) return false;
+
+  return true;
+}
+
+function updateButtonState() {
+  const btn = $("btnSimpanKK");
+  if (!btn) return;
+
+  if (isValidFormKK()) {
+    btn.disabled = false;
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  } else {
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
+    btn.style.cursor = "not-allowed";
+  }
+}
+
+function initValidationWatcher() {
+  const ids = [
+    "kk_no",
+    "kk_nik",
+    "kk_nama",
+    "kk_alamat",
+    "sel_provinsi",
+    "sel_kabupaten",
+    "sel_kecamatan",
+    "sel_desa",
+    "sel_rw",
+    "sel_rt",
+    "b_kelamin",
+  ];
+
+  ids.forEach((id) => {
+    const el = $(id);
+    if (!el) return;
+
+    el.addEventListener("input", updateButtonState);
+    el.addEventListener("change", updateButtonState);
+  });
+}
 
 function toggleAlamatAsal() {
   const status = document.getElementById("kk_statuswarga").value;
