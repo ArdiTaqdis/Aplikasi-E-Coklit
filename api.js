@@ -1,7 +1,8 @@
 /* =========================
 BASE URL (WAJIB GANTI)
 ========================= */
-const BASE_URL = "https://script.google.com/macros/s/AKFYxxxx/exec";
+const BASE_URL =
+  "https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbwGVPhsTCFQ_WZ3OIJkB8qdz-1tPt8WnG4x2p9nPEc/dev";
 
 /* =========================
 CORE API
