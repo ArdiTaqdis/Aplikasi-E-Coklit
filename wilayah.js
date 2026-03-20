@@ -41,16 +41,16 @@
       return;
     }
 
-    google.script.run
-      .withSuccessHandler((data) => {
+    apiGet("getWilayah")
+      .then((data) => {
         WILAYAH_DATA = data || {};
+        console.log("✅ wilayah loaded", WILAYAH_DATA);
         cb && cb();
       })
-      .withFailureHandler((err) => {
-        console.error("Gagal load wilayah:", err);
+      .catch((err) => {
+        console.error("❌ Gagal load wilayah:", err);
         WILAYAH_DATA = {};
-      })
-      .getWilayah();
+      });
   }
 
   /* =====================
@@ -203,8 +203,6 @@
    * AUTO INIT
    * ===================== */
   document.addEventListener("DOMContentLoaded", () => {
-    if (typeof google !== "undefined") {
-      initWilayah();
-    }
+    initWilayah();
   });
 })();

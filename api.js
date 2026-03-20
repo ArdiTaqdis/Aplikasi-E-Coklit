@@ -37,21 +37,6 @@ function apiPost(action, data = {}) {
     return res.json();
   });
 }
-function apiPost(action, data = {}) {
-  return fetch(BASE_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      action,
-      ...data,
-    }),
-  }).then((res) => {
-    if (!res.ok) throw new Error("HTTP Error");
-    return res.json();
-  });
-}
 
 /* =========================
 API OBJECT
