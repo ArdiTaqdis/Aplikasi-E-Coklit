@@ -1,37 +1,52 @@
 /* =========================
-BASE URL (WAJIB GANTI)
+BASE URL
 ========================= */
 const BASE_URL =
-  "https://script.google.com/macros/s/AKfycby4HvGZSSrYt0dj7GXox9mD1mBoQwGT_lu0Un6TsQfdI8Vmur5IaqkRpBGgj3MD_aRN/exec";
+  "https://script.google.com/macros/s/AKfycbw0eNcuKgze3vo5aoxHsEi3dI01ixdYiXtxiTps5tyhV_pWFMNZbc8W7vtpKWE1X-KR/exec";
 
 /* =========================
-CORE API
+HELPER AUTO ENCODE
 ========================= */
-
-function apiGet(action, params = {}) {
-  const url = new URL(BASE_URL);
-  url.searchParams.append("action", action);
+function encodeParams(params = {}) {
+  const result = {};
 
   Object.keys(params).forEach((key) => {
-    url.searchParams.append(key, params[key]);
+    const val = params[key];
+
+    // kalau object → stringify + encode
+    if (typeof val === "object") {
+      result[key] = encodeURIComponent(JSON.stringify(val));
+    } else {
+      result[key] = encodeURIComponent(val);
+    }
   });
 
-  return fetch(url).then((res) => {
-    if (!res.ok) throw new Error("HTTP Error");
-    return res.json();
-  });
+  return result;
 }
 
-function apiPost(action, data = {}) {
+/* =========================
+CORE API (GET ONLY - ANTI CORS)
+========================= */
+function api(action, params = {}) {
   const url = new URL(BASE_URL);
 
   url.searchParams.append("action", action);
 
-  Object.keys(data).forEach((key) => {
-    url.searchParams.append(key, JSON.stringify(data[key]));
+  const encoded = encodeParams(params);
+
+  Object.keys(encoded).forEach((key) => {
+    url.searchParams.append(key, encoded[key]);
   });
 
-  return fetch(url).then((res) => res.json());
+  return fetch(url)
+    .then((res) => {
+      if (!res.ok) throw new Error("HTTP Error");
+      return res.json();
+    })
+    .catch((err) => {
+      console.error("API ERROR:", err);
+      throw err;
+    });
 }
 
 /* =========================
@@ -45,7 +60,7 @@ const API = {
   getWilayah(cb) {
     showLoading();
 
-    apiGet("getWilayah")
+    api("getWilayah")
       .then((res) => {
         hideLoading();
         state.wilayah = res || {};
@@ -63,7 +78,7 @@ const API = {
   getKeluarga(noKK, cb) {
     showLoading();
 
-    apiGet("getKeluarga", { noKK })
+    api("getKeluarga", { noKK })
       .then((res) => {
         hideLoading();
 
@@ -80,12 +95,12 @@ const API = {
   },
 
   /* =====================
-   * SIMPAN KK
+   * SIMPAN KK (AUTO ENCODE 🔥)
    * ===================== */
   simpanKK(dataA, dataB, cb) {
     showLoading();
 
-    apiPost("simpanKK", { dataA, dataB })
+    api("simpanKK", { dataA, dataB })
       .then((res) => {
         hideLoading();
 
@@ -104,56 +119,12 @@ const API = {
   },
 
   /* =====================
-   * UPDATE KK
-   * ===================== */
-  updateKK(data, cb) {
-    showLoading();
-
-    apiPost("updateKK", data)
-      .then((res) => {
-        hideLoading();
-
-        if (!res.success) {
-          toastError(res.message);
-          return;
-        }
-
-        toastSuccess("Berhasil update");
-        cb && cb(res);
-      })
-      .catch(() => {
-        hideLoading();
-        toastError("Server error");
-      });
-  },
-
-  /* =====================
-   * HAPUS KK
-   * ===================== */
-  hapusKK(noKK, cb) {
-    if (!confirm("Yakin hapus semua data keluarga?")) return;
-
-    showLoading();
-
-    apiPost("hapusKK", { noKK })
-      .then((res) => {
-        hideLoading();
-        toastSuccess(res.message);
-        cb && cb(res);
-      })
-      .catch(() => {
-        hideLoading();
-        toastError("Gagal hapus");
-      });
-  },
-
-  /* =====================
    * ANGGOTA
    * ===================== */
   simpanAnggota(data, cb) {
     showLoading();
 
-    apiPost("simpanAnggota", data)
+    api("simpanAnggota", { data })
       .then((res) => {
         hideLoading();
 
@@ -174,7 +145,7 @@ const API = {
   updateAnggota(data, cb) {
     showLoading();
 
-    apiPost("updateAnggota", data)
+    api("updateAnggota", data)
       .then((res) => {
         hideLoading();
 
@@ -197,11 +168,11 @@ const API = {
 
     showLoading();
 
-    apiPost("hapusAnggota", { nik })
-      .then((res) => {
+    api("hapusAnggota", { nik })
+      .then(() => {
         hideLoading();
         toastSuccess("Anggota dihapus");
-        cb && cb(res);
+        cb && cb();
       })
       .catch(() => {
         hideLoading();
@@ -213,7 +184,7 @@ const API = {
    * SUMMARY
    * ===================== */
   getSummary(cb) {
-    apiGet("getSummary")
+    api("getSummary")
       .then((res) => cb && cb(res))
       .catch(() => toastError("Gagal load statistik"));
   },
