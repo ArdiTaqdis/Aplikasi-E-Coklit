@@ -72,6 +72,14 @@
     hide($("modalKK"));
   };
 
+  function initAutoSyncKK() {
+    ["kk_no", "kk_nik", "kk_nama"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      el.addEventListener("input", syncKepalaToAnggota);
+    });
+  }
   /* =====================
    * MODAL EDIT KK
    * ===================== */

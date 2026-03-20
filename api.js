@@ -23,19 +23,15 @@ function apiGet(action, params = {}) {
 }
 
 function apiPost(action, data = {}) {
-  return fetch(BASE_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      action,
-      ...data,
-    }),
-  }).then((res) => {
-    if (!res.ok) throw new Error("HTTP Error");
-    return res.json();
+  const url = new URL(BASE_URL);
+
+  url.searchParams.append("action", action);
+
+  Object.keys(data).forEach((key) => {
+    url.searchParams.append(key, JSON.stringify(data[key]));
   });
+
+  return fetch(url).then((res) => res.json());
 }
 
 /* =========================
