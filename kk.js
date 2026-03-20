@@ -633,6 +633,10 @@ if (!localStorage.getItem("userSession") && app) {
    * AUTO SYNC KK → ANGGOTA
    * ===================== */
 
+  /* =====================
+   * AUTO SYNC KK → ANGGOTA
+   * ===================== */
+
   function syncKepalaToAnggota() {
     const noKK = document.getElementById("kk_no")?.value;
     const nik = document.getElementById("kk_nik")?.value;
