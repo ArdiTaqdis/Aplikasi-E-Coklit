@@ -97,13 +97,14 @@
    * PUBLIC INIT
    * ===================== */
   window.initWilayah = async function () {
+    if (window.__wilayahReady) return;
+
     await loadWilayah();
 
-    // FORM TAMBAH
     initCascade("sel_");
-
-    // FORM EDIT
     initCascade("edtA_");
+
+    window.__wilayahReady = true;
   };
 
   /* =====================
