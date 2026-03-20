@@ -108,32 +108,53 @@ LOGIN
 
         err.innerText = "";
 
+        // VALIDASI
         if (!user || !pass) {
           err.innerText = "Username & password wajib";
           return;
         }
 
+        // LOADING
         btn.innerHTML = "Loading...";
         btn.disabled = true;
+
+        // DEBUG (hapus kalau sudah aman)
+        console.log("LOGIN:", user, pass);
 
         apiGet("login", {
           username: user,
           password: pass,
         })
           .then((res) => {
+            console.log("RESPONSE:", res);
+
             btn.innerHTML = "Login";
             btn.disabled = false;
 
+            // HANDLE ERROR RESPONSE
+            if (!res || res.success === undefined) {
+              err.innerText = "Response tidak valid";
+              return;
+            }
+
             if (res.success) {
+              // SIMPAN SESSION
               localStorage.setItem("userSession", JSON.stringify(res.user));
-              checkSession();
+
+              // OPTIONAL: kasih delay dikit biar smooth
+              setTimeout(() => {
+                checkSession();
+              }, 300);
             } else {
               err.innerText = "Username atau password salah";
             }
           })
-          .catch(() => {
+          .catch((e) => {
+            console.error("LOGIN ERROR:", e);
+
             btn.innerHTML = "Login";
             btn.disabled = false;
+
             err.innerText = "Server error";
           });
       }
