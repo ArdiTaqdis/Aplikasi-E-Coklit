@@ -364,6 +364,24 @@ function toggleAlamatAsal() {
   }
 }
 
+function openTab(tabId, el) {
+  // 🔹 sembunyikan semua tab
+  document
+    .querySelectorAll(".tab-content")
+    .forEach((tab) => tab.classList.remove("active"));
+
+  // 🔹 hilangkan active di semua tombol
+  document
+    .querySelectorAll(".tab-btn")
+    .forEach((btn) => btn.classList.remove("active"));
+
+  // 🔹 tampilkan tab yang dipilih
+  document.getElementById(tabId).classList.add("active");
+
+  // 🔹 aktifkan tombol yang diklik
+  if (el) el.classList.add("active");
+}
+
 /* =========================
 INIT
 ========================= */
