@@ -169,9 +169,10 @@ ${
   a["Status"] === "Sudah Coklit"
     ? `<span class="badge-selesai">✔ Sudah Coklit</span>`
     : `<button class="btn-coklit"
-      onclick='openCoklit(${encodeURIComponent(JSON.stringify(a))})'>
-      ✔ Coklit
-     </button>`
+        data-item='${JSON.stringify(a)}'
+        onclick="openCoklit(this)">
+        ✔ Coklit
+       </button>`
 }
 
 </div>
@@ -184,11 +185,12 @@ ${
   });
 }
 
-function openCoklit(data) {
+function openCoklit(el) {
+  const data = JSON.parse(el.getAttribute("data-item"));
+
   currentNIK = data["NIK"];
 
   const detail = document.getElementById("detailPemilih");
-  data = JSON.parse(decodeURIComponent(data));
 
   if (!detail) {
     console.error("detailPemilih tidak ditemukan");
