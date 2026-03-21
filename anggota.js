@@ -20,41 +20,41 @@ window.simpanAnggotaKeluarga = function () {
     "Ibu Kandung": get("agt_ibu"),
   };
 
+  console.log("📤 KIRIM DATA:", data); // 🔥 debug
+
   if (!data["NO KK"]) {
-    alert("NO KK belum terisi");
+    toastError("NO KK kosong");
     return;
   }
 
   if (!data["NIK"]) {
-    alert("NIK wajib diisi");
+    toastError("NIK wajib diisi");
     return;
   }
 
   showLoading();
 
-  apiPost("simpanAnggota", data) // 🔥 pakai POST
+  apiPost("simpanAnggota", data) // 🔥 WAJIB INI
     .then((res) => {
       hideLoading();
 
-      console.log("RESULT SIMPAN:", res); // debug
+      console.log("✅ RESPONSE:", res); // 🔥 WAJIB MUNCUL
 
       if (!res || !res.status) {
-        toastError(res?.message || "Gagal simpan data");
+        toastError(res?.message || "Gagal simpan");
         return;
       }
 
-      toastSuccess("Anggota berhasil disimpan");
+      toastSuccess("Anggota berhasil disimpan 🎉");
 
       closeModalAnggota();
 
-      // 🔥 reload data keluarga
-      if (typeof cariKeluarga === "function") {
-        cariKeluarga();
-      }
+      // reload data
+      cariKeluarga();
     })
     .catch((err) => {
       hideLoading();
-      console.error(err);
+      console.error("❌ ERROR:", err);
       toastError("Server error");
     });
 };
