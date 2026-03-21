@@ -32,12 +32,29 @@ window.simpanAnggotaKeluarga = function () {
 
   showLoading();
 
-  if (!window.api || !api.simpanAnggota) {
-    console.error("API belum siap");
-    alert("API belum siap");
-    return;
-  }
+  apiPost("simpanAnggota", data) // 🔥 pakai POST
+    .then((res) => {
+      hideLoading();
 
-  api.simpanAnggota(data);
-  showLoading();
+      console.log("RESULT SIMPAN:", res); // debug
+
+      if (!res || !res.status) {
+        toastError(res?.message || "Gagal simpan data");
+        return;
+      }
+
+      toastSuccess("Anggota berhasil disimpan");
+
+      closeModalAnggota();
+
+      // 🔥 reload data keluarga
+      if (typeof cariKeluarga === "function") {
+        cariKeluarga();
+      }
+    })
+    .catch((err) => {
+      hideLoading();
+      console.error(err);
+      toastError("Server error");
+    });
 };
