@@ -192,21 +192,55 @@ function openCoklit(el) {
 
   const detail = document.getElementById("detailPemilih");
 
-  if (!detail) {
-    console.error("detailPemilih tidak ditemukan");
-    return;
-  }
-
   detail.innerHTML = `
-<b>NIK :</b> ${data["NIK"]}<br>
-<b>Nama :</b> ${data["Nama Lengkap"]}<br>
-<b>Tempat Lahir :</b> ${data["Tempat Lahir"]}<br>
-<b>Tanggal Lahir :</b> ${data["Tanggal Lahir"]}<br>
-<b>Jenis Kelamin :</b> ${data["Jenis Kelamin"]}<br>
-<b>Agama :</b> ${data["Agama"]}<br>
-<b>Pekerjaan :</b> ${data["Jenis Pekerjaan"]}<br>
-<b>Status Perkawinan :</b> ${data["Status Perkawinan"]}
+
+<div class="form-group">
+<label>NIK</label>
+<input type="text" value="${data["NIK"]}" readonly>
+</div>
+
+<div class="form-group">
+<label>Nama</label>
+<input type="text" value="${data["Nama Lengkap"]}" readonly>
+</div>
+
+<div class="form-group">
+<label>Tempat Lahir</label>
+<input type="text" value="${data["Tempat Lahir"]}" readonly>
+</div>
+
+<div class="form-group">
+<label>Tanggal Lahir</label>
+<input type="text" value="${data["Tanggal Lahir"]}" readonly>
+</div>
+
+<div class="form-group">
+<label>Jenis Kelamin</label>
+<input type="text" value="${data["Jenis Kelamin"]}" readonly>
+</div>
+
+<div class="form-group">
+<label>Agama</label>
+<input type="text" value="${data["Agama"]}" readonly>
+</div>
+
+<div class="form-group">
+<label>Pekerjaan</label>
+<input type="text" value="${data["Jenis Pekerjaan"]}" readonly>
+</div>
+
+<div class="form-group">
+<label>Status Perkawinan</label>
+<input type="text" value="${data["Status Perkawinan"]}" readonly>
+</div>
+
 `;
+
+  // 🔥 set default value select
+  document.getElementById("statusCoklit").value = data["Status"] || "";
+  document.getElementById("ketCoklit").value = data["Keterangan"] || "";
+
+  toggleKeterangan();
 
   document.getElementById("modalCoklit").style.display = "flex";
 }
