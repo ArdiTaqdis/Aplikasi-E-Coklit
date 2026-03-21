@@ -187,56 +187,61 @@ ${
 
 function openCoklit(el) {
   const data = JSON.parse(el.getAttribute("data-item"));
-
   currentNIK = data["NIK"];
 
   const detail = document.getElementById("detailPemilih");
 
   detail.innerHTML = `
 
-<div class="form-group">
+<div class="form-grid">
+
+<div>
 <label>NIK</label>
-<input type="text" value="${data["NIK"]}" readonly>
+<input id="f_nik" value="${data["NIK"]}" readonly>
 </div>
 
-<div class="form-group">
+<div>
 <label>Nama</label>
-<input type="text" value="${data["Nama Lengkap"]}" readonly>
+<input id="f_nama" value="${data["Nama Lengkap"]}">
 </div>
 
-<div class="form-group">
+<div>
 <label>Tempat Lahir</label>
-<input type="text" value="${data["Tempat Lahir"]}" readonly>
+<input id="f_tempat" value="${data["Tempat Lahir"]}">
 </div>
 
-<div class="form-group">
+<div>
 <label>Tanggal Lahir</label>
-<input type="text" value="${data["Tanggal Lahir"]}" readonly>
+<input id="f_tgl" value="${data["Tanggal Lahir"]}">
 </div>
 
-<div class="form-group">
+<div>
 <label>Jenis Kelamin</label>
-<input type="text" value="${data["Jenis Kelamin"]}" readonly>
+<select id="f_jk">
+  <option ${data["Jenis Kelamin"] == "Laki-laki" ? "selected" : ""}>Laki-laki</option>
+  <option ${data["Jenis Kelamin"] == "Perempuan" ? "selected" : ""}>Perempuan</option>
+</select>
 </div>
 
-<div class="form-group">
+<div>
 <label>Agama</label>
-<input type="text" value="${data["Agama"]}" readonly>
+<input id="f_agama" value="${data["Agama"]}">
 </div>
 
-<div class="form-group">
+<div>
 <label>Pekerjaan</label>
-<input type="text" value="${data["Jenis Pekerjaan"]}" readonly>
+<input id="f_pekerjaan" value="${data["Jenis Pekerjaan"]}">
 </div>
 
-<div class="form-group">
+<div>
 <label>Status Perkawinan</label>
-<input type="text" value="${data["Status Perkawinan"]}" readonly>
+<input id="f_kawin" value="${data["Status Perkawinan"]}">
 </div>
 
+</div>
 `;
 
-  // 🔥 set default value select
+  // set status coklit
   document.getElementById("statusCoklit").value = data["Status"] || "";
   document.getElementById("ketCoklit").value = data["Keterangan"] || "";
 
@@ -265,27 +270,31 @@ function simpanCoklit() {
   const status = document.getElementById("statusCoklit").value;
   const ket = document.getElementById("ketCoklit").value;
 
-  if (!status) {
-    alert("Pilih status dulu");
-    return;
-  }
-
   const userSession = JSON.parse(localStorage.getItem("userSession"));
   const userName = userSession?.username || "Admin";
 
-  showLoading();
-
-  apiPost("updateCoklit", {
+  const data = {
     nik: currentNIK,
+    nama: document.getElementById("f_nama").value,
+    tempat: document.getElementById("f_tempat").value,
+    tanggal: document.getElementById("f_tgl").value,
+    jk: document.getElementById("f_jk").value,
+    agama: document.getElementById("f_agama").value,
+    pekerjaan: document.getElementById("f_pekerjaan").value,
+    kawin: document.getElementById("f_kawin").value,
     status: status,
     keterangan: ket,
-    user: userName, // 🔥 kirim user
-  })
+    user: userName,
+  };
+
+  showLoading();
+
+  apiPost("updateFullData", data)
     .then((res) => {
       hideLoading();
 
       if (!res.success) {
-        toastError(res.message || "Gagal update");
+        toastError(res.message);
         return;
       }
 
