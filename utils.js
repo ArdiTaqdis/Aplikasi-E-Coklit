@@ -380,6 +380,10 @@ function openTab(tabId, el) {
   if (tabId === "tabValidasi") {
     loadValidasi();
   }
+
+  if (tabId === "tabTervalidasi") {
+    loadTervalidasi();
+  }
 }
 
 /* =========================
