@@ -196,23 +196,23 @@ function openCoklit(el) {
 <div class="form-grid">
 
 <div>
+<label>No KK</label>
+<input id="f_nokk" value="${data["NO KK"]}" readonly>
+</div>
+
+<div>
 <label>NIK</label>
 <input id="f_nik" value="${data["NIK"]}" readonly>
 </div>
 
 <div>
-<label>Nama</label>
+<label>Nama Lengkap</label>
 <input id="f_nama" value="${data["Nama Lengkap"]}">
 </div>
 
 <div>
-<label>Tempat Lahir</label>
-<input id="f_tempat" value="${data["Tempat Lahir"]}">
-</div>
-
-<div>
-<label>Tanggal Lahir</label>
-<input id="f_tgl" value="${data["Tanggal Lahir"]}">
+<label>Hubungan</label>
+<input id="f_hubungan" value="${data["Hubungan dlm Klg"]}">
 </div>
 
 <div>
@@ -224,8 +224,23 @@ function openCoklit(el) {
 </div>
 
 <div>
+<label>Tempat Lahir</label>
+<input id="f_tempat" value="${data["Tempat Lahir"]}">
+</div>
+
+<div>
+<label>Tanggal Lahir</label>
+<input type="date" id="f_tgl" value="${formatDateInput(data["Tanggal Lahir"])}">
+</div>
+
+<div>
 <label>Agama</label>
 <input id="f_agama" value="${data["Agama"]}">
+</div>
+
+<div>
+<label>Pendidikan</label>
+<input id="f_pendidikan" value="${data["Pendidikan"]}">
 </div>
 
 <div>
@@ -235,7 +250,37 @@ function openCoklit(el) {
 
 <div>
 <label>Status Perkawinan</label>
-<input id="f_kawin" value="${data["Status Perkawinan"]}">
+<select id="f_kawin">
+  <option ${data["Status Perkawinan"] == "Belum Kawin" ? "selected" : ""}>Belum Kawin</option>
+  <option ${data["Status Perkawinan"] == "Kawin" ? "selected" : ""}>Kawin</option>
+  <option ${data["Status Perkawinan"] == "Cerai Hidup" ? "selected" : ""}>Cerai Hidup</option>
+  <option ${data["Status Perkawinan"] == "Cerai Mati" ? "selected" : ""}>Cerai Mati</option>
+</select>
+</div>
+
+<div>
+<label>Kewarganegaraan</label>
+<input id="f_warga" value="${data["Kewarganegaraan"]}">
+</div>
+
+<div>
+<label>No Paspor</label>
+<input id="f_paspor" value="${data["No Paspor"]}">
+</div>
+
+<div>
+<label>No KITAP/KITAS</label>
+<input id="f_kitap" value="${data["No KITAP_KITAS"]}">
+</div>
+
+<div>
+<label>Ayah Kandung</label>
+<input id="f_ayah" value="${data["Ayah Kandung"]}">
+</div>
+
+<div>
+<label>Ibu Kandung</label>
+<input id="f_ibu" value="${data["Ibu Kandung"]}">
 </div>
 
 </div>
@@ -248,6 +293,15 @@ function openCoklit(el) {
   toggleKeterangan();
 
   document.getElementById("modalCoklit").style.display = "flex";
+}
+
+function formatDateInput(val) {
+  if (!val) return "";
+
+  const parts = val.split("-");
+  if (parts.length !== 3) return "";
+
+  return `${parts[2]}-${parts[1]}-${parts[0]}`;
 }
 
 function closeModalCoklit() {
@@ -275,13 +329,21 @@ function simpanCoklit() {
 
   const data = {
     nik: currentNIK,
+    nokk: document.getElementById("f_nokk").value,
     nama: document.getElementById("f_nama").value,
+    hubungan: document.getElementById("f_hubungan").value,
+    jk: document.getElementById("f_jk").value,
     tempat: document.getElementById("f_tempat").value,
     tanggal: document.getElementById("f_tgl").value,
-    jk: document.getElementById("f_jk").value,
     agama: document.getElementById("f_agama").value,
+    pendidikan: document.getElementById("f_pendidikan").value,
     pekerjaan: document.getElementById("f_pekerjaan").value,
     kawin: document.getElementById("f_kawin").value,
+    warga: document.getElementById("f_warga").value,
+    paspor: document.getElementById("f_paspor").value,
+    kitap: document.getElementById("f_kitap").value,
+    ayah: document.getElementById("f_ayah").value,
+    ibu: document.getElementById("f_ibu").value,
     status: status,
     keterangan: ket,
     user: userName,
