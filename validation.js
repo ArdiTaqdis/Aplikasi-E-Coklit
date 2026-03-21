@@ -236,12 +236,16 @@ function simpanCoklit() {
     return;
   }
 
+  const userSession = JSON.parse(localStorage.getItem("userSession"));
+  const userName = userSession?.username || "Admin";
+
   showLoading();
 
   apiPost("updateCoklit", {
     nik: currentNIK,
     status: status,
     keterangan: ket,
+    user: userName, // 🔥 kirim user
   })
     .then((res) => {
       hideLoading();
