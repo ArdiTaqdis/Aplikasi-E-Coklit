@@ -36,22 +36,16 @@ function apiGet(action, params = {}) {
 }
 
 function apiPost(action, data = {}) {
-  const url = new URL(BASE_URL);
-
-  url.searchParams.append("action", action);
-
-  Object.keys(data).forEach((key) => {
-    const val = data[key];
-
-    // ❗ kalau string → kirim langsung
-    if (typeof val === "string") {
-      url.searchParams.append(key, val);
-    } else {
-      url.searchParams.append(key, JSON.stringify(val));
-    }
-  });
-
-  return fetch(url).then((res) => res.json());
+  return fetch(BASE_URL, {
+    method: "POST", // 🔥 INI KUNCI
+    headers: {
+      "Content-Type": "application/json", // 🔥 WAJIB
+    },
+    body: JSON.stringify({
+      action,
+      ...data,
+    }),
+  }).then((res) => res.json());
 }
 
 /* =========================
