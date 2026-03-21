@@ -2,7 +2,7 @@
 BASE URL (WAJIB GANTI)
 ========================= */
 const BASE_URL =
-  "https://script.google.com/macros/s/AKfycbyO8gIZLOLmj962r5EAh5nbACxJZ_yQmq2cOuah_fYwD4VnihQ-q2I5CFkoa-XHwce-/exec";
+  "https://script.google.com/macros/s/AKfycbx8KFKb7agG0npY_CFUBcPae7yGN1M1wmRb7gB-7XNgPOgRdYcgImP7o-0NjaO7cmbt/exec";
 
 /* =========================
 CORE API
@@ -37,15 +37,21 @@ function apiGet(action, params = {}) {
 
 function apiPost(action, data = {}) {
   return fetch(BASE_URL, {
-    method: "POST", // 🔥 INI KUNCI
+    method: "POST",
     headers: {
-      "Content-Type": "application/json", // 🔥 WAJIB
+      "Content-Type": "text/plain;charset=utf-8",
     },
     body: JSON.stringify({
       action,
       ...data,
     }),
-  }).then((res) => res.json());
+    redirect: "follow",
+  })
+    .then((res) => res.text())
+    .then((text) => {
+      console.log("📦 RAW:", text);
+      return JSON.parse(text);
+    });
 }
 
 /* =========================
