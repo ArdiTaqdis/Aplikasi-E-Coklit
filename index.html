@@ -82,14 +82,21 @@ SESSION
           loginWrapper.style.display = "none";
           appSection.style.display = "block";
 
-          // load layout + render user + init app
+          // 🔥 LOAD SEMUA HTML DULU (BERURUTAN)
           loadHTML("layout", "layout.html", () => {
             renderUser();
-            initApp();
-          });
 
-          loadHTML("modalLayout", "modal_layout.html");
-          loadHTML("modalValidasi", "modal_validasi.html");
+            // load modal layout dulu
+            loadHTML("modalLayout", "modal_layout.html", () => {
+              // load modal validasi terakhir
+              loadHTML("modalValidasi", "modal_validasi.html", () => {
+                console.log("🔥 SEMUA MODAL LOADED");
+
+                // 🔥 BARU INIT APP
+                initApp();
+              });
+            });
+          });
         } else {
           loginWrapper.style.display = "block";
           appSection.style.display = "none";

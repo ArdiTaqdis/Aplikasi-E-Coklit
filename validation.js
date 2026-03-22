@@ -403,3 +403,7 @@ window.simpanCoklit = function () {
       toastError("Server error");
     });
 };
+
+window.simpanCoklit = function () {
+  console.log("🔥 SIMPAN DIKLIK");
+};

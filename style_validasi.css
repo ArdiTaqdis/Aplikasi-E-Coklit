@@ -256,3 +256,12 @@ button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.modal-premium {
+  position: relative;
+  z-index: 2;
+}
+
+.modal-overlay {
+  z-index: 1;
+}
