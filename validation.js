@@ -303,12 +303,12 @@ function openCoklit(el) {
   // 🔥 LOAD NO HP DARI SHEET KEPALA KELUARGA
   apiGet("getNoHP", { noKK: data["NO KK"] })
     .then((res) => {
-      if (res && res.nohp) {
-        document.getElementById("f_nohp").value = res.nohp;
+      if (res && res.nohp !== undefined) {
+        document.getElementById("f_nohp").value = res.nohp || "";
       }
     })
     .catch((err) => {
-      console.error("Gagal load No HP:", err);
+      console.warn("No HP tidak ditemukan (aman)", err);
     });
 }
 
