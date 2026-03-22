@@ -341,7 +341,6 @@ window.simpanCoklit = function () {
   try {
     console.log("🔥 CLICK SIMPAN");
 
-    // helper ambil value aman
     const val = (id) => {
       const el = document.getElementById(id);
       return el ? el.value : "";
@@ -356,10 +355,7 @@ window.simpanCoklit = function () {
       return;
     }
 
-    if (nohp && !/^08\d{8,12}$/.test(nohp)) {
-      toastError("Nomor HP tidak valid");
-      return;
-    }
+    // ❌ VALIDASI NO HP DIHAPUS
 
     const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
     const userName = userSession.username || "Admin";
@@ -389,7 +385,6 @@ window.simpanCoklit = function () {
 
     console.log("📤 DATA DIKIRIM:", data);
 
-    // loading aman
     if (typeof showLoading === "function") showLoading();
 
     apiPost("updateFullData", data)
