@@ -287,3 +287,19 @@ button:disabled {
 .modal-overlay {
   z-index: 1;
 }
+
+select#statusCoklit {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+@keyframes modalPop {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
