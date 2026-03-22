@@ -241,3 +241,18 @@
   border: 1px solid #ddd;
   border-radius: 6px;
 }
+
+.field-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-check input[type="checkbox"] {
+  transform: scale(1.2);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
