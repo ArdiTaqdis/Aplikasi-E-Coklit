@@ -2,7 +2,7 @@
 BASE URL (WAJIB GANTI)
 ========================= */
 const BASE_URL =
-  "https://script.google.com/macros/s/AKfycbw0nhxmVG2UmmO_lmzIKLtq2_YSRvErq4AybLRD1QJUa2mvd1tAX_KfnDtTqyS8IL4/exec";
+  "https://script.google.com/macros/s/AKfycbz9OTj96550d2eFTMTNyJUOFRwsOzX949D2_teTYCjp1EEUsvzGFMHjsPwDru2neOH5/exec";
 
 /* =========================
 CORE API
@@ -45,12 +45,17 @@ function apiPost(action, data = {}) {
       action,
       ...data,
     }),
-    redirect: "follow",
   })
     .then((res) => res.text())
     .then((text) => {
-      console.log("📦 RAW:", text);
-      return JSON.parse(text);
+      console.log("📦 RAW RESPONSE:", text);
+
+      try {
+        return JSON.parse(text);
+      } catch (err) {
+        console.error("❌ BUKAN JSON:", text);
+        throw new Error("Response bukan JSON");
+      }
     });
 }
 

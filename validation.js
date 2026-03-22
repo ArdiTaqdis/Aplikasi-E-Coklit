@@ -283,7 +283,11 @@ function openCoklit(el) {
 <input id="f_ibu" value="${data["Ibu Kandung"]}">
 </div>
 
-
+<!-- 🔥 TAMBAHAN BARU -->
+<div style="grid-column: span 2;">
+<label>📞 No HP (Kepala Keluarga)</label>
+<input id="f_nohp" placeholder="08xxxxxxxxxx">
+</div>
 
 </div>
 `;
@@ -380,6 +384,7 @@ window.simpanCoklit = function () {
       status: status,
       keterangan: ket,
       user: userName,
+      nohp: nohp,
     };
 
     console.log("📤 DATA DIKIRIM:", data);
