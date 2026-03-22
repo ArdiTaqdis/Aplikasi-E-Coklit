@@ -191,15 +191,6 @@ function openCoklit(el) {
 
   const detail = document.getElementById("detailPemilih");
 
-  const umur = hitungUmur(formatDateInput(data["Tanggal Lahir"]));
-
-  if (umur < 17) {
-    document.getElementById("statusCoklit").value = "Tersaring";
-    document.getElementById("ketCoklit").value = "Dibawah Umur";
-
-    toggleKeterangan();
-  }
-
   detail.innerHTML = `
 
 <div class="form-grid">
@@ -302,10 +293,21 @@ function openCoklit(el) {
 `;
 
   // set status coklit
+  // set status coklit dari data dulu
   document.getElementById("statusCoklit").value = data["Status"] || "";
   document.getElementById("ketCoklit").value = data["Keterangan"] || "";
 
-  toggleKeterangan();
+  // 🔥 BARU HITUNG UMUR
+  const umur = hitungUmur(formatDateInput(data["Tanggal Lahir"]));
+
+  if (umur < 17) {
+    document.getElementById("statusCoklit").value = "Tersaring";
+    document.getElementById("ketCoklit").value = "Dibawah Umur";
+
+    toggleKeterangan();
+
+    console.log("AUTO SET TERARING (UMUR <17)");
+  }
 
   document.getElementById("modalCoklit").style.display = "flex";
 
@@ -355,38 +357,42 @@ window.simpanCoklit = function () {
       return el ? el.value : "";
     };
 
-    const status = val("statusCoklit");
-    const ket = val("ketCoklit");
     let nohpInput = val("f_nohp");
     let nohp = normalizeNoHP(nohpInput);
+
     const tgl = val("f_tgl");
     const umur = hitungUmur(tgl);
 
     console.log("UMUR:", umur);
 
+    // ✅ VALIDASI NO HP
     if (!nohp) {
       toastError("Format nomor HP tidak valid (contoh: 628123456789)");
       return;
     }
 
-    if (umur < 17) {
-      document.getElementById("statusCoklit").value = "Tersaring";
-      document.getElementById("ketCoklit").value = "Dibawah Umur";
+    // 🔥 AMBIL STATUS AWAL
+    let status = val("statusCoklit");
+    let ket = val("ketCoklit");
 
-      document.getElementById("statusCoklit").disabled = true;
-      document.getElementById("ketCoklit").disabled = true;
+    // 🔥 AUTO RULE UMUR
+    if (umur < 17) {
+      status = "Tersaring";
+      ket = "Dibawah Umur";
+
+      document.getElementById("statusCoklit").value = status;
+      document.getElementById("ketCoklit").value = ket;
 
       toggleKeterangan();
 
-      toastError("Umur < 17 tahun → otomatis tersaring");
+      console.log("AUTO SET: UMUR < 17");
     }
 
+    // ✅ VALIDASI STATUS SETELAH RULE
     if (!status) {
-      toastError("Pilih status dulu broo");
+      toastError("Pilih status Terlebih dahulu");
       return;
     }
-
-    // ❌ VALIDASI NO HP DIHAPUS
 
     const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
     const userName = userSession.username || "Admin";
@@ -398,7 +404,7 @@ window.simpanCoklit = function () {
       hubungan: val("f_hubungan"),
       jk: val("f_jk"),
       tempat: val("f_tempat"),
-      tanggal: val("f_tgl"),
+      tanggal: tgl,
       agama: val("f_agama"),
       pendidikan: val("f_pendidikan"),
       pekerjaan: val("f_pekerjaan"),
