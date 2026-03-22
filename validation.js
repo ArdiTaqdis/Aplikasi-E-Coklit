@@ -283,6 +283,12 @@ function openCoklit(el) {
 <input id="f_ibu" value="${data["Ibu Kandung"]}">
 </div>
 
+<!-- 🔥 TAMBAHAN BARU -->
+<div style="grid-column: span 2;">
+<label>📞 No HP (Kepala Keluarga)</label>
+<input id="f_nohp" placeholder="08xxxxxxxxxx">
+</div>
+
 </div>
 `;
 
@@ -293,6 +299,17 @@ function openCoklit(el) {
   toggleKeterangan();
 
   document.getElementById("modalCoklit").style.display = "flex";
+
+  // 🔥 LOAD NO HP DARI SHEET KEPALA KELUARGA
+  apiGet("getNoHP", { noKK: data["NO KK"] })
+    .then((res) => {
+      if (res && res.nohp) {
+        document.getElementById("f_nohp").value = res.nohp;
+      }
+    })
+    .catch((err) => {
+      console.error("Gagal load No HP:", err);
+    });
 }
 
 function formatDateInput(val) {
@@ -327,6 +344,23 @@ function simpanCoklit() {
   const userSession = JSON.parse(localStorage.getItem("userSession"));
   const userName = userSession?.username || "Admin";
 
+  let nohp = document.getElementById("f_nohp").value.trim();
+
+  // 🔥 bersihin selain angka
+  nohp = nohp.replace(/\D/g, "");
+
+  // 🔥 validasi format (opsional tapi penting)
+  if (nohp && !/^08\d{8,12}$/.test(nohp)) {
+    toastError("Nomor HP harus format 08xxxxxxxx");
+    return;
+  }
+
+  // 🔥 convert ke format WA (62)
+  let nohpWA = "";
+  if (nohp) {
+    nohpWA = nohp.startsWith("0") ? "62" + nohp.slice(1) : nohp;
+  }
+
   const data = {
     nik: currentNIK,
     nokk: document.getElementById("f_nokk").value,
@@ -347,6 +381,10 @@ function simpanCoklit() {
     status: status,
     keterangan: ket,
     user: userName,
+
+    // 🔥 simpan dua-duanya (opsional tapi bagus)
+    nohp: nohp, // asli
+    nohp_wa: nohpWA, // format WA
   };
 
   showLoading();
@@ -359,6 +397,9 @@ function simpanCoklit() {
         toastError(res.message);
         return;
       }
+
+      // 🔥 UX lebih enak
+      toastSuccess("Data berhasil disimpan");
 
       closeModalCoklit();
       loadValidasi();
