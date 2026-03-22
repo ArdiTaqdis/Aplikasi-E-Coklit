@@ -384,7 +384,7 @@ window.simpanCoklit = function () {
       status: status,
       keterangan: ket,
       user: userName,
-      nohp: nohp,
+      nohp: val("f_nohp"),
     };
 
     console.log("📤 DATA DIKIRIM:", data);
