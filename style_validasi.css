@@ -231,15 +231,37 @@
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 
 .form-grid input,
 .form-grid select {
-  width: 100%;
-  padding: 6px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 13px;
+
+  transition: all 0.2s ease;
+}
+
+.form-grid input:focus,
+.form-grid select:focus {
+  background: white;
+  border-color: #d8232a;
+  box-shadow: 0 0 0 2px rgba(216, 35, 42, 0.15);
+}
+
+.form-grid label {
+  font-size: 11px;
+  color: #6b7280;
+  margin-bottom: 2px;
+  display: block;
+}
+
+#f_nohp {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
 }
 
 .field-check {
