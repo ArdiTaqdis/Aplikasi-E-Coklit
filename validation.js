@@ -186,8 +186,6 @@ ${
 }
 
 function openCoklit(el) {
-  document.getElementById("btnSimpan").disabled = true;
-
   const data = JSON.parse(el.getAttribute("data-item"));
   currentNIK = data["NIK"];
 
@@ -195,60 +193,106 @@ function openCoklit(el) {
 
   detail.innerHTML = `
 
-<label style="font-size:12px;color:#64748b;">
-✔ Centang jika data sudah sesuai
-</label>
-
 <div class="form-grid">
 
 <div>
-<label>NIK</label>
-<div class="field-check">
-<input type="checkbox" class="chk">
-<input id="f_nik" value="${data["NIK"]}" readonly>
-</div>
+<label>No KK</label>
+<input id="f_nokk" value="${data["NO KK"]}" readonly>
 </div>
 
 <div>
-<label>Nama</label>
-<div class="field-check">
-<input type="checkbox" class="chk">
+<label>NIK</label>
+<input id="f_nik" value="${data["NIK"]}" readonly>
+</div>
+
+<div>
+<label>Nama Lengkap</label>
 <input id="f_nama" value="${data["Nama Lengkap"]}">
 </div>
+
+<div>
+<label>Hubungan</label>
+<input id="f_hubungan" value="${data["Hubungan dlm Klg"]}">
+</div>
+
+<div>
+<label>Jenis Kelamin</label>
+<select id="f_jk">
+  <option ${data["Jenis Kelamin"] == "Laki-laki" ? "selected" : ""}>Laki-laki</option>
+  <option ${data["Jenis Kelamin"] == "Perempuan" ? "selected" : ""}>Perempuan</option>
+</select>
+</div>
+
+<div>
+<label>Tempat Lahir</label>
+<input id="f_tempat" value="${data["Tempat Lahir"]}">
 </div>
 
 <div>
 <label>Tanggal Lahir</label>
-<div class="field-check">
-<input type="checkbox" class="chk">
 <input type="date" id="f_tgl" value="${formatDateInput(data["Tanggal Lahir"])}">
-</div>
 </div>
 
 <div>
-<label>Status Coklit</label>
-<div class="field-check">
-<input type="checkbox" class="chk">
-<select id="statusCoklit">
-  <option value="">Pilih Status</option>
-  <option value="Sudah Coklit">Pemilih Sesuai</option>
-  <option value="Tersaring">Pemilih Tersaring</option>
+<label>Agama</label>
+<input id="f_agama" value="${data["Agama"]}">
+</div>
+
+<div>
+<label>Pendidikan</label>
+<input id="f_pendidikan" value="${data["Pendidikan"]}">
+</div>
+
+<div>
+<label>Pekerjaan</label>
+<input id="f_pekerjaan" value="${data["Jenis Pekerjaan"]}">
+</div>
+
+<div>
+<label>Status Perkawinan</label>
+<select id="f_kawin">
+  <option ${data["Status Perkawinan"] == "Belum Kawin" ? "selected" : ""}>Belum Kawin</option>
+  <option ${data["Status Perkawinan"] == "Kawin" ? "selected" : ""}>Kawin</option>
+  <option ${data["Status Perkawinan"] == "Cerai Hidup" ? "selected" : ""}>Cerai Hidup</option>
+  <option ${data["Status Perkawinan"] == "Cerai Mati" ? "selected" : ""}>Cerai Mati</option>
 </select>
 </div>
+
+<div>
+<label>Kewarganegaraan</label>
+<input id="f_warga" value="${data["Kewarganegaraan"]}">
+</div>
+
+<div>
+<label>No Paspor</label>
+<input id="f_paspor" value="${data["No Paspor"]}">
+</div>
+
+<div>
+<label>No KITAP/KITAS</label>
+<input id="f_kitap" value="${data["No KITAP_KITAS"]}">
+</div>
+
+<div>
+<label>Ayah Kandung</label>
+<input id="f_ayah" value="${data["Ayah Kandung"]}">
+</div>
+
+<div>
+<label>Ibu Kandung</label>
+<input id="f_ibu" value="${data["Ibu Kandung"]}">
 </div>
 
 </div>
 `;
 
+  // set status coklit
   document.getElementById("statusCoklit").value = data["Status"] || "";
+  document.getElementById("ketCoklit").value = data["Keterangan"] || "";
+
+  toggleKeterangan();
 
   document.getElementById("modalCoklit").style.display = "flex";
-
-  document.querySelectorAll(".chk").forEach((c) => {
-    c.onchange = cekValidasiForm;
-  });
-
-  document.getElementById("statusCoklit").onchange = cekValidasiForm;
 }
 
 function formatDateInput(val) {
@@ -258,24 +302,6 @@ function formatDateInput(val) {
   if (parts.length !== 3) return "";
 
   return `${parts[2]}-${parts[1]}-${parts[0]}`;
-}
-
-function cekValidasiForm() {
-  const checks = document.querySelectorAll(".chk");
-  const status = document.getElementById("statusCoklit").value;
-  const btn = document.getElementById("btnSimpan");
-
-  let allChecked = true;
-
-  checks.forEach((c) => {
-    if (!c.checked) allChecked = false;
-  });
-
-  if (allChecked && status) {
-    btn.disabled = false;
-  } else {
-    btn.disabled = true;
-  }
 }
 
 function closeModalCoklit() {
