@@ -419,7 +419,3 @@ window.simpanCoklit = function () {
     alert("Terjadi error di sistem");
   }
 };
-
-window.simpanCoklit = function () {
-  console.log("🔥 SIMPAN DIKLIK");
-};
