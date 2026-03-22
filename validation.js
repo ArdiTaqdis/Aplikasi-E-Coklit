@@ -191,6 +191,15 @@ function openCoklit(el) {
 
   const detail = document.getElementById("detailPemilih");
 
+  const umur = hitungUmur(formatDateInput(data["Tanggal Lahir"]));
+
+  if (umur < 17) {
+    document.getElementById("statusCoklit").value = "Tersaring";
+    document.getElementById("ketCoklit").value = "Dibawah Umur";
+
+    toggleKeterangan();
+  }
+
   detail.innerHTML = `
 
 <div class="form-grid">
@@ -350,10 +359,26 @@ window.simpanCoklit = function () {
     const ket = val("ketCoklit");
     let nohpInput = val("f_nohp");
     let nohp = normalizeNoHP(nohpInput);
+    const tgl = val("f_tgl");
+    const umur = hitungUmur(tgl);
+
+    console.log("UMUR:", umur);
 
     if (!nohp) {
       toastError("Format nomor HP tidak valid (contoh: 628123456789)");
       return;
+    }
+
+    if (umur < 17) {
+      document.getElementById("statusCoklit").value = "Tersaring";
+      document.getElementById("ketCoklit").value = "Dibawah Umur";
+
+      document.getElementById("statusCoklit").disabled = true;
+      document.getElementById("ketCoklit").disabled = true;
+
+      toggleKeterangan();
+
+      toastError("Umur < 17 tahun → otomatis tersaring");
     }
 
     if (!status) {
@@ -436,4 +461,20 @@ function normalizeNoHP(nohp) {
   }
 
   return ""; // tidak valid
+}
+
+function hitungUmur(tglLahir) {
+  if (!tglLahir) return 0;
+
+  const today = new Date();
+  const birth = new Date(tglLahir);
+
+  let umur = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+    umur--;
+  }
+
+  return umur;
 }
