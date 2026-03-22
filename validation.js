@@ -187,6 +187,7 @@ ${
 
 function openCoklit(el) {
   document.getElementById("btnSimpan").disabled = true;
+
   const data = JSON.parse(el.getAttribute("data-item"));
   currentNIK = data["NIK"];
 
@@ -194,51 +195,60 @@ function openCoklit(el) {
 
   detail.innerHTML = `
 
-  <div class="form-grid">
+<label style="font-size:12px;color:#64748b;">
+✔ Centang jika data sudah sesuai
+</label>
 
-  <div>
-  <label>NIK</label>
-  <div class="field-check">
-  <input type="checkbox" class="chk">
-  <input id="f_nik" value="${data["NIK"]}" readonly>
-  </div>
-  </div>
+<div class="form-grid">
 
-  <div>
-  <label>Nama</label>
-  <div class="field-check">
-  <input type="checkbox" class="chk">
-  <input id="f_nama" value="${data["Nama Lengkap"]}">
-  </div>
-  </div>
+<div>
+<label>NIK</label>
+<div class="field-check">
+<input type="checkbox" class="chk">
+<input id="f_nik" value="${data["NIK"]}" readonly>
+</div>
+</div>
 
-  <div>
-  <label>Tanggal Lahir</label>
-  <div class="field-check">
-  <input type="checkbox" class="chk">
-  <input type="date" id="f_tgl" value="${formatDateInput(data["Tanggal Lahir"])}">
-  </div>
-  </div>
+<div>
+<label>Nama</label>
+<div class="field-check">
+<input type="checkbox" class="chk">
+<input id="f_nama" value="${data["Nama Lengkap"]}">
+</div>
+</div>
 
-  </div>
-  `;
+<div>
+<label>Tanggal Lahir</label>
+<div class="field-check">
+<input type="checkbox" class="chk">
+<input type="date" id="f_tgl" value="${formatDateInput(data["Tanggal Lahir"])}">
+</div>
+</div>
 
-  // set status coklit
+<div>
+<label>Status Coklit</label>
+<div class="field-check">
+<input type="checkbox" class="chk">
+<select id="statusCoklit">
+  <option value="">Pilih Status</option>
+  <option value="Sudah Coklit">Pemilih Sesuai</option>
+  <option value="Tersaring">Pemilih Tersaring</option>
+</select>
+</div>
+</div>
+
+</div>
+`;
+
   document.getElementById("statusCoklit").value = data["Status"] || "";
-  document.getElementById("ketCoklit").value = data["Keterangan"] || "";
-
-  toggleKeterangan();
 
   document.getElementById("modalCoklit").style.display = "flex";
-  setTimeout(() => {
-    document.querySelectorAll(".chk").forEach((c) => {
-      c.addEventListener("change", cekValidasiForm);
-    });
 
-    document
-      .getElementById("statusCoklit")
-      .addEventListener("change", cekValidasiForm);
-  }, 100);
+  document.querySelectorAll(".chk").forEach((c) => {
+    c.onchange = cekValidasiForm;
+  });
+
+  document.getElementById("statusCoklit").onchange = cekValidasiForm;
 }
 
 function formatDateInput(val) {
