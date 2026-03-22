@@ -286,7 +286,7 @@ function openCoklit(el) {
 <!-- 🔥 TAMBAHAN BARU -->
 <div style="grid-column: span 2;">
 <label>📞 No HP (Kepala Keluarga)</label>
-<input id="f_nohp" placeholder="08xxxxxxxxxx">
+<input id="f_nohp" placeholder="Contoh Format 628xxxxxxxxxx">
 </div>
 
 </div>
