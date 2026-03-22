@@ -341,25 +341,22 @@ function simpanCoklit() {
   const status = document.getElementById("statusCoklit").value;
   const ket = document.getElementById("ketCoklit").value;
 
-  const userSession = JSON.parse(localStorage.getItem("userSession"));
-  const userName = userSession?.username || "Admin";
+  const nohp = document.getElementById("f_nohp")?.value || "";
 
-  let nohp = document.getElementById("f_nohp").value.trim();
-
-  // 🔥 bersihin selain angka
-  nohp = nohp.replace(/\D/g, "");
-
-  // 🔥 validasi format (opsional tapi penting)
-  if (nohp && !/^08\d{8,12}$/.test(nohp)) {
-    toastError("Nomor HP harus format 08xxxxxxxx");
+  // 🔥 VALIDASI STATUS
+  if (!status) {
+    toastError("Pilih status dulu broo");
     return;
   }
 
-  // 🔥 convert ke format WA (62)
-  let nohpWA = "";
-  if (nohp) {
-    nohpWA = nohp.startsWith("0") ? "62" + nohp.slice(1) : nohp;
+  // 🔥 VALIDASI HP
+  if (nohp && !/^08\d{8,12}$/.test(nohp)) {
+    toastError("Nomor HP tidak valid");
+    return;
   }
+
+  const userSession = JSON.parse(localStorage.getItem("userSession"));
+  const userName = userSession?.username || "Admin";
 
   const data = {
     nik: currentNIK,
@@ -381,11 +378,10 @@ function simpanCoklit() {
     status: status,
     keterangan: ket,
     user: userName,
-
-    // 🔥 simpan dua-duanya (opsional tapi bagus)
-    nohp: nohp, // asli
-    nohp_wa: nohpWA, // format WA
+    nohp: nohp,
   };
+
+  console.log("KIRIM DATA:", data); // 🔥 debug
 
   showLoading();
 
@@ -393,13 +389,14 @@ function simpanCoklit() {
     .then((res) => {
       hideLoading();
 
+      console.log("RESP:", res);
+
       if (!res.success) {
-        toastError(res.message);
+        toastError(res.message || "Gagal update");
         return;
       }
 
-      // 🔥 UX lebih enak
-      toastSuccess("Data berhasil disimpan");
+      toastSuccess("Berhasil disimpan 🔥");
 
       closeModalCoklit();
       loadValidasi();
