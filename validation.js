@@ -337,23 +337,23 @@ function toggleKeterangan() {
   }
 }
 
-function simpanCoklit() {
+window.simpanCoklit = function () {
   const status = document.getElementById("statusCoklit").value;
   const ket = document.getElementById("ketCoklit").value;
 
   const nohp = document.getElementById("f_nohp")?.value || "";
 
-  // 🔥 VALIDASI STATUS
   if (!status) {
     toastError("Pilih status dulu broo");
     return;
   }
 
-  // 🔥 VALIDASI HP
   if (nohp && !/^08\d{8,12}$/.test(nohp)) {
     toastError("Nomor HP tidak valid");
     return;
   }
+
+  console.log("CLICK SIMPAN 🔥"); // DEBUG
 
   const userSession = JSON.parse(localStorage.getItem("userSession"));
   const userName = userSession?.username || "Admin";
@@ -381,18 +381,14 @@ function simpanCoklit() {
     nohp: nohp,
   };
 
-  console.log("KIRIM DATA:", data); // 🔥 debug
-
   showLoading();
 
   apiPost("updateFullData", data)
     .then((res) => {
       hideLoading();
 
-      console.log("RESP:", res);
-
       if (!res.success) {
-        toastError(res.message || "Gagal update");
+        toastError(res.message);
         return;
       }
 
@@ -406,4 +402,4 @@ function simpanCoklit() {
       console.error(err);
       toastError("Server error");
     });
-}
+};
