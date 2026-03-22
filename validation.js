@@ -338,70 +338,86 @@ function toggleKeterangan() {
 }
 
 window.simpanCoklit = function () {
-  const status = document.getElementById("statusCoklit").value;
-  const ket = document.getElementById("ketCoklit").value;
+  try {
+    console.log("🔥 CLICK SIMPAN");
 
-  const nohp = document.getElementById("f_nohp")?.value || "";
+    // helper ambil value aman
+    const val = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.value : "";
+    };
 
-  if (!status) {
-    toastError("Pilih status dulu broo");
-    return;
+    const status = val("statusCoklit");
+    const ket = val("ketCoklit");
+    const nohp = val("f_nohp");
+
+    if (!status) {
+      toastError("Pilih status dulu broo");
+      return;
+    }
+
+    if (nohp && !/^08\d{8,12}$/.test(nohp)) {
+      toastError("Nomor HP tidak valid");
+      return;
+    }
+
+    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+    const userName = userSession.username || "Admin";
+
+    const data = {
+      nik: currentNIK,
+      nokk: val("f_nokk"),
+      nama: val("f_nama"),
+      hubungan: val("f_hubungan"),
+      jk: val("f_jk"),
+      tempat: val("f_tempat"),
+      tanggal: val("f_tgl"),
+      agama: val("f_agama"),
+      pendidikan: val("f_pendidikan"),
+      pekerjaan: val("f_pekerjaan"),
+      kawin: val("f_kawin"),
+      warga: val("f_warga"),
+      paspor: val("f_paspor"),
+      kitap: val("f_kitap"),
+      ayah: val("f_ayah"),
+      ibu: val("f_ibu"),
+      status: status,
+      keterangan: ket,
+      user: userName,
+      nohp: nohp,
+    };
+
+    console.log("📤 DATA DIKIRIM:", data);
+
+    // loading aman
+    if (typeof showLoading === "function") showLoading();
+
+    apiPost("updateFullData", data)
+      .then((res) => {
+        console.log("📥 RESPONSE:", res);
+
+        if (typeof hideLoading === "function") hideLoading();
+
+        if (!res || !res.success) {
+          toastError(res?.message || "Gagal menyimpan");
+          return;
+        }
+
+        toastSuccess("Berhasil disimpan 🔥");
+
+        if (typeof closeModalCoklit === "function") closeModalCoklit();
+        if (typeof loadValidasi === "function") loadValidasi();
+      })
+      .catch((err) => {
+        if (typeof hideLoading === "function") hideLoading();
+
+        console.error("❌ ERROR API:", err);
+        toastError("Server error");
+      });
+  } catch (err) {
+    console.error("❌ ERROR JS:", err);
+    alert("Terjadi error di sistem");
   }
-
-  if (nohp && !/^08\d{8,12}$/.test(nohp)) {
-    toastError("Nomor HP tidak valid");
-    return;
-  }
-
-  console.log("CLICK SIMPAN 🔥"); // DEBUG
-
-  const userSession = JSON.parse(localStorage.getItem("userSession"));
-  const userName = userSession?.username || "Admin";
-
-  const data = {
-    nik: currentNIK,
-    nokk: document.getElementById("f_nokk").value,
-    nama: document.getElementById("f_nama").value,
-    hubungan: document.getElementById("f_hubungan").value,
-    jk: document.getElementById("f_jk").value,
-    tempat: document.getElementById("f_tempat").value,
-    tanggal: document.getElementById("f_tgl").value,
-    agama: document.getElementById("f_agama").value,
-    pendidikan: document.getElementById("f_pendidikan").value,
-    pekerjaan: document.getElementById("f_pekerjaan").value,
-    kawin: document.getElementById("f_kawin").value,
-    warga: document.getElementById("f_warga").value,
-    paspor: document.getElementById("f_paspor").value,
-    kitap: document.getElementById("f_kitap").value,
-    ayah: document.getElementById("f_ayah").value,
-    ibu: document.getElementById("f_ibu").value,
-    status: status,
-    keterangan: ket,
-    user: userName,
-    nohp: nohp,
-  };
-
-  showLoading();
-
-  apiPost("updateFullData", data)
-    .then((res) => {
-      hideLoading();
-
-      if (!res.success) {
-        toastError(res.message);
-        return;
-      }
-
-      toastSuccess("Berhasil disimpan 🔥");
-
-      closeModalCoklit();
-      loadValidasi();
-    })
-    .catch((err) => {
-      hideLoading();
-      console.error(err);
-      toastError("Server error");
-    });
 };
 
 window.simpanCoklit = function () {
