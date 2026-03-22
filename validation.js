@@ -348,7 +348,13 @@ window.simpanCoklit = function () {
 
     const status = val("statusCoklit");
     const ket = val("ketCoklit");
-    const nohp = val("f_nohp");
+    let nohpInput = val("f_nohp");
+    let nohp = normalizeNoHP(nohpInput);
+
+    if (!nohp) {
+      toastError("Format nomor HP tidak valid (contoh: 628123456789)");
+      return;
+    }
 
     if (!status) {
       toastError("Pilih status dulu broo");
@@ -414,3 +420,20 @@ window.simpanCoklit = function () {
     alert("Terjadi error di sistem");
   }
 };
+
+function normalizeNoHP(nohp) {
+  if (!nohp) return "";
+
+  // hapus semua selain angka
+  nohp = nohp.replace(/\D/g, "");
+
+  if (nohp.startsWith("0")) {
+    return "62" + nohp.slice(1);
+  }
+
+  if (nohp.startsWith("62")) {
+    return nohp;
+  }
+
+  return ""; // tidak valid
+}
