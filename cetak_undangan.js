@@ -337,25 +337,21 @@ function generatePDFKK(noKK, btn) {
       if (res.status) {
         toastSuccess("PDF KK berhasil dibuat 🎉");
 
-        // 🔥 buka pdf
-        window.open(res.url, "_blank");
+        // 🔥 GANTI INI → MODAL
+        openModalPDF(res.url);
 
-        // =========================
-        // 🔥 UPDATE DATA GLOBAL (FULL)
-        // =========================
+        // 🔥 update data global
         window.dataTervalidasiGlobal.forEach((d) => {
           if (String(d["NO KK"]) === String(noKK)) {
             d.urlPDF = res.url;
           }
         });
 
-        // =========================
-        // 🔥 GANTI TOMBOL LANGSUNG (TIDAK NIMPAH)
-        // =========================
+        // 🔥 ganti tombol
         btn.outerHTML = `
-        <button class="btn-pdf-link" onclick="openModalPDF('${res.url}')">
+          <button class="btn-pdf-link" onclick="openModalPDF('${res.url}')">
             📎 PDF
-        </button>
+          </button>
         `;
       } else {
         toastError(res.message || "Gagal membuat PDF");
