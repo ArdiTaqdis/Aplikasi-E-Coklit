@@ -307,13 +307,13 @@ function printSemuaKK() {
   document.getElementById("modalUndangan").style.display = "flex";
 }
 
-function generatePDFDrive(data) {
-  API.generatePDF(data, (res) => {
-    if (res.url) {
-      window.open(res.url, "_blank");
-    }
-  });
-}
+// function generatePDFDrive(data) {
+//   API.generatePDF(data, (res) => {
+//     if (res.url) {
+//       window.open(res.url, "_blank");
+//     }
+//   });
+// }
 
 function generatePDFKK(noKK, btn) {
   const anggota = (window.dataTervalidasiGlobal || []).filter(
