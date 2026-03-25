@@ -39,9 +39,15 @@ function loadTervalidasi() {
               Detail
             </button>
 
+            <button onclick='exportPDF(${JSON.stringify(a)})'>
+              📄 PDF
+            </button>
+
             <button onclick="cetakKK('${a["NO KK"]}')">
               📄 Cetak 1 KK
             </button>
+
+            
           </td>
         </tr>`;
       });
