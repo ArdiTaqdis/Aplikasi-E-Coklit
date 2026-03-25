@@ -644,3 +644,25 @@ table th {
 td button {
   margin-right: 4px;
 }
+
+/* PDF SUDAH JADI (PREVIEW) */
+.btn-pdf-ready {
+  background: #16a34a; /* hijau tua */
+  color: white;
+}
+
+.btn-pdf-ready:hover {
+  background: #15803d;
+  transform: translateY(-1px);
+}
+
+/* PDF BELUM (GENERATE) */
+.btn-pdf-generate {
+  background: #f59e0b; /* kuning/orange */
+  color: white;
+}
+
+.btn-pdf-generate:hover {
+  background: #d97706;
+  transform: translateY(-1px);
+}

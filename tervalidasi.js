@@ -29,13 +29,14 @@ function loadTervalidasi() {
         const dataStr = encodeURIComponent(JSON.stringify(a));
 
         const pdfButton = urlPDF
-          ? `<button class="btn btn-pdf-link" onclick="openModalPDF('${urlPDF}')">
-               📎 PDF
-             </button>`
-          : `<button class="btn btn-pdf-link"
-               onclick="generatePDFKK('${a["NO KK"]}', this)">
-               ☁️ PDF KK
-             </button>`;
+          ? `<button class="btn btn-pdf-ready"
+            onclick="openModalPDF('${urlPDF}')">
+            📎 Undangan PDF
+          </button>`
+          : `<button class="btn btn-pdf-generate"
+            onclick="generatePDFKK('${a["NO KK"]}', this)">
+            ☁️ Create PDF KK
+          </button>`;
 
         html += `
         <tr>
