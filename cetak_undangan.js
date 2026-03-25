@@ -353,9 +353,9 @@ function generatePDFKK(noKK, btn) {
         // 🔥 GANTI TOMBOL LANGSUNG (TIDAK NIMPAH)
         // =========================
         btn.outerHTML = `
-          <a href="${res.url}" target="_blank" class="btn-pdf-link">
+        <button class="btn-pdf-link" onclick="openModalPDF('${res.url}')">
             📎 PDF
-          </a>
+        </button>
         `;
       } else {
         toastError(res.message || "Gagal membuat PDF");
@@ -366,4 +366,14 @@ function generatePDFKK(noKK, btn) {
       console.error(err);
       toastError("Error server");
     });
+}
+
+function openModalPDF(url) {
+  document.getElementById("iframePDF").src = url;
+  document.getElementById("modalPDF").style.display = "block";
+}
+
+function closeModalPDF() {
+  document.getElementById("modalPDF").style.display = "none";
+  document.getElementById("iframePDF").src = "";
 }

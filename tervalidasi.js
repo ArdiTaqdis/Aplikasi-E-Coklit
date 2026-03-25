@@ -22,12 +22,14 @@ function loadTervalidasi() {
       }
 
       data.forEach((a) => {
-        // 🔥 CEK APAKAH SUDAH ADA PDF
+        // 🔥 tombol PDF (preview modal)
         const pdfButton = a.urlPDF
-          ? `<a href="${a.urlPDF}" target="_blank" class="btn-pdf-link">📎 PDF</a>`
+          ? `<button class="btn-pdf-link" onclick="openModalPDF('${a.urlPDF}')">
+         📎 PDF
+       </button>`
           : `<button onclick="generatePDFKK('${a["NO KK"]}', this)">
-               ☁️ PDF KK
-             </button>`;
+         ☁️ PDF KK
+       </button>`;
 
         tbody.innerHTML += `
         <tr>
