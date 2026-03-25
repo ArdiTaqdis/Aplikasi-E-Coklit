@@ -308,37 +308,9 @@ function printSemuaKK() {
 }
 
 function generatePDFDrive(data) {
-  if (!data || !data["NIK"]) {
-    toastError("Data tidak valid");
-    return;
-  }
-
-  showLoading();
-
-  fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      action: "generatePDF",
-      data: data,
-    }),
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      hideLoading();
-
-      if (res.status) {
-        toastSuccess("PDF berhasil dibuat 🎉");
-
-        // 🔥 buka file
-        window.open(res.url, "_blank");
-      } else {
-        toastError(res.message || "Gagal membuat PDF");
-      }
-    })
-    .catch((err) => {
-      hideLoading();
-      console.error(err);
-
-      toastError("Error koneksi server");
-    });
+  API.generatePDF(data, (res) => {
+    if (res.url) {
+      window.open(res.url, "_blank");
+    }
+  });
 }

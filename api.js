@@ -242,6 +242,30 @@ const API = {
       .then((res) => cb && cb(res))
       .catch(() => toastError("Gagal load statistik"));
   },
+
+  /* =====================
+   * GENERATE PDF
+   * ===================== */
+  generatePDF(data, cb) {
+    showLoading();
+
+    apiPost("generatePDF", { data })
+      .then((res) => {
+        hideLoading();
+
+        if (!res || res.status === false) {
+          toastError(res?.message || "Gagal generate PDF");
+          return;
+        }
+
+        toastSuccess("PDF berhasil dibuat 🎉");
+        cb && cb(res);
+      })
+      .catch(() => {
+        hideLoading();
+        toastError("Server error");
+      });
+  },
 };
 
 window.api = API;
