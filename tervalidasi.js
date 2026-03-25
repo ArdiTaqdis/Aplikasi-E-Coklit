@@ -131,6 +131,7 @@ function loadTervalidasi() {
       console.error("Gagal load tervalidasi:", err);
       toastError("Gagal load data tervalidasi");
     });
+  renderTervalidasi(data);
 }
 
 function detailWarga(el) {
@@ -223,4 +224,103 @@ function detailWarga(el) {
 
 function closeModalDetail() {
   document.getElementById("modalDetail").style.display = "none";
+}
+
+function searchTervalidasi() {
+  const keyword = document
+    .getElementById("searchTervalidasi")
+    .value.toLowerCase();
+
+  const data = window.dataTervalidasiGlobal || [];
+
+  const filtered = data.filter((a) => {
+    return (
+      (a["Nama Lengkap"] || "").toLowerCase().includes(keyword) ||
+      (a["NIK"] || "").toLowerCase().includes(keyword) ||
+      (a["NO KK"] || "").toLowerCase().includes(keyword)
+    );
+  });
+
+  renderTervalidasi(filtered);
+}
+
+function renderTervalidasi(data) {
+  const tbody = document.getElementById("tbodyTervalidasi");
+  const cardContainer = document.getElementById("cardTervalidasi");
+
+  if (!data.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align:center;color:#777">
+          Data tidak ditemukan
+        </td>
+      </tr>`;
+
+    cardContainer.innerHTML = `
+      <div style="text-align:center;color:#777;padding:20px">
+        Data tidak ditemukan
+      </div>`;
+    return;
+  }
+
+  let htmlTable = "";
+  let htmlCard = "";
+
+  data.forEach((a) => {
+    const noHP = a["No HP"] || "";
+    const urlPDF = a["urlPDF"] || "";
+    const isKepala = a["Hubungan dlm Klg"] === "Kepala Keluarga";
+    const dataStr = encodeURIComponent(JSON.stringify(a));
+
+    const pdfButton = urlPDF
+      ? `<button class="btn btn-pdf-ready" onclick="openModalPDF('${urlPDF}')">📎 PDF</button>`
+      : `<button class="btn btn-pdf-generate" onclick="generatePDFKK('${a["NO KK"]}', this)">☁️ PDF</button>`;
+
+    // TABLE
+    htmlTable += `
+      <tr>
+        <td>${a["NO KK"]}</td>
+        <td>${a["NIK"]}</td>
+        <td>${a["Nama Lengkap"]}</td>
+        <td>${a["Hubungan dlm Klg"]}</td>
+        <td>${a["Jenis Kelamin"]}</td>
+        <td>${noHP || "-"}</td>
+        <td><span class="badge-selesai">✔ Sudah Coklit</span></td>
+        <td>
+          <button class="btn btn-detail" data-item="${dataStr}" onclick="detailWarga(this)">Detail</button>
+          ${pdfButton}
+          <button class="btn btn-print" onclick="cetakKK('${a["NO KK"]}')">Cetak</button>
+          ${
+            isKepala
+              ? `<button class="btn btn-wa" onclick="kirimWAPDF('${noHP}','${urlPDF}','${a["NO KK"]}')">WA</button>`
+              : ""
+          }
+        </td>
+      </tr>`;
+
+    // CARD
+    htmlCard += `
+      <div class="card-item">
+        <div class="card-header">${a["Nama Lengkap"]}</div>
+        <div class="card-info">
+          NIK: ${a["NIK"]}<br>
+          KK: ${a["NO KK"]}<br>
+          ${a["Hubungan dlm Klg"]} • ${a["Jenis Kelamin"]}<br>
+          HP: ${noHP || "-"}
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-detail" data-item="${dataStr}" onclick="detailWarga(this)">Detail</button>
+          ${pdfButton}
+          <button class="btn btn-print" onclick="cetakKK('${a["NO KK"]}')">Cetak</button>
+          ${
+            isKepala
+              ? `<button class="btn btn-wa" onclick="kirimWAPDF('${noHP}','${urlPDF}','${a["NO KK"]}')">WA</button>`
+              : ""
+          }
+        </div>
+      </div>`;
+  });
+
+  tbody.innerHTML = htmlTable;
+  cardContainer.innerHTML = htmlCard;
 }
