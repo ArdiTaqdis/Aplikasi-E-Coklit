@@ -42,8 +42,14 @@ function cetakUndangan(data) {
       <tr><td>Tempat</td><td>: TPS</td></tr>
     </table>
 
+    const tgl = new Date().toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+    });
+
     <div class="ttd">
-      <p>${new Date().toLocaleDateString()}</p>
+      <p>${tgl}</p>
       <p>Panitia</p>
       <br><br><br>
       <p><b>(_____________)</b></p>
@@ -57,26 +63,7 @@ function cetakUndangan(data) {
 }
 
 function printUndangan() {
-  const printContent = document.getElementById("printArea").innerHTML;
-
-  const win = window.open("", "", "width=800,height=600");
-
-  win.document.write(`
-    <html>
-      <head>
-        <title>Print</title>
-        <style>
-          body { font-family: Times New Roman; padding: 40px; }
-        </style>
-      </head>
-      <body>
-        ${printContent}
-      </body>
-    </html>
-  `);
-
-  win.document.close();
-  win.print();
+  window.print();
 }
 
 function closeModalUndangan() {
@@ -130,13 +117,11 @@ function cetakKK(noKK) {
 
     <div class="line"></div>
 
-    <!-- NOMOR -->
     <p style="text-align:center; font-size:12px;">
-      Nomor : 001/UND/PILKADES/2026
+    Nomor : 001/UND/PILKADES/2026
     </p>
 
-    <!-- JUDUL -->
-    <h3 class="judul">DAFTAR PEMILIH DALAM 1 KARTU KELUARGA</h3>
+    <h3 class="judul">SURAT UNDANGAN PILKADES</h3>
 
     <!-- PEMBUKA -->
     <p style="text-align:justify">
