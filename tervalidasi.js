@@ -5,47 +5,45 @@ function loadTervalidasi() {
     .then((data) => {
       hideLoading();
 
-      // 🔥 SIMPAN GLOBAL
       window.dataTervalidasiGlobal = data;
 
       const tbody = document.getElementById("tbodyTervalidasi");
-      tbody.innerHTML = "";
 
       if (!data || !data.length) {
         tbody.innerHTML = `
         <tr>
-          <td colspan="7" style="text-align:center;color:#777">
+          <td colspan="8" style="text-align:center;color:#777">
             Tidak ada data tervalidasi
           </td>
         </tr>`;
         return;
       }
 
-      data.forEach((a) => {
-        // 🔥 tombol PDF (preview modal)
-        const pdfButton = a.urlPDF
-          ? `<button class="btn-pdf-link" onclick="openModalPDF('${a.urlPDF}')">
-         📎 PDF
-       </button>`
-          : `<button onclick="generatePDFKK('${a["NO KK"]}', this)">
-         ☁️ PDF KK
-       </button>`;
+      let html = ""; // 🔥 pindah ke luar
 
-        tbody.innerHTML += `
+      data.forEach((a) => {
+        const noHP = a["No HP"] || "";
+        const urlPDF = a["urlPDF"] || "";
+
+        const pdfButton = urlPDF
+          ? `<button class="btn-pdf-link" onclick="openModalPDF('${urlPDF}')">📎 PDF</button>`
+          : `<button onclick="generatePDFKK('${a["NO KK"]}', this)">☁️ PDF KK</button>`;
+
+        const dataStr = encodeURIComponent(JSON.stringify(a));
+
+        html += `
         <tr>
           <td>${a["NO KK"]}</td>
           <td>${a["NIK"]}</td>
           <td>${a["Nama Lengkap"]}</td>
           <td>${a["Hubungan dlm Klg"]}</td>
           <td>${a["Jenis Kelamin"]}</td>
-          <td>${a["No HP"] || "-"}</td>
-          <td>
-            <span class="badge-selesai">✔ Sudah Coklit</span>
-          </td>
+          <td>${noHP || "-"}</td>
+          <td><span class="badge-selesai">✔ Sudah Coklit</span></td>
           <td>
 
             <button class="btn"
-              data-item='${JSON.stringify(a).replace(/'/g, "&apos;")}'
+              data-item="${dataStr}"
               onclick="detailWarga(this)">
               Detail
             </button>
@@ -53,22 +51,24 @@ function loadTervalidasi() {
             <button class="btn-pdf"
               onclick='generatePDFDrive(${JSON.stringify(a).replace(/'/g, "&apos;")})'>
               ☁️ PDF Drive
-            </button> 
+            </button>
 
             ${pdfButton}
 
             <button onclick="cetakKK('${a["NO KK"]}')">
-              📄 Cetak 1 KK
+              📄 Cetak
             </button>
 
             <button class="btn-wa"
-              onclick="kirimWAPDF('${a["No HP"]}','${a["urlPDF"]}','${a["NO KK"]}')">
+              onclick="kirimWAPDF('${noHP}','${urlPDF}','${a["NO KK"]}')">
               💬 WA
             </button>
 
           </td>
         </tr>`;
       });
+
+      tbody.innerHTML = html; // 🔥 sekali saja
     })
     .catch((err) => {
       hideLoading();
