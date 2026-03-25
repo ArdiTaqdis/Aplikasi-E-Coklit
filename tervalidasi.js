@@ -36,7 +36,9 @@ function loadTervalidasi() {
               Detail
             </button>
 
-            <button onclick='cetakUndangan(${JSON.stringify(row)})'>
+            <button class="btn"
+              data-item='${JSON.stringify(a).replace(/'/g, "&apos;")}'
+              onclick="cetakUndanganFromBtn(this)">
               🖨 Cetak
             </button>
           </td>
@@ -48,6 +50,11 @@ function loadTervalidasi() {
       console.error("Gagal load tervalidasi:", err);
       toastError("Gagal load data tervalidasi");
     });
+}
+
+function cetakUndanganFromBtn(el) {
+  const data = JSON.parse(el.getAttribute("data-item"));
+  cetakUndangan(data);
 }
 
 function detailWarga(el) {
