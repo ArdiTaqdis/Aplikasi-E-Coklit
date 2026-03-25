@@ -46,10 +46,8 @@ function loadTervalidasi() {
               data-item="${dataStr}"
               onclick="detailWarga(this)">
               Detail
-            </button>
-
-          
-            ${pdfButton}
+            </button>        
+         
 
             <button onclick="cetakKK('${a["NO KK"]}')">
               📄 Cetak
