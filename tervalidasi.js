@@ -25,6 +25,8 @@ function loadTervalidasi() {
         const noHP = a["No HP"] || "";
         const urlPDF = a["urlPDF"] || "";
 
+        const isKepala = a["Hubungan dlm Klg"] === "Kepala Keluarga";
+
         const pdfButton = urlPDF
           ? `<button class="btn-pdf-link" onclick="openModalPDF('${urlPDF}')">📎 PDF</button>`
           : `<button onclick="generatePDFKK('${a["NO KK"]}', this)">☁️ PDF KK</button>`;
@@ -32,35 +34,41 @@ function loadTervalidasi() {
         const dataStr = encodeURIComponent(JSON.stringify(a));
 
         html += `
-        <tr>
-          <td>${a["NO KK"]}</td>
-          <td>${a["NIK"]}</td>
-          <td>${a["Nama Lengkap"]}</td>
-          <td>${a["Hubungan dlm Klg"]}</td>
-          <td>${a["Jenis Kelamin"]}</td>
-          <td>${noHP || "-"}</td>
-          <td><span class="badge-selesai">✔ Sudah Coklit</span></td>
-          <td>
+      <tr>
+        <td>${a["NO KK"]}</td>
+        <td>${a["NIK"]}</td>
+        <td>${a["Nama Lengkap"]}</td>
+        <td>${a["Hubungan dlm Klg"]}</td>
+        <td>${a["Jenis Kelamin"]}</td>
+        <td>${noHP || "-"}</td>
+        <td><span class="badge-selesai">✔ Sudah Coklit</span></td>
+        <td>
 
-            <button class="btn"
-              data-item="${dataStr}"
-              onclick="detailWarga(this)">
-              Detail
-            </button>
+          <button class="btn"
+            data-item="${dataStr}"
+            onclick="detailWarga(this)">
+            Detail
+          </button>
 
-            ${pdfButton}
+          ${pdfButton}
 
-            <button onclick="cetakKK('${a["NO KK"]}')">
-              📄 Cetak
-            </button>
+          <button onclick="cetakKK('${a["NO KK"]}')">
+            📄 Cetak
+          </button>
 
-            <button class="btn-wa"
-              onclick="kirimWAPDF('${noHP}','${urlPDF}','${a["NO KK"]}')">
-              💬 WA
-            </button>
+          ${
+            isKepala
+              ? `
+          <button class="btn-wa"
+            onclick="kirimWAPDF('${noHP}','${urlPDF}','${a["NO KK"]}')">
+            💬 WA
+          </button>
+          `
+              : ""
+          }
 
-          </td>
-        </tr>`;
+        </td>
+      </tr>`;
       });
 
       tbody.innerHTML = html; // 🔥 sekali saja
