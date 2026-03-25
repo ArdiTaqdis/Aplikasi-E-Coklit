@@ -130,8 +130,19 @@ function cetakKK(noKK) {
 
     <div class="line"></div>
 
+    <!-- NOMOR -->
+    <p style="text-align:center; font-size:12px;">
+      Nomor : 001/UND/PILKADES/2026
+    </p>
+
     <!-- JUDUL -->
-    <h3 class="judul">DAFTAR UNDANGAN 1 KARTU KELUARGA</h3>
+    <h3 class="judul">DAFTAR PEMILIH DALAM 1 KARTU KELUARGA</h3>
+
+    <!-- PEMBUKA -->
+    <p style="text-align:justify">
+      Berdasarkan pelaksanaan Pemilihan Kepala Desa, bersama ini disampaikan
+      daftar anggota keluarga yang terdaftar sebagai pemilih:
+    </p>
 
     <!-- INFO KK -->
     <p>No KK : <b>${noKK}</b></p>
@@ -169,15 +180,19 @@ function cetakKK(noKK) {
         </tr>
       </table>
 
-      <p style="margin-top:10px">
+      <p style="margin-top:4px">
         * Harap membawa undangan ini saat hadir ke TPS
+      </p>
+
+      <p style="margin-top:4px">
+        Demikian undangan ini disampaikan untuk dipergunakan sebagaimana mestinya.
       </p>
 
     </div>
 
     <!-- TTD -->
     <div class="ttd">
-      <p>${new Date().toLocaleDateString()}</p>
+      <p>Desa Anda, ${new Date().toLocaleDateString()}</p>
       <p>Panitia Pemilihan</p>
 
       <br><br><br>
