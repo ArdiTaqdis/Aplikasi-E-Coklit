@@ -35,6 +35,10 @@ function loadTervalidasi() {
               onclick="detailWarga(this)">
               Detail
             </button>
+
+            <button onclick='cetakUndangan(${JSON.stringify(row)})'>
+              🖨 Cetak
+            </button>
           </td>
         </tr>`;
       });
