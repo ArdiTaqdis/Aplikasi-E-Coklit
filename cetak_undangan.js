@@ -315,7 +315,7 @@ function generatePDFDrive(data) {
   });
 }
 
-function generatePDFKK(noKK) {
+function generatePDFKK(noKK, btn) {
   const anggota = (window.dataTervalidasiGlobal || []).filter(
     (d) => String(d["NO KK"]).trim() === String(noKK).trim(),
   );
@@ -336,7 +336,27 @@ function generatePDFKK(noKK) {
 
       if (res.status) {
         toastSuccess("PDF KK berhasil dibuat 🎉");
+
+        // 🔥 buka pdf
         window.open(res.url, "_blank");
+
+        // =========================
+        // 🔥 UPDATE DATA GLOBAL (FULL)
+        // =========================
+        window.dataTervalidasiGlobal.forEach((d) => {
+          if (String(d["NO KK"]) === String(noKK)) {
+            d.urlPDF = res.url;
+          }
+        });
+
+        // =========================
+        // 🔥 GANTI TOMBOL LANGSUNG (TIDAK NIMPAH)
+        // =========================
+        btn.outerHTML = `
+          <a href="${res.url}" target="_blank" class="btn-pdf-link">
+            📎 PDF
+          </a>
+        `;
       } else {
         toastError(res.message || "Gagal membuat PDF");
       }

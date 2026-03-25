@@ -22,6 +22,13 @@ function loadTervalidasi() {
       }
 
       data.forEach((a) => {
+        // 🔥 CEK APAKAH SUDAH ADA PDF
+        const pdfButton = a.urlPDF
+          ? `<a href="${a.urlPDF}" target="_blank" class="btn-pdf-link">📎 PDF</a>`
+          : `<button onclick="generatePDFKK('${a["NO KK"]}', this)">
+               ☁️ PDF KK
+             </button>`;
+
         tbody.innerHTML += `
         <tr>
           <td>${a["NO KK"]}</td>
@@ -33,29 +40,24 @@ function loadTervalidasi() {
             <span class="badge-selesai">✔ Sudah Coklit</span>
           </td>
           <td>
+
             <button class="btn"
               data-item='${JSON.stringify(a).replace(/'/g, "&apos;")}'
               onclick="detailWarga(this)">
               Detail
             </button>
 
-            <button class="btn-pdf" onclick='generatePDFDrive(${JSON.stringify(a).replace(/'/g, "&apos;")})'>
+            <button class="btn-pdf"
+              onclick='generatePDFDrive(${JSON.stringify(a).replace(/'/g, "&apos;")})'>
               ☁️ PDF Drive
             </button> 
 
-            <button onclick="generatePDFKK('${a["NO KK"]}')">
-              ☁️ PDF KK
-            </button>
+            ${pdfButton}
 
             <button onclick="cetakKK('${a["NO KK"]}')">
               📄 Cetak 1 KK
             </button>
 
-
-
-
-
-            
           </td>
         </tr>`;
       });
