@@ -84,7 +84,9 @@ function closeModalUndangan() {
 }
 
 function cetakKK(noKK) {
-  const anggota = dataValidasiGlobal.filter((d) => d["NO KK"] === noKK);
+  const anggota = (window.dataTervalidasiGlobal || []).filter(
+    (d) => String(d["NO KK"]) === String(noKK),
+  );
 
   if (!anggota.length) {
     alert("Data KK tidak ditemukan");

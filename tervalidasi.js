@@ -5,6 +5,9 @@ function loadTervalidasi() {
     .then((data) => {
       hideLoading();
 
+      // 🔥 SIMPAN GLOBAL
+      window.dataTervalidasiGlobal = data;
+
       const tbody = document.getElementById("tbodyTervalidasi");
       tbody.innerHTML = "";
 
