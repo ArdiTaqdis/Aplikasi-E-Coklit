@@ -38,6 +38,7 @@ function loadTervalidasi() {
           <td>${a["Nama Lengkap"]}</td>
           <td>${a["Hubungan dlm Klg"]}</td>
           <td>${a["Jenis Kelamin"]}</td>
+          <td>${a["No HP"] || "-"}</td>
           <td>
             <span class="badge-selesai">✔ Sudah Coklit</span>
           </td>
@@ -58,6 +59,11 @@ function loadTervalidasi() {
 
             <button onclick="cetakKK('${a["NO KK"]}')">
               📄 Cetak 1 KK
+            </button>
+
+            <button class="btn-wa"
+              onclick="kirimWAPDF('${a["No HP"]}','${a["urlPDF"]}','${a["NO KK"]}')">
+              💬 WA
             </button>
 
           </td>

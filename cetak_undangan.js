@@ -373,3 +373,40 @@ function closeModalPDF() {
   document.getElementById("modalPDF").style.display = "none";
   document.getElementById("iframePDF").src = "";
 }
+
+function kirimWAPDF(noHP, urlPDF, noKK) {
+  if (!noHP) {
+    alert("Nomor HP tidak tersedia");
+    return;
+  }
+
+  if (!urlPDF) {
+    alert("PDF belum dibuat broo 😅");
+    return;
+  }
+
+  // 🔥 bersihin nomor
+  noHP = noHP.replace(/\D/g, "");
+
+  // 🔥 ubah ke format internasional (WA wajib 62)
+  if (noHP.startsWith("0")) {
+    noHP = "62" + noHP.substring(1);
+  }
+
+  const pesan = `
+Halo 👋
+
+Berikut undangan Kartu Keluarga Anda:
+
+No KK: ${noKK}
+
+Silakan buka di link berikut:
+${urlPDF}
+
+Terima kasih 🙏
+  `;
+
+  const waUrl = `https://wa.me/${noHP}?text=${encodeURIComponent(pesan)}`;
+
+  window.open(waUrl, "_blank");
+}
