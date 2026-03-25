@@ -687,6 +687,21 @@ td button {
   }
 }
 
+/* default desktop */
+#cardTervalidasi {
+  display: none;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  #tableTervalidasi {
+    display: none;
+  }
+  #cardTervalidasi {
+    display: block;
+  }
+}
+
 .card-item {
   background: white;
   border-radius: 12px;
