@@ -273,28 +273,34 @@
 
       <div class="table-wrap">
         <button onclick="printSemuaKK()" class="btn">🖨 Cetak Semua KK</button>
-        <table>
-          <thead>
-            <tr>
-              <th>NO.KK</th>
-              <th>NIK</th>
-              <th>Nama</th>
-              <th>Hubungan</th>
-              <th>JK</th>
-              <th>No HP</th>
-              <th>Status</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
 
-          <tbody id="tbodyTervalidasi">
-            <tr>
-              <td colspan="7" style="text-align: center; color: #777">
-                Memuat data...
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <!-- 🔥 TAMBAH WRAPPER -->
+        <div id="tableTervalidasi">
+          <table>
+            <thead>
+              <tr>
+                <th>NO.KK</th>
+                <th>NIK</th>
+                <th>Nama</th>
+                <th>Hubungan</th>
+                <th>JK</th>
+                <th>No HP</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+
+            <tbody id="tbodyTervalidasi">
+              <tr>
+                <td colspan="8" style="text-align: center; color: #777">
+                  Memuat data...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- CARD -->
         <div id="cardTervalidasi" class="card-view"></div>
       </div>
     </div>
