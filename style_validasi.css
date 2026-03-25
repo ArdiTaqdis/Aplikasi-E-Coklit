@@ -438,6 +438,11 @@ table th {
     visibility: hidden;
   }
 
+  .modal-content-print {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
   #printArea,
   #printArea * {
     visibility: visible;
