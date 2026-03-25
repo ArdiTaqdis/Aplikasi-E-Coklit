@@ -438,11 +438,6 @@ table th {
     visibility: hidden;
   }
 
-  .modal-content-print {
-    overflow: visible !important;
-    height: auto !important;
-  }
-
   #printArea,
   #printArea * {
     visibility: visible;
@@ -455,9 +450,19 @@ table th {
     width: 100%;
   }
 
+  .modal-content-print {
+    overflow: visible !important;
+    height: auto !important;
+    box-shadow: none !important;
+  }
+
   .modal-header,
   .modal-footer {
     display: none !important;
+  }
+
+  .page-break {
+    page-break-after: always;
   }
 }
 
