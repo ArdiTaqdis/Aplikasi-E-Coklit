@@ -434,6 +434,7 @@ table th {
 
 /* ================= PRINT FIX ================= */
 @media print {
+  /* 🔥 sembunyikan semua selain area print */
   body * {
     visibility: hidden;
   }
@@ -450,6 +451,7 @@ table th {
     width: 100%;
   }
 
+  /* 🔥 hilangkan UI modal */
   .modal-content-print {
     overflow: visible !important;
     height: auto !important;
@@ -461,9 +463,44 @@ table th {
     display: none !important;
   }
 
+  /* 🔥 PAGE BREAK (VERSI BARU + FALLBACK) */
   .page-break {
+    break-after: page;
     page-break-after: always;
   }
+
+  /* 🔥 BATASI TINGGI BIAR GAK KEPOTONG */
+  .surat {
+    height: 260mm;
+    overflow: hidden;
+    font-size: 12.5px;
+    line-height: 1.25;
+  }
+
+  /* 🔥 JANGAN PECAH TABLE & TPS */
+  table {
+    page-break-inside: avoid;
+  }
+
+  .info-tps {
+    page-break-inside: avoid;
+  }
+
+  /* 🔥 HILANGKAN SCROLLBAR */
+  html,
+  body {
+    overflow: visible !important;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 🔥 SETTING KERTAS */
+@page {
+  size: A4;
+  margin: 10mm;
 }
 
 @page {
