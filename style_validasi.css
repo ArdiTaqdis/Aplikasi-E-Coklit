@@ -382,6 +382,17 @@ select#statusCoklit {
   text-align: right;
 }
 
+.info-tps {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #000;
+  width: 100%;
+}
+
+.info-tps table td {
+  padding: 4px 8px;
+}
+
 @keyframes modalPop {
   from {
     transform: scale(0.92);

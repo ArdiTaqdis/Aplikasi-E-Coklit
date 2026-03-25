@@ -84,48 +84,61 @@ function closeModalUndangan() {
 }
 
 function cetakKK(noKK) {
+  // 🔥 ambil data dari global
   const anggota = (window.dataTervalidasiGlobal || []).filter(
-    (d) => String(d["NO KK"]) === String(noKK),
+    (d) => String(d["NO KK"]).trim() === String(noKK).trim(),
   );
 
+  // ❌ kalau tidak ada data
   if (!anggota.length) {
+    console.warn("KK tidak ditemukan:", noKK, window.dataTervalidasiGlobal);
     alert("Data KK tidak ditemukan");
     return;
   }
 
+  // 🔥 generate row tabel
   let rows = "";
 
   anggota.forEach((a, i) => {
     rows += `
       <tr>
         <td>${i + 1}</td>
-        <td>${a["Nama Lengkap"]}</td>
-        <td>${a["NIK"]}</td>
-        <td>${a["Jenis Kelamin"]}</td>
+        <td>${a["Nama Lengkap"] || "-"}</td>
+        <td>${a["NIK"] || "-"}</td>
+        <td>${a["Jenis Kelamin"] || "-"}</td>
       </tr>
     `;
   });
 
+  // 🔥 HTML SURAT
   const html = `
   <div class="surat">
 
+    <!-- WATERMARK -->
     <div class="wm">PILKADES</div>
 
+    <!-- HEADER -->
     <div class="header">
       <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Coat_of_arms_of_Indonesia_Garuda_Pancasila.svg/512px-Coat_of_arms_of_Indonesia_Garuda_Pancasila.svg.png"/>
+      
       <div class="header-text">
         <h2>PEMERINTAH DESA</h2>
         <h3>DESA ANDA</h3>
+        <p>Kecamatan XXX • Kabupaten XXX</p>
       </div>
     </div>
 
     <div class="line"></div>
 
+    <!-- JUDUL -->
     <h3 class="judul">DAFTAR UNDANGAN 1 KARTU KELUARGA</h3>
 
+    <!-- INFO KK -->
     <p>No KK : <b>${noKK}</b></p>
+    <p>Jumlah Pemilih : <b>${anggota.length} Orang</b></p>
 
-    <table border="1" width="100%" cellspacing="0" cellpadding="5">
+    <!-- TABEL -->
+    <table border="1" style="border-collapse:collapse" width="100%" cellpadding="5">
       <tr>
         <th>No</th>
         <th>Nama</th>
@@ -134,19 +147,48 @@ function cetakKK(noKK) {
       </tr>
 
       ${rows}
-
     </table>
 
+    <!-- TPS -->
+    <div class="info-tps">
+
+      <p><b>Tempat Pemungutan Suara (TPS)</b></p>
+
+      <table class="table">
+        <tr>
+          <td>TPS</td>
+          <td>: TPS 01</td>
+        </tr>
+        <tr>
+          <td>Lokasi</td>
+          <td>: Balai Desa</td>
+        </tr>
+        <tr>
+          <td>Waktu</td>
+          <td>: 07.00 - 13.00 WIB</td>
+        </tr>
+      </table>
+
+      <p style="margin-top:10px">
+        * Harap membawa undangan ini saat hadir ke TPS
+      </p>
+
+    </div>
+
+    <!-- TTD -->
     <div class="ttd">
       <p>${new Date().toLocaleDateString()}</p>
-      <p>Panitia</p>
+      <p>Panitia Pemilihan</p>
+
       <br><br><br>
-      <p><b>(_____________)</b></p>
+
+      <p><b>(_____________________)</b></p>
     </div>
 
   </div>
   `;
 
+  // 🔥 render ke modal
   document.getElementById("printArea").innerHTML = html;
   document.getElementById("modalUndangan").style.display = "flex";
 }
