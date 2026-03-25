@@ -43,9 +43,15 @@ function loadTervalidasi() {
               ☁️ PDF Drive
             </button> 
 
+            <button onclick="generatePDFKK('${a["NO KK"]}')">
+              ☁️ PDF KK
+            </button>
+
             <button onclick="cetakKK('${a["NO KK"]}')">
               📄 Cetak 1 KK
             </button>
+
+
 
 
 

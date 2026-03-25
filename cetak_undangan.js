@@ -314,3 +314,36 @@ function generatePDFDrive(data) {
     }
   });
 }
+
+function generatePDFKK(noKK) {
+  const anggota = (window.dataTervalidasiGlobal || []).filter(
+    (d) => String(d["NO KK"]).trim() === String(noKK).trim(),
+  );
+
+  if (!anggota.length) {
+    toastError("Data KK tidak ditemukan");
+    return;
+  }
+
+  showLoading();
+
+  apiPost("generatePDFKK", {
+    noKK: noKK,
+    anggota: anggota,
+  })
+    .then((res) => {
+      hideLoading();
+
+      if (res.status) {
+        toastSuccess("PDF KK berhasil dibuat 🎉");
+        window.open(res.url, "_blank");
+      } else {
+        toastError(res.message || "Gagal membuat PDF");
+      }
+    })
+    .catch((err) => {
+      hideLoading();
+      console.error(err);
+      toastError("Error server");
+    });
+}
