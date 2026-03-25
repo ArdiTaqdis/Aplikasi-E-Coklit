@@ -39,9 +39,9 @@ function loadTervalidasi() {
               Detail
             </button>
 
-            <button onclick='generatePDFDrive(${JSON.stringify(a)})'>
-              ☁️ Simpan PDF
-            </button>
+            <button class="btn-pdf" onclick='generatePDFDrive(${JSON.stringify(a).replace(/'/g, "&apos;")})'>
+              ☁️ PDF Drive
+            </button> 
 
             <button onclick="cetakKK('${a["NO KK"]}')">
               📄 Cetak 1 KK

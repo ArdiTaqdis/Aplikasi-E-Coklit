@@ -308,6 +308,11 @@ function printSemuaKK() {
 }
 
 function generatePDFDrive(data) {
+  if (!data || !data["NIK"]) {
+    toastError("Data tidak valid");
+    return;
+  }
+
   showLoading();
 
   fetch(API_URL, {
@@ -321,89 +326,19 @@ function generatePDFDrive(data) {
     .then((res) => {
       hideLoading();
 
-      if (res.url) {
-        alert("PDF berhasil dibuat!");
+      if (res.status) {
+        toastSuccess("PDF berhasil dibuat 🎉");
+
+        // 🔥 buka file
         window.open(res.url, "_blank");
       } else {
-        alert("Gagal membuat PDF");
+        toastError(res.message || "Gagal membuat PDF");
       }
     })
     .catch((err) => {
       hideLoading();
       console.error(err);
-      alert("Error server");
+
+      toastError("Error koneksi server");
     });
-}
-
-function generatePDF(data) {
-  const html = `
-  <html>
-  <head>
-    <style>
-      body {
-        font-family: Times New Roman;
-        padding: 30px;
-        font-size: 14px;
-      }
-      .judul {
-        text-align:center;
-        font-weight:bold;
-        text-decoration: underline;
-      }
-      table td {
-        padding: 4px;
-      }
-    </style>
-  </head>
-
-  <body>
-
-    <h3 style="text-align:center">PEMERINTAH DESA</h3>
-    <p style="text-align:center">DESA ANDA</p>
-
-    <hr>
-
-    <p style="text-align:center">Nomor : 001/UND/PILKADES/2026</p>
-
-    <h3 class="judul">SURAT UNDANGAN PILKADES</h3>
-
-    <table>
-      <tr><td>Nama</td><td>: ${data["Nama Lengkap"]}</td></tr>
-      <tr><td>NIK</td><td>: ${data["NIK"]}</td></tr>
-      <tr><td>No KK</td><td>: ${data["NO KK"]}</td></tr>
-    </table>
-
-    <p>
-      Dengan ini diundang untuk hadir pada pemilihan kepala desa.
-    </p>
-
-    <table>
-      <tr><td>TPS</td><td>: TPS 01</td></tr>
-      <tr><td>Lokasi</td><td>: Balai Desa</td></tr>
-      <tr><td>Waktu</td><td>: 07.00 WIB</td></tr>
-    </table>
-
-    <br><br>
-
-    <p>${new Date().toLocaleDateString()}</p>
-    <p>Panitia</p>
-
-  </body>
-  </html>
-  `;
-
-  // 🔥 convert ke blob PDF
-  const blob = Utilities.newBlob(html, "text/html")
-    .getAs("application/pdf")
-    .setName("Undangan_" + data["NIK"] + ".pdf");
-
-  // 🔥 simpan ke Drive
-  const folder = DriveApp.getRootFolder(); // bisa ganti folder khusus
-
-  const file = folder.createFile(blob);
-
-  return {
-    status: "success",
-    url: file.getUrl(),
-  };
 }
