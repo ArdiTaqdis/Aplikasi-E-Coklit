@@ -327,6 +327,61 @@ select#statusCoklit {
   text-align: right;
 }
 
+.surat {
+  position: relative;
+  font-family: "Times New Roman", serif;
+  padding: 30px;
+  color: #000;
+}
+
+/* 🔥 WATERMARK */
+.wm {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 90px;
+  color: rgba(0, 0, 0, 0.05);
+  z-index: 0;
+}
+
+/* 🔥 HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  z-index: 2;
+}
+
+.logo {
+  width: 60px;
+}
+
+.header-text {
+  text-align: center;
+  flex: 1;
+}
+
+.line {
+  border-top: 3px solid black;
+  margin: 10px 0;
+}
+
+.judul {
+  text-align: center;
+  text-decoration: underline;
+}
+
+.table td {
+  padding: 4px 8px;
+}
+
+.ttd {
+  margin-top: 60px;
+  text-align: right;
+}
+
 @keyframes modalPop {
   from {
     transform: scale(0.92);
