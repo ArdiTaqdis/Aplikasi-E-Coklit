@@ -585,3 +585,62 @@ table th {
     opacity: 1;
   }
 }
+
+/* ================= BUTTON AKSI MODERN ================= */
+
+.btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* DETAIL */
+.btn-detail {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-detail:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+/* PDF */
+.btn-pdf-link {
+  background: #22c55e;
+  color: white;
+}
+
+.btn-pdf-link:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
+/* CETAK */
+.btn-print {
+  background: #e5e7eb;
+  color: #111;
+}
+
+.btn-print:hover {
+  background: #d1d5db;
+}
+
+/* WA */
+.btn-wa {
+  background: #25d366;
+  color: white;
+}
+
+.btn-wa:hover {
+  background: #1da851;
+  transform: translateY(-1px);
+}
+
+/* SPACING BIAR RAPI */
+td button {
+  margin-right: 4px;
+}
