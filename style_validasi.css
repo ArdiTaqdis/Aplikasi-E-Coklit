@@ -727,3 +727,22 @@ td button {
   flex-wrap: wrap;
   gap: 6px;
 }
+
+.pagination {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.page-btn {
+  margin: 2px;
+  padding: 6px 10px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.page-btn.active {
+  background: #e53935;
+  color: #fff;
+}

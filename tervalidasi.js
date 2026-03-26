@@ -1,3 +1,6 @@
+let currentPage = 1;
+const rowsPerPage = 10;
+
 function loadTervalidasi() {
   showLoading();
 
@@ -80,6 +83,8 @@ function renderTervalidasi(data) {
   const tbody = document.getElementById("tbodyTervalidasi");
   const cardContainer = document.getElementById("cardTervalidasi");
 
+  if (!tbody || !cardContainer) return;
+
   if (!data.length) {
     tbody.innerHTML = `
       <tr>
@@ -95,10 +100,15 @@ function renderTervalidasi(data) {
     return;
   }
 
+  // 🔥 PAGINATION CORE
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const paginatedData = data.slice(start, end);
+
   let htmlTable = "";
   let htmlCard = "";
 
-  data.forEach((a) => {
+  paginatedData.forEach((a) => {
     const noHP = a["No HP"] || "";
     const urlPDF = a["urlPDF"] || "";
     const isKepala = a["Hubungan dlm Klg"] === "Kepala Keluarga";
@@ -108,7 +118,6 @@ function renderTervalidasi(data) {
       ? `<button class="btn btn-pdf-ready" onclick="openModalPDF('${urlPDF}')">📎 PDF</button>`
       : `<button class="btn btn-pdf-generate" onclick="generatePDFKK('${a["NO KK"]}', this)">☁️ PDF</button>`;
 
-    // TABLE
     htmlTable += `
       <tr>
         <td>${a["NO KK"]}</td>
@@ -130,7 +139,6 @@ function renderTervalidasi(data) {
         </td>
       </tr>`;
 
-    // CARD
     htmlCard += `
       <div class="card-item">
         <div class="card-header">${a["Nama Lengkap"]}</div>
@@ -155,6 +163,55 @@ function renderTervalidasi(data) {
 
   tbody.innerHTML = htmlTable;
   cardContainer.innerHTML = htmlCard;
+
+  // 🔥 render pagination button
+  renderPagination(data.length);
+}
+
+function renderPagination(totalData) {
+  const totalPages = Math.ceil(totalData / rowsPerPage);
+  const container = document.getElementById("pagination");
+
+  if (!container) return;
+
+  let html = "";
+
+  for (let i = 1; i <= totalPages; i++) {
+    html += `
+      <button 
+        class="page-btn ${i === currentPage ? "active" : ""}"
+        onclick="goPage(${i})">
+        ${i}
+      </button>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+function goPage(page) {
+  currentPage = page;
+
+  const keyword =
+    document.getElementById("searchTervalidasi")?.value.toLowerCase() || "";
+
+  const data = window.dataTervalidasiGlobal || [];
+
+  const filtered = data.filter((a) => {
+    return (
+      String(a["Nama Lengkap"] || "")
+        .toLowerCase()
+        .includes(keyword) ||
+      String(a["NIK"] || "")
+        .toLowerCase()
+        .includes(keyword) ||
+      String(a["NO KK"] || "")
+        .toLowerCase()
+        .includes(keyword)
+    );
+  });
+
+  renderTervalidasi(filtered);
 }
 
 function detailWarga(el) {
