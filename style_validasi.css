@@ -702,64 +702,51 @@ td button {
   }
 }
 
+/* search */
+.input-search {
+  margin: 10px 0;
+  padding: 8px;
+  width: 100%;
+  max-width: 300px;
+}
+
+/* card */
 .card-item {
-  background: white;
-  border-radius: 12px;
-  padding: 12px;
+  background: #fff;
+  padding: 10px;
   margin-bottom: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
 }
 
-.card-header {
-  font-weight: bold;
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-
-.card-info {
-  font-size: 12px;
-  color: #555;
-  margin-bottom: 8px;
-}
-
-.card-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
+/* pagination */
 .pagination {
   margin-top: 15px;
   text-align: center;
 }
 
-.page-btn {
+.pagination button {
   margin: 3px;
-  padding: 6px 12px;
+  padding: 6px 10px;
   border: none;
-  background: #eee;
   cursor: pointer;
-  border-radius: 6px;
-  font-size: 13px;
 }
 
-.page-btn:hover {
-  background: #ddd;
+.pagination .active {
+  background: red;
+  color: white;
 }
 
-.page-btn.active {
-  background: #e53935;
-  color: #fff;
-  font-weight: bold;
+/* responsive */
+#cardTervalidasi {
+  display: none;
 }
 
-.page-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+@media (max-width: 768px) {
+  #tableTervalidasi {
+    display: none;
+  }
 
-.page-info {
-  margin-top: 8px;
-  font-size: 12px;
-  color: #555;
+  #cardTervalidasi {
+    display: block;
+  }
 }
