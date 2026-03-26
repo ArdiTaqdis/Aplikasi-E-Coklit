@@ -47,19 +47,21 @@ function loadPengaturan() {
 }
 
 function simpanPengaturan() {
-  const tps = document.getElementById("set_tps").value;
+  const rw = document.getElementById("set_rw").value;
+  const rt = document.getElementById("set_rt").value;
   const lokasi = document.getElementById("set_lokasi").value;
   const waktu = document.getElementById("set_waktu").value;
 
-  if (!tps || !lokasi || !waktu) {
-    toastError("Lengkapi semua pengaturan dulu broo");
+  if (!rw || !rt || !lokasi || !waktu) {
+    toastError("Lengkapi semua data broo");
     return;
   }
 
   showLoading();
 
-  apiPost("saveConfig", {
-    tps: tps,
+  apiPost("saveTPS", {
+    rw: rw,
+    rt: rt,
     lokasi: lokasi,
     waktu: waktu,
   })
@@ -67,9 +69,9 @@ function simpanPengaturan() {
       hideLoading();
 
       if (res.status) {
-        toastSuccess("Pengaturan berhasil disimpan");
+        toastSuccess("TPS berhasil disimpan 🔥");
       } else {
-        toastError(res.message || "Gagal simpan");
+        toastError(res.message);
       }
     })
     .catch((err) => {
