@@ -43,6 +43,10 @@
     <button class="tab-btn" onclick="openTab('tabStatistik', this)">
       📊 Statistik
     </button>
+
+    <button class="tab-btn" onclick="openTab('tabPengaturan', this)">
+      ⚙️ Pengaturan
+    </button>
   </div>
 </div>
 
@@ -329,6 +333,61 @@
   <div class="container">
     <div class="card">
       <h2>📊 Statistik Warga</h2>
+    </div>
+  </div>
+</div>
+
+<!-- ================= TAB PENGATURAN ================= -->
+
+<div class="tab-content" id="tabPengaturan">
+  <div class="container">
+    <div class="card">
+      <h2>⚙️ Pengaturan Undangan</h2>
+      <p>Atur TPS, lokasi, dan waktu pemilihan</p>
+
+      <div class="form-grid">
+        <!-- RW -->
+        <div class="form-group">
+          <label>RW</label>
+          <select id="set_rw">
+            <option value="">Pilih RW</option>
+            <option value="01">RW 01</option>
+            <option value="02">RW 02</option>
+          </select>
+        </div>
+
+        <!-- RT -->
+        <div class="form-group">
+          <label>RT</label>
+          <select id="set_rt">
+            <option value="">Pilih RT</option>
+            <option value="01">RT 01</option>
+            <option value="02">RT 02</option>
+          </select>
+        </div>
+
+        <!-- TPS AUTO -->
+        <div class="form-group">
+          <label>TPS</label>
+          <input type="text" id="set_tps" readonly />
+        </div>
+
+        <!-- LOKASI -->
+        <div class="form-group">
+          <label>Lokasi TPS</label>
+          <input type="text" id="set_lokasi" placeholder="Contoh: Balai Desa" />
+        </div>
+
+        <!-- WAKTU -->
+        <div class="form-group">
+          <label>Waktu Pemilihan</label>
+          <input type="text" id="set_waktu" placeholder="07.00 - 13.00 WIB" />
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="simpanPengaturan()">
+        💾 Simpan Pengaturan
+      </button>
     </div>
   </div>
 </div>
