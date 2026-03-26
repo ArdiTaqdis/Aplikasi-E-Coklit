@@ -71,126 +71,101 @@ function closeModalUndangan() {
 }
 
 function cetakKK(noKK) {
-  // 🔥 ambil data dari global
   const anggota = (window.dataTervalidasiGlobal || []).filter(
     (d) => String(d["NO KK"]).trim() === String(noKK).trim(),
   );
 
-  // ❌ kalau tidak ada data
   if (!anggota.length) {
-    console.warn("KK tidak ditemukan:", noKK, window.dataTervalidasiGlobal);
     alert("Data KK tidak ditemukan");
     return;
   }
 
-  // 🔥 generate row tabel
-  let rows = "";
+  const rw = String(anggota[0]["RW"] || "").padStart(2, "0");
+  const rt = String(anggota[0]["RT"] || "").padStart(2, "0");
 
-  anggota.forEach((a, i) => {
-    rows += `
-      <tr>
-        <td>${i + 1}</td>
-        <td>${a["Nama Lengkap"] || "-"}</td>
-        <td>${a["NIK"] || "-"}</td>
-        <td>${a["Jenis Kelamin"] || "-"}</td>
-      </tr>
-    `;
-  });
+  showLoading();
 
-  // 🔥 HTML SURAT
-  const html = `
-  <div class="surat">
+  apiGet("getTPS", { rw, rt }).then((res) => {
+    hideLoading();
 
-    <!-- WATERMARK -->
-    <div class="wm">PILKADES</div>
+    let tps = "-";
+    let lokasi = "Belum ditentukan";
+    let waktu = "-";
 
-    <!-- HEADER -->
-    <div class="header">
-      <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Coat_of_arms_of_Indonesia_Garuda_Pancasila.svg/512px-Coat_of_arms_of_Indonesia_Garuda_Pancasila.svg.png"/>
-      
-      <div class="header-text">
-        <h2>PEMERINTAH DESA</h2>
-        <h3>DESA ANDA</h3>
-        <p>Kecamatan XXX • Kabupaten XXX</p>
+    if (res.status) {
+      tps = res.data.TPS;
+      lokasi = res.data.LOKASI;
+      waktu = res.data.WAKTU;
+    }
+
+    let rows = "";
+
+    anggota.forEach((a, i) => {
+      rows += `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${a["Nama Lengkap"] || "-"}</td>
+          <td>${a["NIK"] || "-"}</td>
+          <td>${a["Jenis Kelamin"] || "-"}</td>
+        </tr>
+      `;
+    });
+
+    const html = `
+    <div class="surat">
+
+      <div class="wm">PILKADES</div>
+
+      <div class="header">
+        <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Coat_of_arms_of_Indonesia_Garuda_Pancasila.svg/512px-Coat_of_arms_of_Indonesia_Garuda_Pancasila.svg.png"/>
+        
+        <div class="header-text">
+          <h2>PEMERINTAH DESA</h2>
+          <h3>DESA ANDA</h3>
+          <p>Kecamatan XXX • Kabupaten XXX</p>
+        </div>
       </div>
-    </div>
 
-    <div class="line"></div>
+      <div class="line"></div>
 
-    <p style="text-align:center; font-size:12px;">
-    Nomor : 001/UND/PILKADES/2026
-    </p>
+      <h3 class="judul">SURAT UNDANGAN PILKADES</h3>
 
-    <h3 class="judul">SURAT UNDANGAN PILKADES</h3>
+      <p>No KK : <b>${noKK}</b></p>
+      <p>Jumlah Pemilih : <b>${anggota.length} Orang</b></p>
 
-    <!-- PEMBUKA -->
-    <p style="text-align:justify">
-      Berdasarkan pelaksanaan Pemilihan Kepala Desa, bersama ini disampaikan
-      daftar anggota keluarga yang terdaftar sebagai pemilih:
-    </p>
-
-    <!-- INFO KK -->
-    <p>No KK : <b>${noKK}</b></p>
-    <p>Jumlah Pemilih : <b>${anggota.length} Orang</b></p>
-
-    <!-- TABEL -->
-    <table border="1" style="border-collapse:collapse" width="100%" cellpadding="5">
-      <tr>
-        <th>No</th>
-        <th>Nama</th>
-        <th>NIK</th>
-        <th>JK</th>
-      </tr>
-
-      ${rows}
-    </table>
-
-    <!-- TPS -->
-    <div class="info-tps">
-
-      <p><b>Tempat Pemungutan Suara (TPS)</b></p>
-
-      <table class="table">
+      <table border="1" width="100%" cellpadding="5">
         <tr>
-          <td>TPS</td>
-          <td>: TPS 01</td>
+          <th>No</th>
+          <th>Nama</th>
+          <th>NIK</th>
+          <th>JK</th>
         </tr>
-        <tr>
-          <td>Lokasi</td>
-          <td>: Balai Desa</td>
-        </tr>
-        <tr>
-          <td>Waktu</td>
-          <td>: 07.00 - 13.00 WIB</td>
-        </tr>
+        ${rows}
       </table>
 
-      <p style="margin-top:4px">
-        * Harap membawa undangan ini saat hadir ke TPS
-      </p>
+      <div class="info-tps">
+        <p><b>Tempat Pemungutan Suara (TPS)</b></p>
 
-      <p style="margin-top:4px">
-        Demikian undangan ini disampaikan untuk dipergunakan sebagaimana mestinya.
-      </p>
+        <table>
+          <tr><td>TPS</td><td>: ${tps}</td></tr>
+          <tr><td>Lokasi</td><td>: ${lokasi}</td></tr>
+          <tr><td>Waktu</td><td>: ${waktu}</td></tr>
+        </table>
+
+        <p>* Harap membawa undangan ini saat hadir ke TPS</p>
+      </div>
+
+      <div class="ttd">
+        <p>${new Date().toLocaleDateString("id-ID")}</p>
+        <p>Panitia</p>
+      </div>
 
     </div>
+    `;
 
-    <!-- TTD -->
-    <div class="ttd">
-      <p>Desa Anda, ${new Date().toLocaleDateString()}</p>
-      <p>Panitia Pemilihan</p>
-
-      <br><br><br>
-
-      <p><b>(_____________________)</b></p>
-    </div>
-
-  </div>
-  `;
-
-  // 🔥 render ke modal
-  document.getElementById("printArea").innerHTML = html;
-  document.getElementById("modalUndangan").style.display = "flex";
+    document.getElementById("printArea").innerHTML = html;
+    document.getElementById("modalUndangan").style.display = "flex";
+  });
 }
 
 function printSemuaKK() {
