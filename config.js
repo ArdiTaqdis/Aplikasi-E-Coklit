@@ -80,3 +80,51 @@ function simpanPengaturan() {
       toastError("Server error");
     });
 }
+
+function loadTPSOtomatis() {
+  const rw = document.getElementById("set_rw").value;
+  const rt = document.getElementById("set_rt").value;
+
+  if (!rw || !rt) return;
+
+  showLoading();
+
+  apiGet("getTPS", { rw, rt })
+    .then((res) => {
+      hideLoading();
+
+      if (res.status) {
+        const data = res.data;
+
+        // isi form
+        document.getElementById("set_tps").value = data.TPS;
+        document.getElementById("set_lokasi").value = data.LOKASI;
+        document.getElementById("set_waktu").value = data.WAKTU;
+
+        toastSuccess("Data TPS ditemukan 🔥");
+      } else {
+        // reset kalau tidak ada
+        document.getElementById("set_lokasi").value = "";
+        document.getElementById("set_waktu").value = "";
+
+        generateTPS(); // tetap isi TPS
+
+        toastError("TPS belum ada, silakan isi baru");
+      }
+    })
+    .catch((err) => {
+      hideLoading();
+      console.error(err);
+      toastError("Gagal load TPS");
+    });
+}
+
+document.getElementById("set_rw").addEventListener("change", () => {
+  generateTPS();
+  loadTPSOtomatis();
+});
+
+document.getElementById("set_rt").addEventListener("change", () => {
+  generateTPS();
+  loadTPSOtomatis();
+});
