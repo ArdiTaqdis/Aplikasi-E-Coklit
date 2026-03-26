@@ -80,92 +80,101 @@ function cetakKK(noKK) {
     return;
   }
 
-  const rw = String(anggota[0]["RW"] || "").padStart(2, "0");
-  const rt = String(anggota[0]["RT"] || "").padStart(2, "0");
+  // 🔥 ambil RW RT
+  const rw = anggota[0]["RW"];
+  const rt = anggota[0]["RT"];
 
-  showLoading();
+  // 🔥 ambil TPS dari LOCAL (NO CORS)
+  const tpsData = getTPSLocal(rw, rt);
 
-  apiGet("getTPS", { rw, rt }).then((res) => {
-    hideLoading();
+  let tps = "-";
+  let lokasi = "Belum ditentukan";
+  let waktu = "-";
 
-    let tps = "-";
-    let lokasi = "Belum ditentukan";
-    let waktu = "-";
+  if (tpsData) {
+    tps = tpsData.TPS;
+    lokasi = tpsData.LOKASI;
+    waktu = tpsData.WAKTU;
+  }
 
-    if (res.status) {
-      tps = res.data.TPS;
-      lokasi = res.data.LOKASI;
-      waktu = res.data.WAKTU;
-    }
+  let rows = "";
 
-    let rows = "";
+  anggota.forEach((a, i) => {
+    rows += `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${a["Nama Lengkap"] || "-"}</td>
+        <td>${a["NIK"] || "-"}</td>
+        <td>${a["Jenis Kelamin"] || "-"}</td>
+      </tr>
+    `;
+  });
 
-    anggota.forEach((a, i) => {
-      rows += `
-        <tr>
-          <td>${i + 1}</td>
-          <td>${a["Nama Lengkap"] || "-"}</td>
-          <td>${a["NIK"] || "-"}</td>
-          <td>${a["Jenis Kelamin"] || "-"}</td>
-        </tr>
-      `;
-    });
+  const html = `
+  <div class="surat">
 
-    const html = `
-    <div class="surat">
+    <div class="wm">PILKADES</div>
 
-      <div class="wm">PILKADES</div>
-
-      <div class="header">
-        <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Coat_of_arms_of_Indonesia_Garuda_Pancasila.svg/512px-Coat_of_arms_of_Indonesia_Garuda_Pancasila.svg.png"/>
-        
-        <div class="header-text">
-          <h2>PEMERINTAH DESA</h2>
-          <h3>DESA ANDA</h3>
-          <p>Kecamatan XXX • Kabupaten XXX</p>
-        </div>
+    <div class="header">
+      <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Coat_of_arms_of_Indonesia_Garuda_Pancasila.svg/512px-Coat_of_arms_of_Indonesia_Garuda_Pancasila.svg.png"/>
+      
+      <div class="header-text">
+        <h2>PEMERINTAH DESA</h2>
+        <h3>DESA ANDA</h3>
+        <p>Kecamatan XXX • Kabupaten XXX</p>
       </div>
+    </div>
 
-      <div class="line"></div>
+    <div class="line"></div>
 
-      <h3 class="judul">SURAT UNDANGAN PILKADES</h3>
+    <h3 class="judul">SURAT UNDANGAN PILKADES</h3>
 
-      <p>No KK : <b>${noKK}</b></p>
-      <p>Jumlah Pemilih : <b>${anggota.length} Orang</b></p>
+    <p>No KK : <b>${noKK}</b></p>
+    <p>Jumlah Pemilih : <b>${anggota.length} Orang</b></p>
 
-      <table border="1" width="100%" cellpadding="5">
-        <tr>
-          <th>No</th>
-          <th>Nama</th>
-          <th>NIK</th>
-          <th>JK</th>
-        </tr>
-        ${rows}
+    <table border="1" width="100%" cellpadding="5">
+      <tr>
+        <th>No</th>
+        <th>Nama</th>
+        <th>NIK</th>
+        <th>JK</th>
+      </tr>
+      ${rows}
+    </table>
+
+    <div class="info-tps">
+      <p><b>Tempat Pemungutan Suara (TPS)</b></p>
+
+      <table>
+        <tr><td>TPS</td><td>: ${tps}</td></tr>
+        <tr><td>Lokasi</td><td>: ${lokasi}</td></tr>
+        <tr><td>Waktu</td><td>: ${waktu}</td></tr>
       </table>
 
-      <div class="info-tps">
-        <p><b>Tempat Pemungutan Suara (TPS)</b></p>
-
-        <table>
-          <tr><td>TPS</td><td>: ${tps}</td></tr>
-          <tr><td>Lokasi</td><td>: ${lokasi}</td></tr>
-          <tr><td>Waktu</td><td>: ${waktu}</td></tr>
-        </table>
-
-        <p>* Harap membawa undangan ini saat hadir ke TPS</p>
-      </div>
-
-      <div class="ttd">
-        <p>${new Date().toLocaleDateString("id-ID")}</p>
-        <p>Panitia</p>
-      </div>
-
+      <p>* Harap membawa undangan ini saat hadir ke TPS</p>
     </div>
-    `;
 
-    document.getElementById("printArea").innerHTML = html;
-    document.getElementById("modalUndangan").style.display = "flex";
-  });
+    <div class="ttd">
+      <p>${new Date().toLocaleDateString("id-ID")}</p>
+      <p>Panitia</p>
+    </div>
+
+  </div>
+  `;
+
+  document.getElementById("printArea").innerHTML = html;
+  document.getElementById("modalUndangan").style.display = "flex";
+}
+
+function getTPSLocal(rw, rt) {
+  rw = String(rw).padStart(2, "0");
+  rt = String(rt).padStart(2, "0");
+
+  return (window.dataTPSGlobal || []).find(
+    (d) =>
+      String(d.RW).padStart(2, "0") === rw &&
+      String(d.RT).padStart(2, "0") === rt,
+  );
 }
 
 function printSemuaKK() {
