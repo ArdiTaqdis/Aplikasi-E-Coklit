@@ -5,7 +5,13 @@ let dataValidasiGlobal = [];
 function loadValidasi() {
   showLoading();
 
-  apiGet("getValidasi")
+  const session = JSON.parse(localStorage.getItem("userSession") || "{}");
+
+  console.log("SESSION:", session); // 🔥 debug
+
+  apiGet("getValidasi", {
+    username: session.username, // 🔥 WAJIB
+  })
     .then((res) => {
       hideLoading();
 
