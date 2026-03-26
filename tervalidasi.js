@@ -5,9 +5,18 @@ const maxPageShow = 5;
 function loadTervalidasi() {
   showLoading();
 
-  apiGet("getTervalidasi")
+  // 🔥 ambil session user
+  const session = JSON.parse(localStorage.getItem("userSession") || "{}");
+
+  console.log("SESSION:", session); // 🔥 debug
+
+  apiGet("getTervalidasi", {
+    username: session.username, // 🔥 WAJIB kirim ini
+  })
     .then((data) => {
       hideLoading();
+
+      console.log("DATA TERVALIDASI:", data); // 🔥 debug
 
       // 🔥 pastikan selalu array
       if (!Array.isArray(data)) {
@@ -15,7 +24,7 @@ function loadTervalidasi() {
         data = [];
       }
 
-      // 🔥 simpan global (buat search & fitur lain)
+      // 🔥 simpan global (buat search & pagination)
       window.dataTervalidasiGlobal = data;
 
       // 🔥 render 1 pintu (table + card)
@@ -25,7 +34,6 @@ function loadTervalidasi() {
       hideLoading();
       console.error("Gagal load tervalidasi:", err);
 
-      // 🔥 fallback UI kalau error
       const tbody = document.getElementById("tbodyTervalidasi");
       const cardContainer = document.getElementById("cardTervalidasi");
 
