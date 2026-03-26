@@ -1,5 +1,6 @@
 let currentPage = 1;
 const rowsPerPage = 10;
+const maxPageShow = 5;
 
 function loadTervalidasi() {
   showLoading();
@@ -51,32 +52,30 @@ function loadTervalidasi() {
 let searchTimer;
 
 function searchTervalidasi() {
-  clearTimeout(searchTimer);
+  currentPage = 1; // 🔥 reset halaman
 
-  searchTimer = setTimeout(() => {
-    const keyword = document
-      .getElementById("searchTervalidasi")
-      .value.toLowerCase()
-      .trim();
+  const keyword = document
+    .getElementById("searchTervalidasi")
+    .value.toLowerCase()
+    .trim();
 
-    const data = window.dataTervalidasiGlobal || [];
+  const data = window.dataTervalidasiGlobal || [];
 
-    const filtered = data.filter((a) => {
-      return (
-        String(a["Nama Lengkap"] || "")
-          .toLowerCase()
-          .includes(keyword) ||
-        String(a["NIK"] || "")
-          .toLowerCase()
-          .includes(keyword) ||
-        String(a["NO KK"] || "")
-          .toLowerCase()
-          .includes(keyword)
-      );
-    });
+  const filtered = data.filter((a) => {
+    return (
+      String(a["Nama Lengkap"] || "")
+        .toLowerCase()
+        .includes(keyword) ||
+      String(a["NIK"] || "")
+        .toLowerCase()
+        .includes(keyword) ||
+      String(a["NO KK"] || "")
+        .toLowerCase()
+        .includes(keyword)
+    );
+  });
 
-    renderTervalidasi(filtered);
-  }, 200); // delay 200ms
+  renderTervalidasi(filtered);
 }
 
 function renderTervalidasi(data) {
@@ -176,7 +175,27 @@ function renderPagination(totalData) {
 
   let html = "";
 
-  for (let i = 1; i <= totalPages; i++) {
+  // 🔥 PREV
+  html += `
+    <button 
+      class="page-btn"
+      ${currentPage === 1 ? "disabled" : ""}
+      onclick="goPage(${currentPage - 1})">
+      ⬅ Prev
+    </button>
+  `;
+
+  // 🔥 HITUNG RANGE PAGE
+  let startPage = Math.max(1, currentPage - Math.floor(maxPageShow / 2));
+  let endPage = startPage + maxPageShow - 1;
+
+  if (endPage > totalPages) {
+    endPage = totalPages;
+    startPage = Math.max(1, endPage - maxPageShow + 1);
+  }
+
+  // 🔥 PAGE NUMBER
+  for (let i = startPage; i <= endPage; i++) {
     html += `
       <button 
         class="page-btn ${i === currentPage ? "active" : ""}"
@@ -186,16 +205,32 @@ function renderPagination(totalData) {
     `;
   }
 
+  // 🔥 NEXT
+  html += `
+    <button 
+      class="page-btn"
+      ${currentPage === totalPages ? "disabled" : ""}
+      onclick="goPage(${currentPage + 1})">
+      Next ➡
+    </button>
+  `;
+
+  // 🔥 INFO
+  html += `
+    <div class="page-info">
+      Halaman ${currentPage} dari ${totalPages}
+    </div>
+  `;
+
   container.innerHTML = html;
 }
 
 function goPage(page) {
-  currentPage = page;
+  const data = window.dataTervalidasiGlobal || [];
 
   const keyword =
-    document.getElementById("searchTervalidasi")?.value.toLowerCase() || "";
-
-  const data = window.dataTervalidasiGlobal || [];
+    document.getElementById("searchTervalidasi")?.value.toLowerCase().trim() ||
+    "";
 
   const filtered = data.filter((a) => {
     return (
@@ -210,6 +245,14 @@ function goPage(page) {
         .includes(keyword)
     );
   });
+
+  const totalPages = Math.ceil(filtered.length / rowsPerPage);
+
+  // 🔥 VALIDASI BATAS
+  if (page < 1) page = 1;
+  if (page > totalPages) page = totalPages;
+
+  currentPage = page;
 
   renderTervalidasi(filtered);
 }
