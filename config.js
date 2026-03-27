@@ -57,6 +57,21 @@ function simpanPengaturan() {
     return;
   }
 
+  // 🔥 VALIDASI TPS SUDAH ADA
+  const data = window.dataConfigGlobal || [];
+
+  const sudahAda = data.some(
+    (d) =>
+      String(d.RW).trim() === String(rw).trim() &&
+      String(d.RT).trim() === String(rt).trim(),
+  );
+
+  if (sudahAda) {
+    toastError("TPS untuk RW " + rw + " RT " + rt + " sudah ada broo ❌");
+    return;
+  }
+
+  // lanjut simpan
   showLoading();
 
   apiPost("saveTPS", {
@@ -70,8 +85,7 @@ function simpanPengaturan() {
 
       if (res.status) {
         toastSuccess("TPS berhasil disimpan 🔥");
-
-        loadTableConfig(); // 🔥 reload table
+        loadTableConfig();
       } else {
         toastError(res.message);
       }
@@ -96,6 +110,7 @@ function loadTableConfig() {
       }
 
       const data = res.data || [];
+      window.dataConfigGlobal = data;
 
       if (!data.length) {
         tbody.innerHTML = `<tr><td colspan="6">Belum ada data</td></tr>`;
