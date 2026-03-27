@@ -2,29 +2,28 @@
 BASE URL (WAJIB GANTI)
 ========================= */
 const BASE_URL =
-  "https://script.google.com/macros/s/AKfycbx7GN-25bl4p9Kr6Rh1vnT30uHAP6TdybiR8aePcU3vBGAt4PguDSuFbndI5YxnFW4A/exec";
+  "https://script.google.com/macros/s/AKfycbz8LB_qDIYnJ8jfAXqrKmLpbE5ZZe7LPz9pPPuwmRMYirTj-Y-S0Uv_KFnrswxoqXPW/exec";
 
 /* =========================
 CORE API
 ========================= */
 
 function apiGet(action, params = {}) {
-  const url = new URL(BASE_URL);
-  url.searchParams.append("action", action);
+  let url = BASE_URL + "?action=" + encodeURIComponent(action.trim());
 
   Object.keys(params).forEach((key) => {
-    url.searchParams.append(key, params[key]);
+    url += `&${key}=${encodeURIComponent(params[key])}`;
   });
 
-  console.log("🌐 URL:", url.toString());
+  console.log("🌐 URL:", url);
 
   return fetch(url)
     .then((res) => {
       console.log("📡 STATUS:", res.status);
-      return res.text(); // 🔥 ambil raw dulu
+      return res.text();
     })
     .then((text) => {
-      console.log("📦 RAW:", text); // 🔥 ini kunci
+      console.log("📦 RAW:", text);
 
       try {
         return JSON.parse(text);
