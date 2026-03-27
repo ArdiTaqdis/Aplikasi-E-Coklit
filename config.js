@@ -126,6 +126,8 @@ function loadTableConfig() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadPengaturan();
-  loadTableConfig(); // 🔥 load table awal
+  setTimeout(() => {
+    loadPengaturan();
+    loadTableConfig();
+  }, 300);
 });
