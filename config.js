@@ -70,6 +70,8 @@ function simpanPengaturan() {
 
       if (res.status) {
         toastSuccess("TPS berhasil disimpan 🔥");
+
+        loadTableConfig(); // 🔥 reload table
       } else {
         toastError(res.message);
       }
@@ -80,3 +82,50 @@ function simpanPengaturan() {
       toastError("Server error");
     });
 }
+
+function loadTableConfig() {
+  const tbody = document.getElementById("bodyConfig");
+
+  tbody.innerHTML = `<tr><td colspan="6">Loading...</td></tr>`;
+
+  apiGet("getAllTPS")
+    .then((res) => {
+      if (!res.status) {
+        tbody.innerHTML = `<tr><td colspan="6">Gagal load data</td></tr>`;
+        return;
+      }
+
+      const data = res.data || [];
+
+      if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="6">Belum ada data</td></tr>`;
+        return;
+      }
+
+      let html = "";
+
+      data.forEach((d, i) => {
+        html += `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${d.TPS}</td>
+            <td>${d.RW}</td>
+            <td>${d.RT}</td>
+            <td>${d.LOKASI}</td>
+            <td>${d.WAKTU}</td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+    })
+    .catch((err) => {
+      console.error(err);
+      tbody.innerHTML = `<tr><td colspan="6">Error server</td></tr>`;
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadPengaturan();
+  loadTableConfig(); // 🔥 load table awal
+});
