@@ -175,6 +175,142 @@ function renderTervalidasi(data) {
   renderPagination(data.length);
 }
 
+function exportPDFTervalidasi() {
+  const data = window.dataTervalidasiGlobal || [];
+
+  if (!data.length) {
+    toastError("Tidak ada data untuk export");
+    return;
+  }
+
+  // 🔥 ambil data session / wilayah
+  const session = JSON.parse(localStorage.getItem("userSession") || "{}");
+
+  const kecamatan = "Bebelan";
+  const desa = "Kedung Jaya";
+  const rt = session.rt || "-";
+  const rw = session.rw || "-";
+  const tps = session.tps || "-";
+
+  let rows = "";
+
+  data.forEach((a, i) => {
+    const umur = hitungUmurPDF(a["Tanggal Lahir"]);
+
+    rows += `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${a["NO KK"]}</td>
+        <td>${a["NIK"]}</td>
+        <td>${a["Nama Lengkap"]}</td>
+        <td>${a["Hubungan dlm Klg"]}</td>
+        <td>${a["Jenis Kelamin"]}</td>
+        <td>${a["Tempat Lahir"]}</td>
+        <td>${a["Tanggal Lahir"]}</td>
+        <td>${umur}</td>
+        <td>${a["Agama"]}</td>
+        <td>${a["Pendidikan"]}</td>
+        <td>${a["Jenis Pekerjaan"]}</td>
+        <td>${a["Status Perkawinan"]}</td>
+        <td>${a["Kewarganegaraan"]}</td>
+      </tr>
+    `;
+  });
+
+  const html = `
+  <html>
+  <head>
+    <title>Export Coklit</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
+
+      .title {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .title h2 {
+        margin: 0;
+      }
+
+      .info {
+        margin-top: 10px;
+        margin-bottom: 15px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+      }
+
+      th, td {
+        border: 1px solid #000;
+        padding: 4px;
+        text-align: center;
+      }
+
+      th {
+        background: #eee;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="title">
+      <h2>DAFTAR COKLIT</h2>
+      <h3>PILKADES 2026</h3>
+      <h3>DESA KEDUNG JAYA</h3>
+    </div>
+
+    <div class="info">
+      Kecamatan : ${kecamatan}<br>
+      Kelurahan : ${desa}<br>
+      RT/RW     : ${rt}/${rw}<br>
+      TPS       : ${tps}
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>No KK</th>
+          <th>NIK</th>
+          <th>Nama</th>
+          <th>Hub</th>
+          <th>JK</th>
+          <th>Tempat</th>
+          <th>Tgl Lahir</th>
+          <th>Umur</th>
+          <th>Agama</th>
+          <th>Pendidikan</th>
+          <th>Pekerjaan</th>
+          <th>Status</th>
+          <th>Warga</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+
+  </body>
+  </html>
+  `;
+
+  const win = window.open("", "_blank");
+  win.document.write(html);
+  win.document.close();
+
+  setTimeout(() => {
+    win.print();
+  }, 500);
+}
+
 function renderPagination(totalData) {
   const totalPages = Math.ceil(totalData / rowsPerPage);
   const container = document.getElementById("pagination");
@@ -355,4 +491,23 @@ function detailWarga(el) {
 
 function closeModalDetail() {
   document.getElementById("modalDetail").style.display = "none";
+}
+
+function hitungUmurPDF(tglLahir) {
+  if (!tglLahir) return "-";
+
+  const parts = tglLahir.split("-");
+  if (parts.length !== 3) return "-";
+
+  const birth = new Date(parts[2], parts[1] - 1, parts[0]);
+  const today = new Date();
+
+  let umur = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+    umur--;
+  }
+
+  return umur;
 }
