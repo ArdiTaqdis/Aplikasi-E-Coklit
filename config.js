@@ -176,24 +176,24 @@ function loadTableConfig() {
 }
 
 function hapusTPS(rw, rt) {
-  if (!confirm(`Hapus TPS RW ${rw} RT ${rt} ?`)) return;
+  showConfirm(`Hapus TPS RW ${rw} RT ${rt}?`, () => {
+    showLoading();
 
-  showLoading();
+    apiPost("deleteTPS", { rw, rt })
+      .then((res) => {
+        hideLoading();
 
-  apiPost("deleteTPS", { rw, rt })
-    .then((res) => {
-      hideLoading();
-
-      if (res.status) {
-        toastSuccess(`TPS RW ${rw} RT ${rt} berhasil dihapus 🗑`);
-        loadTableConfig();
-      } else {
-        toastError(res.message);
-      }
-    })
-    .catch((err) => {
-      hideLoading();
-      console.error(err);
-      toastError("Server error");
-    });
+        if (res.status) {
+          toastSuccess(`TPS RW ${rw} RT ${rt} berhasil dihapus 🗑`);
+          loadTableConfig();
+        } else {
+          toastError(res.message);
+        }
+      })
+      .catch((err) => {
+        hideLoading();
+        console.error(err);
+        toastError("Server error");
+      });
+  });
 }

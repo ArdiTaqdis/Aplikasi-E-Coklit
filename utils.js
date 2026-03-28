@@ -413,3 +413,26 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", cariKeluarga);
   }
 });
+
+let confirmCallback = null;
+
+window.showConfirm = (msg, callback) => {
+  const modal = $("confirmModal");
+  const text = $("confirmText");
+
+  if (!modal || !text) return;
+
+  text.innerText = msg;
+  modal.style.display = "flex";
+
+  confirmCallback = callback;
+};
+
+window.confirmOk = () => {
+  $("confirmModal").style.display = "none";
+  if (confirmCallback) confirmCallback();
+};
+
+window.confirmCancel = () => {
+  $("confirmModal").style.display = "none";
+};
