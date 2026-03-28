@@ -386,7 +386,11 @@ function openTab(tabId, el) {
   }
 
   if (tabId === "tabPengaturan") {
-    loadPengaturan();
+    setTimeout(() => {
+      initPengaturan(); // 🔥 pasang event
+      loadPengaturan(); // 🔥 isi form
+      loadTableConfig(); // 🔥 isi table
+    }, 200);
   }
 }
 

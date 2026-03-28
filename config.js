@@ -1,3 +1,23 @@
+let isInitPengaturan = false;
+
+function initPengaturan() {
+  if (isInitPengaturan) return;
+  isInitPengaturan = true;
+
+  const rwEl = document.getElementById("set_rw");
+  const rtEl = document.getElementById("set_rt");
+
+  if (!rwEl || !rtEl) {
+    console.warn("Form belum siap broo...");
+    return;
+  }
+
+  rwEl.addEventListener("change", generateTPS);
+  rtEl.addEventListener("change", generateTPS);
+
+  console.log("✅ Event TPS aktif");
+}
+
 function generateTPS() {
   const rw = document.getElementById("set_rw").value;
   const rt = document.getElementById("set_rt").value;
@@ -149,15 +169,3 @@ function loadTableConfig() {
       tbody.innerHTML = `<tr><td colspan="6">Error server</td></tr>`;
     });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  // event TPS
-  document.getElementById("set_rw").addEventListener("change", generateTPS);
-  document.getElementById("set_rt").addEventListener("change", generateTPS);
-
-  // load data
-  setTimeout(() => {
-    loadPengaturan();
-    loadTableConfig();
-  }, 300);
-});
