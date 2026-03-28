@@ -176,9 +176,23 @@ RENDER USER
 
         if (session.username) {
           const el = document.getElementById("userInfo");
+
           if (el) {
-            el.innerText = "👤 " + session.username + " (" + session.role + ")";
+            el.innerText = `👤 ${session.username} (${session.role}) | RW ${session.rw} RT ${session.rt}`;
           }
+
+          // 🔥 BATASI MENU UNTUK PETUGAS
+          setTimeout(() => {
+            if (session.role !== "ADMIN") {
+              // ❌ sembunyikan menu petugas
+              const menuPetugas = document.getElementById("menuPetugas");
+              if (menuPetugas) menuPetugas.style.display = "none";
+
+              // ❌ (opsional) sembunyikan pengaturan
+              const menuPengaturan = document.getElementById("menuPengaturan");
+              if (menuPengaturan) menuPengaturan.style.display = "none";
+            }
+          }, 300); // tunggu layout load dulu
         }
       }
 
