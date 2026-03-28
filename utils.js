@@ -385,6 +385,10 @@ function openTab(tabId, el) {
     loadTervalidasi();
   }
 
+  if (tabId === "tabPetugas") {
+    loadUsers();
+  }
+
   if (tabId === "tabPengaturan") {
     setTimeout(() => {
       initPengaturan(); // 🔥 pasang event

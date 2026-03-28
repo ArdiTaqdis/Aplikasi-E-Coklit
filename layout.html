@@ -329,10 +329,34 @@
   </div>
 </div>
 
+<!-- ================= TAB PENGATURAN ================= -->
+
 <div class="tab-content" id="tabPetugas">
   <div class="container">
     <div class="card">
       <h2>👮 Manajemen Petugas</h2>
+
+      <button class="btn-primary" onclick="loadUsers()">🔄 Load Data</button>
+
+      <div class="table-wrap" style="margin-top: 15px">
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>RW</th>
+              <th>RT</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyUsers">
+            <tr>
+              <td colspan="6" style="text-align: center">Belum ada data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
