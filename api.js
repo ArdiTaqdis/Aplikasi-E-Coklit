@@ -37,15 +37,25 @@ function apiGet(action, params = {}) {
 function apiPost(action, data = {}) {
   return fetch(BASE_URL, {
     method: "POST",
+    mode: "cors", // 🔥 wajib untuk Chrome
+    credentials: "omit", // 🔥 biar aman dari cookie issue
     headers: {
-      "Content-Type": "text/plain;charset=utf-8",
+      "Content-Type": "application/json", // 🔥 FIX utama
     },
     body: JSON.stringify({
       action,
       ...data,
     }),
   })
-    .then((res) => res.text())
+    .then((res) => {
+      console.log("📡 STATUS:", res.status);
+
+      if (!res.ok) {
+        throw new Error("HTTP error " + res.status);
+      }
+
+      return res.text();
+    })
     .then((text) => {
       console.log("📦 RAW RESPONSE:", text);
 
@@ -55,6 +65,10 @@ function apiPost(action, data = {}) {
         console.error("❌ BUKAN JSON:", text);
         throw new Error("Response bukan JSON");
       }
+    })
+    .catch((err) => {
+      console.error("❌ API POST ERROR:", err);
+      throw err; // biar tetap ke-handle di atas (toastError kamu)
     });
 }
 
