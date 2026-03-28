@@ -22,8 +22,14 @@
 
         <div class="login-subtitle">Sistem Manajemen Data RT</div>
 
-        <input id="username" type="text" placeholder="Username" />
-        <input id="password" type="password" placeholder="Password" />
+        <div class="login-input">
+          <input id="username" type="text" placeholder="Username" />
+        </div>
+
+        <div class="login-input">
+          <input id="password" type="password" placeholder="Password" />
+          <span class="eye" onclick="togglePassword()">👁</span>
+        </div>
 
         <button id="loginBtn" onclick="login()">Login</button>
 
@@ -234,6 +240,13 @@ INIT
           if (e.key === "Enter") login();
         });
       });
+    </script>
+
+    <script>
+      function togglePassword() {
+        const input = document.getElementById("password");
+        input.type = input.type === "password" ? "text" : "password";
+      }
     </script>
   </body>
 </html>
