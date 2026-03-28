@@ -73,7 +73,7 @@ function renderUsers(data) {
       <td>${u.rw}</td>
       <td>${u.rt}</td>
       <td>
-        <button onclick="editUser('${u.username}')">✏️</button>
+        
         <button onclick="hapusUserConfirm('${u.username}')">🗑️</button>
       </td>
     `;
