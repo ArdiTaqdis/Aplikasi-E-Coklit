@@ -772,6 +772,7 @@ MODAL ANIMATION
 /* ======================
 LOGIN SCREEN MODERN
 ====================== */
+
 /* ================= LOGIN STYLE NEW ================= */
 
 body.login-mode {
@@ -837,18 +838,18 @@ body.login-mode #loginWrapper {
 
 .login-input {
   position: relative;
+  width: 100%;
   margin-bottom: 16px; /* tambah jarak */
 }
 
 .login-input input {
   width: 100%;
-  padding: 14px 16px; /* lebih lega */
+  padding: 14px 45px 14px 16px; /* 🔥 ini kunci */
   border-radius: 12px;
   border: 1px solid #ddd;
   font-size: 14px;
   outline: none;
-
-  transition: all 0.2s ease;
+  box-sizing: border-box; /* 🔥 WAJIB */
 }
 
 /* hover halus */
@@ -867,9 +868,14 @@ body.login-mode #loginWrapper {
   right: 14px;
   top: 50%;
   transform: translateY(-50%);
-  cursor: pointer;
   font-size: 14px;
   color: #888;
+}
+
+.login-input input,
+#loginBtn {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* button */
