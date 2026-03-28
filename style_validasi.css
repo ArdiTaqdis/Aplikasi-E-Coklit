@@ -796,3 +796,36 @@ td button {
   padding: 8px 15px;
   border-radius: 6px;
 }
+
+.modal-content {
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+}
+
+.modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.modal-content {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.form-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr; /* 🔥 jadi 1 kolom */
+  }
+}
