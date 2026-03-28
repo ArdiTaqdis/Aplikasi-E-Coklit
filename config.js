@@ -7,16 +7,14 @@ function generateTPS() {
     return;
   }
 
-  const tps = `TPS ${rw}${rt}`;
+  const rwFix = rw.padStart(2, "0");
+  const rtFix = rt.padStart(2, "0");
+
+  const tps = `TPS ${rwFix}${rtFix}`;
   document.getElementById("set_tps").value = tps;
 }
 
 // trigger
-document.addEventListener("change", function (e) {
-  if (e.target.id === "set_rw" || e.target.id === "set_rt") {
-    generateTPS();
-  }
-});
 
 function loadPengaturan() {
   apiGet("getConfig")
@@ -39,6 +37,7 @@ function loadPengaturan() {
 
       document.getElementById("set_lokasi").value = cfg.LOKASI || "";
       document.getElementById("set_waktu").value = cfg.WAKTU || "";
+      generateTPS();
     })
     .catch((err) => {
       console.error(err);
@@ -95,6 +94,7 @@ function simpanPengaturan() {
         document.getElementById("set_waktu").value = "";
 
         loadTableConfig();
+        generateTPS();
       } else {
         toastError(res.message);
       }
@@ -108,6 +108,7 @@ function simpanPengaturan() {
 
 function loadTableConfig() {
   const tbody = document.getElementById("bodyConfig");
+  if (!tbody) return;
 
   tbody.innerHTML = `<tr><td colspan="6">Loading...</td></tr>`;
 
@@ -130,14 +131,14 @@ function loadTableConfig() {
 
       data.forEach((d, i) => {
         html += `
-          <tr>
-            <td>${i + 1}</td>
-            <td>${d.TPS}</td>
-            <td>${d.RW}</td>
-            <td>${d.RT}</td>
-            <td>${d.LOKASI}</td>
-            <td>${d.WAKTU}</td>
-          </tr>
+        <tr>
+          <td>${i + 1}</td>
+          <td>${d.TPS || "-"}</td>
+          <td>${d.RW || "-"}</td>
+          <td>${d.RT || "-"}</td>
+          <td>${d.LOKASI || "-"}</td>
+          <td>${d.WAKTU || "-"}</td>
+        </tr>
         `;
       });
 
@@ -150,6 +151,11 @@ function loadTableConfig() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  // event TPS
+  document.getElementById("set_rw").addEventListener("change", generateTPS);
+  document.getElementById("set_rt").addEventListener("change", generateTPS);
+
+  // load data
   setTimeout(() => {
     loadPengaturan();
     loadTableConfig();
