@@ -151,14 +151,19 @@ function loadTableConfig() {
 
       data.forEach((d, i) => {
         html += `
-        <tr>
-          <td>${i + 1}</td>
-          <td>${d.TPS || "-"}</td>
-          <td>${d.RW || "-"}</td>
-          <td>${d.RT || "-"}</td>
-          <td>${d.LOKASI || "-"}</td>
-          <td>${d.WAKTU || "-"}</td>
-        </tr>
+          <tr>
+            <td>${i + 1}</td>
+            <td>${d.TPS || "-"}</td>
+            <td>${d.RW || "-"}</td>
+            <td>${d.RT || "-"}</td>
+            <td>${d.LOKASI || "-"}</td>
+            <td>${d.WAKTU || "-"}</td>
+            <td>
+              <button class="btn-delete" onclick="hapusTPS('${d.RW}','${d.RT}')">
+                🗑
+              </button>
+            </td>
+          </tr>
         `;
       });
 
@@ -167,5 +172,28 @@ function loadTableConfig() {
     .catch((err) => {
       console.error(err);
       tbody.innerHTML = `<tr><td colspan="6">Error server</td></tr>`;
+    });
+}
+
+function hapusTPS(rw, rt) {
+  if (!confirm(`Hapus TPS RW ${rw} RT ${rt} ?`)) return;
+
+  showLoading();
+
+  apiPost("deleteTPS", { rw, rt })
+    .then((res) => {
+      hideLoading();
+
+      if (res.status) {
+        toastSuccess(`TPS RW ${rw} RT ${rt} berhasil dihapus 🗑`);
+        loadTableConfig();
+      } else {
+        toastError(res.message);
+      }
+    })
+    .catch((err) => {
+      hideLoading();
+      console.error(err);
+      toastError("Server error");
     });
 }
