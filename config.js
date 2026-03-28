@@ -47,44 +47,53 @@ function loadPengaturan() {
 }
 
 function simpanPengaturan() {
-  const rw = document.getElementById("set_rw").value;
-  const rt = document.getElementById("set_rt").value;
-  const lokasi = document.getElementById("set_lokasi").value;
-  const waktu = document.getElementById("set_waktu").value;
+  const rw = document.getElementById("set_rw").value.trim();
+  const rt = document.getElementById("set_rt").value.trim();
+  const lokasi = document.getElementById("set_lokasi").value.trim();
+  const waktu = document
+    .getElementById("set_waktu")
+    .value.replace(/–/g, "-") // 🔥 fix karakter dash
+    .replace(/\s+/g, " ")
+    .trim();
 
   if (!rw || !rt || !lokasi || !waktu) {
     toastError("Lengkapi semua data broo");
     return;
   }
 
-  // 🔥 VALIDASI TPS SUDAH ADA
+  // 🔥 ambil data global
   const data = window.dataConfigGlobal || [];
 
+  // 🔥 cek apakah sudah ada
   const sudahAda = data.some(
-    (d) =>
-      String(d.RW).trim() === String(rw).trim() &&
-      String(d.RT).trim() === String(rt).trim(),
+    (d) => String(d.RW).trim() === rw && String(d.RT).trim() === rt,
   );
 
-  if (sudahAda) {
-    toastError("TPS untuk RW " + rw + " RT " + rt + " sudah ada broo ❌");
-    return;
-  }
+  const mode = sudahAda ? "update" : "insert";
 
-  // lanjut simpan
   showLoading();
 
   apiPost("saveTPS", {
-    rw: rw,
-    rt: rt,
-    lokasi: lokasi,
-    waktu: waktu,
+    rw,
+    rt,
+    lokasi,
+    waktu,
   })
     .then((res) => {
       hideLoading();
 
       if (res.status) {
-        toastSuccess("TPS berhasil disimpan 🔥");
+        // 🔥 notif beda
+        if (mode === "update") {
+          toastSuccess(`TPS RW ${rw} RT ${rt} berhasil diupdate 🔄`);
+        } else {
+          toastSuccess(`TPS RW ${rw} RT ${rt} berhasil ditambahkan ➕`);
+        }
+
+        // 🔥 reset form biar clean
+        document.getElementById("set_lokasi").value = "";
+        document.getElementById("set_waktu").value = "";
+
         loadTableConfig();
       } else {
         toastError(res.message);
