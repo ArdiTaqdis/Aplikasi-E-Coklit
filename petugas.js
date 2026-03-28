@@ -122,11 +122,11 @@ window.tambahPetugas = function () {
 
   const username = $("pt_username").value.trim();
   const password = $("pt_password").value.trim();
-  const rw = $("pt_rw").value.trim();
-  const rt = $("pt_rt").value.trim();
+  const rw = document.getElementById("sel_rw").value;
+  const rt = document.getElementById("sel_rt").value;
 
   if (!username || !password || !rw || !rt) {
-    toastError("Lengkapi semua field broo 😅");
+    toastError("Lengkapi semua field ");
     return;
   }
 
@@ -164,3 +164,39 @@ window.tambahPetugas = function () {
       toastError("Gagal tambah petugas");
     });
 };
+
+let DATA_WILAYAH = {};
+
+function loadRWRT() {
+  apiGet("getWilayah").then((res) => {
+    DATA_WILAYAH = res || {};
+
+    // 🔥 langsung ambil lokasi fix
+    const rwData =
+      DATA_WILAYAH["Jawa Barat"]?.["Bekasi"]?.["Babelan"]?.["Kedung Jaya"] ||
+      {};
+
+    const selRW = document.getElementById("sel_rw");
+    const selRT = document.getElementById("sel_rt");
+
+    // isi RW
+    selRW.innerHTML =
+      '<option value="">Pilih RW</option>' +
+      Object.keys(rwData)
+        .map((rw) => `<option value="${rw}">${rw}</option>`)
+        .join("");
+
+    // onchange RW → isi RT
+    selRW.onchange = () => {
+      const listRT = rwData[selRW.value] || [];
+
+      selRT.innerHTML =
+        '<option value="">Pilih RT</option>' +
+        listRT.map((rt) => `<option value="${rt}">${rt}</option>`).join("");
+    };
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadRWRT();
+});
