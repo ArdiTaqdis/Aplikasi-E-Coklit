@@ -772,221 +772,112 @@ MODAL ANIMATION
 /* ======================
 LOGIN SCREEN MODERN
 ====================== */
+/* ================= LOGIN STYLE NEW ================= */
 
 body.login-mode {
-  background: #f3f4f6;
+  background: #f5f5f5;
 }
 
-/* wrapper */
-
-body.login-mode #loginWrapper {
-  width: 100%;
-  max-width: 720px;
-
-  margin: auto;
-
-  padding: 40px 20px;
-
-  min-height: 100vh;
-
+/* wrapper center */
+#loginWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
 }
 
 /* card */
-
-body.login-mode .login-card {
+.login-card {
   width: 100%;
-  max-width: 520px;
-
+  max-width: 360px;
   background: white;
-
   border-radius: 20px;
-
-  padding: 42px 44px;
-
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.08),
-    0 5px 15px rgba(0, 0, 0, 0.05);
-
-  border: 1px solid rgba(0, 0, 0, 0.05);
-
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  animation: loginPop 0.4s ease;
-}
-
-/* global safe */
-
-* {
-  box-sizing: border-box;
+  padding: 30px 25px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
 }
 
 /* logo */
-
-body.login-mode .login-logo {
-  width: 80px;
-  height: 80px;
-
-  border-radius: 50%;
-
-  background: linear-gradient(135deg, #fde2e4, #ffe4e6);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 36px;
-
+.login-logo {
+  width: 90px;
+  height: 90px;
   margin: auto;
-
-  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.15);
+  margin-bottom: 15px;
+  background: transparent;
+  font-size: 40px;
 }
 
 /* title */
-
-body.login-mode .login-title {
-  text-align: center;
-  font-size: 20px;
+.login-title {
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: 0.3px;
+  margin-bottom: 5px;
 }
 
 /* subtitle */
-
-body.login-mode .login-subtitle {
-  text-align: center;
-  font-size: 12px;
+.login-subtitle {
+  font-size: 13px;
   color: #666;
-  margin-bottom: 6px;
+  margin-bottom: 20px;
 }
 
-/* divider */
-
-body.login-mode .login-divider {
-  width: 60px;
-  height: 3px;
-
-  background: #dc2626;
-
-  border-radius: 3px;
-
-  margin: 4px auto 14px auto;
-
-  opacity: 0.6;
+/* input wrapper */
+.login-input {
+  position: relative;
+  margin-bottom: 15px;
 }
 
 /* input */
-
-body.login-mode .login-card input {
+.login-input input {
   width: 100%;
-
   padding: 12px 14px;
-
   border-radius: 10px;
-
-  border: 1px solid #e5e7eb;
-
-  background: #fafafa;
-
-  font-size: 13px;
-
-  transition: 0.2s;
-}
-
-/* input focus */
-
-body.login-mode .login-card input:focus {
-  border-color: #dc2626;
-
-  background: white;
-
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-
+  border: 1px solid #ddd;
+  font-size: 14px;
   outline: none;
 }
 
-/* button */
-
-body.login-mode .login-card button {
-  margin-top: 6px;
-
-  background: linear-gradient(135deg, #dc2626, #ef4444);
-
-  color: white;
-
-  border: none;
-
-  padding: 12px;
-
-  border-radius: 10px;
-
-  font-weight: 600;
-
-  font-size: 14px;
-
-  cursor: pointer;
-
-  transition: 0.25s;
+/* focus */
+.login-input input:focus {
+  border-color: #999;
 }
 
-/* button hover */
+/* eye icon */
+.login-input .eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 14px;
+  color: #777;
+}
 
-body.login-mode .login-card button:hover {
-  transform: translateY(-1px);
+/* button */
+#loginBtn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: black;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
+}
 
-  box-shadow: 0 8px 18px rgba(220, 38, 38, 0.25);
+#loginBtn:hover {
+  opacity: 0.9;
 }
 
 /* footer */
-
-body.login-mode .login-footer {
-  text-align: center;
-
-  font-size: 11px;
-
-  color: #888;
-
-  margin-top: 10px;
-}
-
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  max-width: 420px;
-  margin: auto;
-
-  background: white;
-
-  display: flex;
-  justify-content: space-around;
-
-  padding: 8px 0;
-
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-
-  z-index: 1000;
-}
-
-.bottom-nav button {
-  background: none;
-  border: none;
+.login-footer {
   font-size: 12px;
-  color: #555;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
+  color: #777;
+  margin-top: 15px;
 }
-
-/* animation */
 
 @keyframes loginPop {
   from {
