@@ -2,7 +2,7 @@
 BASE URL (WAJIB GANTI)
 ========================= */
 const BASE_URL =
-  "https://script.google.com/macros/s/AKfycby8l-XHchBUp6J6U8eiTfnww1iwVxbOZ5wlUQMKmT6MDxRjoqIZLa_xqBzKIQfZdfcI/exec";
+  "https://script.google.com/macros/s/AKfycbw0FrsMeLPdZqOyy787ZF9pFOgaQlNQz1TSzQzdyGkOfL7FgswI3xDhmcF2qIOP2hJy/exec";
 
 /* =========================
 CORE API
@@ -40,7 +40,7 @@ function apiPost(action, data = {}) {
     mode: "cors", // 🔥 wajib untuk Chrome
     credentials: "omit", // 🔥 biar aman dari cookie issue
     headers: {
-      "Content-Type": "application/json", // 🔥 FIX utama
+      "Content-Type": "text/plain;charset=utf-8", // 🔥 FIX utama
     },
     body: JSON.stringify({
       action,
