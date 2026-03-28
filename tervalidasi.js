@@ -218,29 +218,58 @@ function exportPDFTervalidasi() {
   });
 
   const html = `
-  <html>
-  <head>
+    <html>
+    <head>
     <title>Export Coklit</title>
+
     <style>
       body {
-        font-family: Arial;
+        font-family: Arial, sans-serif;
         padding: 20px;
+        font-size: 12px;
+        color: #000;
       }
 
-      .title {
-        text-align: center;
+      /* HEADER */
+      .header {
+        display: flex;
+        align-items: center;
         margin-bottom: 10px;
       }
 
-      .title h2 {
+      .logo {
+        width: 70px;
+      }
+
+      .header-text {
+        flex: 1;
+        text-align: center;
+        margin-right: 60px;
+      }
+
+      .header-text h2 {
         margin: 0;
+        font-size: 18px;
+        font-weight: bold;
       }
 
+      .header-text h3 {
+        margin: 2px 0;
+        font-size: 14px;
+      }
+
+      .line {
+        border-top: 2px solid #000;
+        margin: 8px 0 12px;
+      }
+
+      /* INFO */
       .info {
-        margin-top: 10px;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
+        font-size: 12px;
       }
 
+      /* TABLE */
       table {
         width: 100%;
         border-collapse: collapse;
@@ -254,26 +283,48 @@ function exportPDFTervalidasi() {
       }
 
       th {
-        background: #eee;
+        background: #f3f4f6;
+        font-weight: bold;
+      }
+
+      td {
+        font-size: 11px;
+      }
+
+      /* PRINT */
+      @media print {
+        body {
+          padding: 10px;
+        }
       }
     </style>
-  </head>
 
-  <body>
+    </head>
 
-    <div class="title">
-      <h2>DAFTAR COKLIT</h2>
-      <h3>PILKADES 2026</h3>
-      <h3>DESA KEDUNG JAYA</h3>
+    <body>
+
+    <!-- HEADER -->
+    <div class="header">
+      <img src="logoPilkades.png" class="logo"/>
+
+      <div class="header-text">
+        <h2>DAFTAR COKLIT</h2>
+        <h3>PILKADES 2026</h3>
+        <h3>DESA KEDUNG JAYA</h3>
+      </div>
     </div>
 
+    <div class="line"></div>
+
+    <!-- INFO -->
     <div class="info">
       Kecamatan : ${kecamatan}<br>
       Kelurahan : ${desa}<br>
-      RT/RW     : ${rt}/${rw}<br>
-      TPS       : ${tps}
+      RT/RW : ${rt}/${rw}<br>
+      TPS : ${tps}
     </div>
 
+    <!-- TABLE -->
     <table>
       <thead>
         <tr>
@@ -298,9 +349,9 @@ function exportPDFTervalidasi() {
       </tbody>
     </table>
 
-  </body>
-  </html>
-  `;
+    </body>
+    </html>
+    `;
 
   const win = window.open("", "_blank");
   win.document.write(html);
@@ -498,19 +549,25 @@ function hitungUmurPDF(tglLahir) {
 
   let birth;
 
-  // 🔥 FORMAT 1: YYYY-MM-DD (dari spreadsheet kamu)
-  if (tglLahir.includes("-") && tglLahir.split("-")[0].length === 4) {
-    const [y, m, d] = tglLahir.split("-");
+  // 🔥 NORMALISASI separator jadi "-"
+  tglLahir = tglLahir.replace(/\//g, "-");
+
+  const parts = tglLahir.split("-");
+
+  if (parts.length !== 3) return "-";
+
+  // 🔥 DETEKSI FORMAT
+  if (parts[0].length === 4) {
+    // YYYY-MM-DD
+    const [y, m, d] = parts;
+    birth = new Date(y, m - 1, d);
+  } else {
+    // DD-MM-YYYY
+    const [d, m, y] = parts;
     birth = new Date(y, m - 1, d);
   }
 
-  // 🔥 FORMAT 2: DD-MM-YYYY
-  else if (tglLahir.includes("-")) {
-    const [d, m, y] = tglLahir.split("-");
-    birth = new Date(y, m - 1, d);
-  } else {
-    return "-";
-  }
+  if (isNaN(birth)) return "-";
 
   const today = new Date();
 

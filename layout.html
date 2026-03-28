@@ -282,7 +282,10 @@
       <p>Menampilkan data warga yang sudah selesai proses validasi / coklit.</p>
 
       <div class="table-wrap">
-        <button onclick="printSemuaKK()" class="btn">🖨 Cetak Semua KK</button>
+        <!-- <button onclick="printSemuaKK()" class="btn">🖨 Cetak Semua KK</button> -->
+        <button class="btn" onclick="exportPDFTervalidasi()">
+          🧾 Export PDF
+        </button>
 
         <input
           type="text"
@@ -291,10 +294,6 @@
           oninput="searchTervalidasi()"
           class="input-search"
         />
-
-        <button class="btn" onclick="exportPDFTervalidasi()">
-          🧾 Export PDF
-        </button>
 
         <!-- TABLE -->
         <div id="tableTervalidasi">
