@@ -88,6 +88,35 @@ window.hapusUserConfirm = function (username) {
   });
 };
 
+window.hapusUser = function (username) {
+  const session = JSON.parse(localStorage.getItem("userSession") || "{}");
+
+  showLoading();
+
+  apiPost("hapusUser", {
+    usernameLogin: session.username,
+    username: username,
+  })
+    .then((res) => {
+      hideLoading();
+
+      if (!res.status) {
+        toastError(res.message || "Gagal hapus user");
+        return;
+      }
+
+      toastSuccess("User berhasil dihapus");
+
+      // 🔥 reload tabel
+      loadUsers();
+    })
+    .catch((err) => {
+      hideLoading();
+      console.error(err);
+      toastError("Error hapus user");
+    });
+};
+
 window.tambahPetugas = function () {
   const session = JSON.parse(localStorage.getItem("userSession") || "{}");
 
