@@ -18,21 +18,32 @@ HEADER
 ====================== */
 
 .app-header {
-  background: #d8232a;
+  background: linear-gradient(135deg, #7f1d1d, #b91c1c, #dc2626);
   color: white;
   padding: 14px;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 2000;
 }
 
+/* HEADER LOGO */
 .app-left img {
-  height: 42px;
+  height: 45px; /* tinggi fix */
+  width: auto; /* biar gak gepeng */
+  object-fit: contain;
+  border-radius: 8px;
+
+  display: block;
+}
+
+.app-left {
+  display: flex;
+  align-items: center;
 }
 
 .app-title {
@@ -51,6 +62,12 @@ HEADER
 .app-user {
   margin-left: auto;
   font-size: 12px;
+  position: relative;
+  z-index: 3000;
+}
+
+.tab-menu::before {
+  pointer-events: none;
 }
 
 /* ======================
@@ -549,6 +566,7 @@ LOADING OVERLAY
 ====================== */
 
 .loading-overlay {
+  pointer-events: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -559,6 +577,11 @@ LOADING OVERLAY
   align-items: center;
   justify-content: center;
   z-index: 2000;
+}
+
+.loading-overlay.show {
+  display: flex;
+  pointer-events: auto; /* aktif cuma saat loading */
 }
 
 /* ======================
@@ -647,15 +670,19 @@ MODAL ANIMATION
   display: flex;
   gap: 10px;
   padding: 10px 14px;
-  background: #f3f4f6;
+
+  background: linear-gradient(135deg, #7f1d1d, #dc2626); /* 🔥 nyatu header */
 
   overflow-x: auto;
   white-space: nowrap;
 
   position: sticky;
   top: 80px;
-  z-index: 900;
+  z-index: 800;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
 }
+
 /* hide scrollbar chrome */
 .tab-menu::-webkit-scrollbar {
   display: none;
@@ -664,37 +691,42 @@ MODAL ANIMATION
 /* ================= TAB BUTTON ================= */
 
 .tab-btn {
-  flex: 0 0 auto; /* tombol tidak mengecil */
+  flex: 0 0 auto;
   border: none;
-  background: white;
+
+  background: rgba(255, 255, 255, 0.15); /* 🔥 transparan */
+  color: white;
+
   padding: 10px 16px;
   border-radius: 12px;
+
   cursor: pointer;
   font-size: 13px;
-  font-weight: 600;
-  color: #444;
+  font-weight: 500;
+
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
   transition: all 0.2s ease;
-  scroll-snap-align: start; /* snap posisi */
 }
 
 /* hover */
 
 .tab-btn:hover {
-  background: #fff5f5;
-  color: #d8232a;
+  background: rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
 }
 
 /* active */
 
 .tab-btn.active {
-  background: #d8232a;
-  color: white;
-  box-shadow: 0 6px 14px rgba(216, 35, 42, 0.35);
+  background: white;
+  color: #d8232a;
+
+  font-weight: 600;
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
   transform: translateY(-1px);
 }
 
