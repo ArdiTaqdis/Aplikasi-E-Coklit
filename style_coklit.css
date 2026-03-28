@@ -838,11 +838,13 @@ body.login-mode #loginWrapper {
 .login-input {
   position: relative;
   margin-bottom: 16px; /* tambah jarak */
+  position: relative;
+  width: 100%;
 }
 
 .login-input input {
   width: 100%;
-  padding: 14px 16px; /* lebih lega */
+  padding: 14px 45px 14px 16px;
   border-radius: 12px;
   border: 1px solid #ddd;
   font-size: 14px;
@@ -870,6 +872,8 @@ body.login-mode #loginWrapper {
   cursor: pointer;
   font-size: 14px;
   color: #888;
+
+  pointer-events: auto;
 }
 
 /* button */
