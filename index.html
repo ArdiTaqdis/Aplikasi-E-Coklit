@@ -90,26 +90,27 @@ SESSION
         const session = localStorage.getItem("userSession");
 
         if (session) {
+          // 🔥 MATIKAN MODE LOGIN
+          document.body.classList.remove("login-mode");
+
           loginWrapper.style.display = "none";
           appSection.style.display = "block";
 
-          // 🔥 LOAD SEMUA HTML DULU (BERURUTAN)
           loadHTML("layout", "layout.html", () => {
             renderUser();
 
-            // load modal layout dulu
             loadHTML("modalLayout", "modal_layout.html", () => {
-              // load modal validasi terakhir
               loadHTML("modalValidasi", "modal_validasi.html", () => {
                 console.log("🔥 SEMUA MODAL LOADED");
-
-                // 🔥 BARU INIT APP
                 initApp();
               });
             });
           });
         } else {
-          loginWrapper.style.display = "block";
+          // 🔥 AKTIFKAN MODE LOGIN
+          document.body.classList.add("login-mode");
+
+          loginWrapper.style.display = "flex"; // 🔥 bukan block
           appSection.style.display = "none";
         }
       }
