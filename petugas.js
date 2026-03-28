@@ -87,3 +87,51 @@ window.hapusUserConfirm = function (username) {
     hapusUser(username);
   });
 };
+
+window.tambahPetugas = function () {
+  const session = JSON.parse(localStorage.getItem("userSession") || "{}");
+
+  const username = $("pt_username").value.trim();
+  const password = $("pt_password").value.trim();
+  const rw = $("pt_rw").value.trim();
+  const rt = $("pt_rt").value.trim();
+
+  if (!username || !password || !rw || !rt) {
+    toastError("Lengkapi semua field broo 😅");
+    return;
+  }
+
+  showLoading();
+
+  apiPost("tambahUser", {
+    usernameLogin: session.username,
+    username,
+    password,
+    rw,
+    rt,
+  })
+    .then((res) => {
+      hideLoading();
+
+      if (!res.status) {
+        toastError(res.message);
+        return;
+      }
+
+      toastSuccess("Petugas berhasil ditambahkan");
+
+      // 🔥 reset form
+      $("pt_username").value = "";
+      $("pt_password").value = "";
+      $("pt_rw").value = "";
+      $("pt_rt").value = "";
+
+      // 🔥 reload tabel
+      loadUsers();
+    })
+    .catch((err) => {
+      hideLoading();
+      console.error(err);
+      toastError("Gagal tambah petugas");
+    });
+};

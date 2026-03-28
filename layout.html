@@ -329,16 +329,51 @@
   </div>
 </div>
 
-<!-- ================= TAB PENGATURAN ================= -->
+<!-- ================= TAB PETUGAS ================= -->
 
 <div class="tab-content" id="tabPetugas">
   <div class="container">
+    <!-- 🔥 FORM TAMBAH PETUGAS -->
     <div class="card">
-      <h2>👮 Manajemen Petugas</h2>
+      <h2>👮 Tambah Petugas</h2>
+      <p>Tambahkan user petugas baru berdasarkan wilayah</p>
 
-      <button class="btn-primary" onclick="loadUsers()">🔄 Load Data</button>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="pt_username" placeholder="Contoh: rudi" />
+        </div>
 
-      <div class="table-wrap" style="margin-top: 15px">
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            type="text"
+            id="pt_password"
+            placeholder="Minimal 4 karakter"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>RW</label>
+          <input type="text" id="pt_rw" placeholder="Contoh: 1" />
+        </div>
+
+        <div class="form-group">
+          <label>RT</label>
+          <input type="text" id="pt_rt" placeholder="Contoh: 2" />
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="tambahPetugas()">
+        ➕ Tambah Petugas
+      </button>
+    </div>
+
+    <!-- 🔥 TABLE -->
+    <div class="card">
+      <h2>📋 Data Petugas</h2>
+
+      <div class="table-wrap">
         <table>
           <thead>
             <tr>
@@ -350,11 +385,7 @@
               <th>Aksi</th>
             </tr>
           </thead>
-          <tbody id="tbodyUsers">
-            <tr>
-              <td colspan="6" style="text-align: center">Belum ada data</td>
-            </tr>
-          </tbody>
+          <tbody id="tbodyUsers"></tbody>
         </table>
       </div>
     </div>
