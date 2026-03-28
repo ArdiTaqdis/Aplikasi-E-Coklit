@@ -890,6 +890,13 @@ body.login-mode {
   }
 }
 
+.login-logo img {
+  width: 100%;
+  max-width: 100px;
+  margin: auto;
+  display: block;
+}
+
 /* ======================
 LOGIN BUTTON LOADING
 ====================== */
