@@ -496,10 +496,22 @@ function closeModalDetail() {
 function hitungUmurPDF(tglLahir) {
   if (!tglLahir) return "-";
 
-  const parts = tglLahir.split("-");
-  if (parts.length !== 3) return "-";
+  let birth;
 
-  const birth = new Date(parts[2], parts[1] - 1, parts[0]);
+  // 🔥 FORMAT 1: YYYY-MM-DD (dari spreadsheet kamu)
+  if (tglLahir.includes("-") && tglLahir.split("-")[0].length === 4) {
+    const [y, m, d] = tglLahir.split("-");
+    birth = new Date(y, m - 1, d);
+  }
+
+  // 🔥 FORMAT 2: DD-MM-YYYY
+  else if (tglLahir.includes("-")) {
+    const [d, m, y] = tglLahir.split("-");
+    birth = new Date(y, m - 1, d);
+  } else {
+    return "-";
+  }
+
   const today = new Date();
 
   let umur = today.getFullYear() - birth.getFullYear();
