@@ -443,8 +443,13 @@ window.simpanCoklit = function () {
 
         toastSuccess("Berhasil disimpan 🔥");
 
-        if (typeof closeModalCoklit === "function") closeModalCoklit();
-        if (typeof loadValidasi === "function") loadValidasi();
+        // 🔥 PRIORITAS UI
+        closeModalCoklit();
+
+        // 🔥 PROSES BERAT DI BELAKANG
+        setTimeout(() => {
+          loadValidasi();
+        }, 200);
       })
       .catch((err) => {
         if (typeof hideLoading === "function") hideLoading();
