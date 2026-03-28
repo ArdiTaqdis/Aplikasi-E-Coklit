@@ -320,17 +320,17 @@ MODAL (FINAL CLEAN)
 /* FOOTER */
 .modal-premium-footer {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 
-  padding: 12px;
+  padding: 14px;
 
-  background: white;
+  background: #f9fafb;
 
   position: sticky; /* 🔥 tombol selalu terlihat */
   bottom: 0;
   z-index: 10;
 
-  border-top: 1px solid #eee;
+  border-top: 2px solid #eee;
 }
 
 /* SELECT */
@@ -342,7 +342,9 @@ MODAL (FINAL CLEAN)
 .modal-premium-footer .btn {
   padding: 10px 14px;
   border-radius: 10px;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 /* ======================

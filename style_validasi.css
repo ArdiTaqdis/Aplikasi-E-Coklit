@@ -284,8 +284,15 @@ button:disabled {
 }
 
 select#statusCoklit {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: #fff1f2;
+  border: 2px solid #f87171;
+  font-weight: 600;
+}
+
+select#ketCoklit {
+  background: #eff6ff;
+  border: 2px solid #60a5fa;
+  font-weight: 500;
 }
 
 /* ================= MODAL ================= */

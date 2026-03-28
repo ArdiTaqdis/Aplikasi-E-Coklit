@@ -372,7 +372,8 @@ window.simpanCoklit = function () {
     console.log("UMUR:", umur);
 
     // ✅ VALIDASI NO HP
-    if (!nohp) {
+    // ✅ VALIDASI NO HP (opsional)
+    if (nohpInput && !nohp) {
       toastError("Format nomor HP tidak valid (contoh: 628123456789)");
       return;
     }
