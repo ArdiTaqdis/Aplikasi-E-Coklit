@@ -783,8 +783,11 @@ body.login-mode {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
+
+  height: 100vh; /* penting */
+  padding: 0; /* hapus padding */
+
+  box-sizing: border-box;
 }
 
 /* card */
@@ -909,6 +912,9 @@ body.login-mode .login-card button.loading {
   align-items: center;
   justify-content: center;
   gap: 8px;
+
+  margin: 0;
+  height: 100vh;
 }
 
 .login-spinner {
