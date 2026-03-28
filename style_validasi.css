@@ -285,6 +285,10 @@ button:disabled {
 }
 
 .modal-overlay {
+  z-index: 99999 !important;
+}
+
+.summary-grid {
   z-index: 1;
 }
 
