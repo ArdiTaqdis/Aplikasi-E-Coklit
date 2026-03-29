@@ -42,6 +42,9 @@
     // INIT PROVINSI
     setOptions(prov, Object.keys(WILAYAH_DATA), "Pilih Provinsi");
 
+    // =====================
+    // PROVINSI
+    // =====================
     prov.onchange = () => {
       setOptions(kab, Object.keys(WILAYAH_DATA[prov.value] || {}), "Pilih Kab");
       setOptions(kec, []);
@@ -50,6 +53,9 @@
       setOptions(rt, []);
     };
 
+    // =====================
+    // KABUPATEN
+    // =====================
     kab.onchange = () => {
       setOptions(
         kec,
@@ -61,6 +67,9 @@
       setOptions(rt, []);
     };
 
+    // =====================
+    // KECAMATAN
+    // =====================
     kec.onchange = () => {
       setOptions(
         des,
@@ -71,25 +80,31 @@
       setOptions(rt, []);
     };
 
+    // =====================
+    // DESA → RW
+    // =====================
     des.onchange = () => {
-      setOptions(
-        rw,
-        Object.keys(
-          WILAYAH_DATA[prov.value]?.[kab.value]?.[kec.value]?.[des.value] || {},
-        ),
-        "Pilih RW",
-      );
-      setOptions(rt, []);
-    };
+      const data =
+        WILAYAH_DATA[prov.value]?.[kab.value]?.[kec.value]?.[des.value] || {};
 
-    rw.onchange = () => {
-      setOptions(
-        rt,
-        WILAYAH_DATA[prov.value]?.[kab.value]?.[kec.value]?.[des.value]?.[
-          rw.value
-        ] || [],
-        "Pilih RT",
-      );
+      // 🔥 FIX: pastikan string + sort
+      const rwList = Object.keys(data)
+        .map((v) => String(v))
+        .sort((a, b) => Number(a) - Number(b));
+
+      setOptions(rw, rwList, "Pilih RW");
+      setOptions(rt, []);
+
+      // =====================
+      // RW → RT
+      // =====================
+      rw.onchange = () => {
+        const rtList = (data[rw.value] || [])
+          .map((v) => String(v))
+          .sort((a, b) => Number(a) - Number(b));
+
+        setOptions(rt, rtList, "Pilih RT");
+      };
     };
   }
 

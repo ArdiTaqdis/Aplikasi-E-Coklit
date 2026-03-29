@@ -10,15 +10,22 @@ function safeString(obj) {
 /* =========================
 LOADING
 ========================= */
+let loadingCount = 0;
 
 window.showLoading = () => {
+  loadingCount++;
   const el = $("loadingOverlay");
-  if (el) el.style.display = "flex";
+  if (el) el.classList.add("show");
 };
 
 window.hideLoading = () => {
-  const el = $("loadingOverlay");
-  if (el) el.style.display = "none";
+  loadingCount--;
+
+  if (loadingCount <= 0) {
+    loadingCount = 0;
+    const el = $("loadingOverlay");
+    if (el) el.classList.remove("show");
+  }
 };
 
 /* =========================
@@ -139,7 +146,7 @@ function renderAnggotaKeluarga(list) {
 /* =========================
 API CALL (FIX FETCH)
 ========================= */
-window.cariKeluarga = function () {
+window.cariKeluarga = function (skipLoading = false) {
   const noKK = $("searchKK")?.value?.trim();
 
   if (!noKK) {
@@ -147,13 +154,11 @@ window.cariKeluarga = function () {
     return;
   }
 
-  showLoading();
+  if (!skipLoading) showLoading();
 
   apiGet("getKeluarga", { noKK })
     .then((res) => {
-      hideLoading();
-
-      console.log("RESULT:", res); // 🔥 DEBUG
+      if (!skipLoading) hideLoading();
 
       if (!res || !res.kepala) {
         toastError("Data tidak ditemukan");
@@ -162,14 +167,9 @@ window.cariKeluarga = function () {
 
       renderKepalaKeluarga(res.kepala);
       renderAnggotaKeluarga(res.anggota || []);
-
-      show($("btnTambahAnggota"));
-      show($("btnHapusKK"));
-      show($("btnEditKK"));
     })
-    .catch((err) => {
-      hideLoading();
-      console.error(err);
+    .catch(() => {
+      if (!skipLoading) hideLoading();
       toastError("Gagal mengambil data");
     });
 };
@@ -247,7 +247,7 @@ window.simpanKepalaDanAnggota = function () {
       }
 
       if (typeof cariKeluarga === "function") {
-        cariKeluarga();
+        cariKeluarga(true);
       }
 
       show($("btnTambahAnggota"));

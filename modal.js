@@ -56,15 +56,15 @@
   window.openModal = async function () {
     const modal = $("modalKK");
 
-    showLoading(); // tampilkan loader
+    showLoading();
 
     resetForm(modal?.querySelector("form") || modal);
 
-    await initWilayah();
+    show(modal); // 🔥 PINDAH KE SINI DULU
+
+    await initWilayah(); // baru init setelah tampil
 
     hideLoading();
-
-    show(modal);
 
     const hub = document.getElementById("b_hubungan");
     if (hub) hub.value = "Kepala Keluarga";
@@ -97,8 +97,9 @@
   window.openModalEditKK = () => {
     show($("modalEditKK"));
 
-    if (typeof initWilayah === "function") {
+    if (typeof initWilayah === "function" && !window.__wilayahLoaded) {
       initWilayah();
+      window.__wilayahLoaded = true;
     }
   };
   window.closeModalEditKK = () => hide($("modalEditKK"));
