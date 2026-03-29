@@ -12,6 +12,8 @@ function initPengaturan() {
     return;
   }
 
+  loadRWRTOnly(); // 🔥 INI WAJIB
+
   rwEl.addEventListener("change", generateTPS);
   rtEl.addEventListener("change", generateTPS);
 
@@ -43,21 +45,40 @@ function loadPengaturan() {
 
       const cfg = res.data || {};
 
-      // TPS → pecah ke RW RT
       if (cfg.TPS) {
         const tps = cfg.TPS.replace("TPS ", "");
 
-        if (tps.length >= 4) {
-          document.getElementById("set_rw").value = tps.substring(0, 2);
-          document.getElementById("set_rt").value = tps.substring(2, 4);
-        }
+        const rwVal = String(parseInt(tps.substring(0, 2)));
+        const rtVal = String(parseInt(tps.substring(2, 4)));
+
+        const rwEl = document.getElementById("set_rw");
+        const rtEl = document.getElementById("set_rt");
+
+        // 🔥 tunggu RW sudah keisi (tanpa delay)
+        const checkReady = setInterval(() => {
+          if (rwEl.options.length > 1) {
+            clearInterval(checkReady);
+
+            rwEl.value = rwVal;
+            rwEl.dispatchEvent(new Event("change"));
+
+            // tunggu RT keisi
+            const checkRT = setInterval(() => {
+              if (rtEl.options.length > 1) {
+                clearInterval(checkRT);
+
+                rtEl.value = rtVal;
+                generateTPS();
+              }
+            }, 50);
+          }
+        }, 50);
 
         document.getElementById("set_tps").value = cfg.TPS;
       }
 
       document.getElementById("set_lokasi").value = cfg.LOKASI || "";
       document.getElementById("set_waktu").value = cfg.WAKTU || "";
-      generateTPS();
     })
     .catch((err) => {
       console.error(err);
@@ -195,5 +216,38 @@ function hapusTPS(rw, rt) {
         console.error(err);
         toastError("Server error");
       });
+  });
+}
+
+function loadRWRTOnly() {
+  apiGet("getWilayah").then((res) => {
+    const data = res || {};
+
+    // 🔥 ambil langsung lokasi kamu
+    const rwData =
+      data["Jawa Barat"]?.["Bekasi"]?.["Babelan"]?.["Kedung Jaya"] || {};
+
+    const rwEl = document.getElementById("set_rw");
+    const rtEl = document.getElementById("set_rt");
+
+    if (!rwEl || !rtEl) return;
+
+    // 🔥 isi RW
+    rwEl.innerHTML =
+      '<option value="">Pilih RW</option>' +
+      Object.keys(rwData)
+        .map((rw) => `<option value="${rw}">${rw}</option>`)
+        .join("");
+
+    // 🔥 onchange RW → isi RT
+    rwEl.onchange = () => {
+      const listRT = rwData[rwEl.value] || [];
+
+      rtEl.innerHTML =
+        '<option value="">Pilih RT</option>' +
+        listRT.map((rt) => `<option value="${rt}">${rt}</option>`).join("");
+
+      generateTPS(); // 🔥 langsung update TPS
+    };
   });
 }

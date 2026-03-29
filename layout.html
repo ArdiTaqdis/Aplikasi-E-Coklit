@@ -42,16 +42,16 @@
       👮 Petugas
     </button>
 
-    <button class="tab-btn" onclick="openTab('tabStatistik', this)">
-      📊 Statistik
-    </button>
-
     <button
       id="menuPengaturan"
       class="tab-btn"
       onclick="openTab('tabPengaturan', this)"
     >
       ⚙️ Pengaturan
+    </button>
+
+    <button class="tab-btn" onclick="openTab('tabStatistik', this)">
+      📊 Statistik
     </button>
   </div>
 </div>
@@ -393,14 +393,6 @@
   </div>
 </div>
 
-<div class="tab-content" id="tabStatistik">
-  <div class="container">
-    <div class="card">
-      <h2>📊 Statistik Warga</h2>
-    </div>
-  </div>
-</div>
-
 <!-- ================= TAB PENGATURAN ================= -->
 
 <div class="tab-content" id="tabPengaturan">
@@ -415,8 +407,6 @@
           <label>RW</label>
           <select id="set_rw">
             <option value="">Pilih RW</option>
-            <option value="01">RW 01</option>
-            <option value="02">RW 02</option>
           </select>
         </div>
 
@@ -478,6 +468,14 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content" id="tabStatistik">
+  <div class="container">
+    <div class="card">
+      <h2>📊 Statistik Warga (Fitur belum tersedia)</h2>
     </div>
   </div>
 </div>

@@ -152,8 +152,9 @@ window.tambahPetugas = function () {
       // 🔥 reset form
       $("pt_username").value = "";
       $("pt_password").value = "";
-      $("pt_rw").value = "";
-      $("pt_rt").value = "";
+      document.getElementById("sel_rw").value = "";
+      document.getElementById("sel_rt").innerHTML =
+        '<option value="">Pilih RT</option>';
 
       // 🔥 reload tabel
       loadUsers();
