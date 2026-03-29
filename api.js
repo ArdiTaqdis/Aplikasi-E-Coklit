@@ -40,6 +40,7 @@ function apiPost(action, data = {}) {
   return fetch(BASE_URL, {
     method: "POST",
     mode: "cors", // 🔥 wajib untuk Chrome
+    cache: "no-store",
     credentials: "omit", // 🔥 biar aman dari cookie issue
     headers: {
       "Content-Type": "text/plain;charset=utf-8", // 🔥 FIX utama

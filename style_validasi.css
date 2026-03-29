@@ -794,3 +794,27 @@ td button {
   padding: 8px 15px;
   border-radius: 6px;
 }
+
+.install-wrapper {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-install {
+  background: white;
+  border: 1px solid #d8232a;
+  color: #d8232a;
+
+  padding: 8px 14px;
+  border-radius: 8px;
+
+  font-size: 13px;
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.btn-install:hover {
+  background: #fff5f5;
+}

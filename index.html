@@ -3,6 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#d8232a" />
 
     <title>Database & e-COKLIT</title>
 
@@ -41,6 +46,10 @@
         ></div>
 
         <div class="login-footer">PILKADES 2026 || Desa Kedung Jaya</div>
+
+        <div class="install-wrapper">
+          <button id="installBtn" class="btn-install">📲 Install App</button>
+        </div>
       </div>
     </div>
 
@@ -70,11 +79,15 @@ LOADER HTML (FIX)
 ========================= -->
     <script>
       function loadHTML(id, file, callback) {
-        fetch(file)
+        fetch(file, { cache: "force-cache" })
           .then((res) => res.text())
           .then((html) => {
             document.getElementById(id).innerHTML = html;
             if (callback) callback();
+          })
+          .catch(() => {
+            document.getElementById(id).innerHTML =
+              "<p style='text-align:center'>⚠️ Offline mode</p>";
           });
       }
     </script>
@@ -174,7 +187,11 @@ LOGIN
             btn.innerHTML = "Login";
             btn.disabled = false;
 
-            err.innerText = "Server error";
+            if (!navigator.onLine) {
+              err.innerText = "📡 Tidak ada koneksi internet";
+            } else {
+              err.innerText = "⚠️ Server error";
+            }
           });
       }
 
@@ -249,6 +266,37 @@ INIT
       function togglePassword() {
         const input = document.getElementById("password");
         input.type = input.type === "password" ? "text" : "password";
+      }
+    </script>
+    <script>
+      window.addEventListener("load", () => {
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker
+            .register("service-worker.js")
+            .then(() => console.log("✅ SW registered"))
+            .catch((err) => console.error("❌ SW gagal:", err));
+        }
+      });
+
+      let deferredPrompt;
+
+      const installBtn = document.getElementById("installBtn");
+
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+
+        if (installBtn) installBtn.style.display = "block";
+      });
+
+      if (installBtn) {
+        installBtn.addEventListener("click", () => {
+          if (!deferredPrompt) return;
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(() => {
+            installBtn.style.display = "none";
+          });
+        });
       }
     </script>
   </body>
