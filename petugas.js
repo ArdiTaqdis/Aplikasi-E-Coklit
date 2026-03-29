@@ -172,7 +172,6 @@ function loadRWRT() {
   apiGet("getWilayah").then((res) => {
     DATA_WILAYAH = res || {};
 
-    // 🔥 langsung ambil lokasi fix
     const rwData =
       DATA_WILAYAH["Jawa Barat"]?.["Bekasi"]?.["Babelan"]?.["Kedung Jaya"] ||
       {};
@@ -180,14 +179,18 @@ function loadRWRT() {
     const selRW = document.getElementById("sel_rw");
     const selRT = document.getElementById("sel_rt");
 
-    // isi RW
+    // 🔥 CEK DULU (INI FIX UTAMA)
+    if (!selRW || !selRT) {
+      console.warn("Element RW/RT belum ada di DOM");
+      return;
+    }
+
     selRW.innerHTML =
       '<option value="">Pilih RW</option>' +
       Object.keys(rwData)
         .map((rw) => `<option value="${rw}">${rw}</option>`)
         .join("");
 
-    // onchange RW → isi RT
     selRW.onchange = () => {
       const listRT = rwData[selRW.value] || [];
 
@@ -197,7 +200,3 @@ function loadRWRT() {
     };
   });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadRWRT();
-});

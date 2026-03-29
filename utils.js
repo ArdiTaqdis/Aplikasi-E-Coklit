@@ -385,8 +385,10 @@ function openTab(tabId, el) {
     loadTervalidasi();
   }
 
-  if (tabId === "tabPetugas") {
-    loadUsers();
+  function openTab(tab) {
+    if (tab === "petugas") {
+      loadRWRT();
+    }
   }
 
   if (tabId === "tabPengaturan") {

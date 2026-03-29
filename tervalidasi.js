@@ -5,29 +5,20 @@ const maxPageShow = 5;
 function loadTervalidasi() {
   showLoading();
 
-  // 🔥 ambil session user
   const session = JSON.parse(localStorage.getItem("userSession") || "{}");
 
-  console.log("SESSION:", session); // 🔥 debug
-
   apiGet("getTervalidasi", {
-    username: session.username, // 🔥 WAJIB kirim ini
+    username: session.username,
   })
     .then((data) => {
       hideLoading();
 
-      console.log("DATA TERVALIDASI:", data); // 🔥 debug
-
-      // 🔥 pastikan selalu array
       if (!Array.isArray(data)) {
-        console.warn("Data bukan array:", data);
         data = [];
       }
 
-      // 🔥 simpan global (buat search & pagination)
       window.dataTervalidasiGlobal = data;
 
-      // 🔥 render 1 pintu (table + card)
       renderTervalidasi(data);
     })
     .catch((err) => {
