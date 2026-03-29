@@ -385,10 +385,9 @@ function openTab(tabId, el) {
     loadTervalidasi();
   }
 
-  function openTab(tab) {
-    if (tab === "petugas") {
-      loadRWRT();
-    }
+  if (tabId === "tabPetugas") {
+    loadRWRT(); // 🔥 load dropdown
+    loadUsers(); // 🔥 load tabel user
   }
 
   if (tabId === "tabPengaturan") {
