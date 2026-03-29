@@ -8,6 +8,8 @@ const BASE_URL =
 CORE API
 ========================= */
 
+const DEBUG = false;
+
 function apiGet(action, params = {}) {
   let url = BASE_URL + "?action=" + encodeURIComponent(action.trim());
 
@@ -15,15 +17,15 @@ function apiGet(action, params = {}) {
     url += `&${key}=${encodeURIComponent(params[key])}`;
   });
 
-  console.log("🌐 URL:", url);
+  if (DEBUG) console.log("🌐 URL:", url);
 
   return fetch(url)
     .then((res) => {
-      console.log("📡 STATUS:", res.status);
+      if (DEBUG) console.log("📡 STATUS:", res.status);
       return res.text();
     })
     .then((text) => {
-      console.log("📦 RAW:", text);
+      if (DEBUG) console.log("📦 RAW:", text);
 
       try {
         return JSON.parse(text);

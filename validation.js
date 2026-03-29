@@ -2,14 +2,13 @@ let currentNIK = null;
 let filterStatus = "SEMUA";
 let dataValidasiGlobal = [];
 let currentPage = 1;
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 5;
+let dataView = [];
 
 function loadValidasi() {
   showLoading();
 
   const session = JSON.parse(localStorage.getItem("userSession") || "{}");
-
-  console.log("SESSION:", session); // 🔥 debug
 
   apiGet("getValidasi", {
     username: session.username, // 🔥 WAJIB
@@ -52,7 +51,6 @@ function setFilter(status, btn) {
   }
 
   renderValidasi(data);
-  searchValidasi();
 }
 
 function searchValidasi() {
@@ -73,14 +71,13 @@ function searchValidasi() {
       String(d["Nama Lengkap"]).toLowerCase().includes(keyword) ||
       String(d["NIK"]).toLowerCase().includes(keyword),
   );
-  if (typeof currentPage === "undefined") {
-    // 🔥 reset ke halaman 1
-    currentPage = 1;
-  }
+
+  currentPage = 1; // 🔥 WAJIB
   renderValidasi(data);
 }
 
 function renderValidasi(data) {
+  dataView = data;
   const box = document.getElementById("validasiList");
   if (!box) return;
 
@@ -149,7 +146,9 @@ function renderValidasi(data) {
           ${
             a["Status"] === "Sudah Coklit"
               ? ""
-              : `<button onclick="openCoklitByIndex(${index})" class="btn-coklit">✔ Coklit</button>`
+              : `<button onclick="openCoklitByNIK('${a["NIK"]}')" class="btn-coklit">
+                  ✔ Coklit
+                </button>`
           }
         </div>
       `;
@@ -163,11 +162,26 @@ function renderValidasi(data) {
   renderPagination(data.length);
 }
 
+function openCoklitByNIK(nik) {
+  const data = dataValidasiGlobal.find((d) => d["NIK"] == nik);
+  if (!data) return;
+
+  openCoklitDirect(data);
+}
+
 function renderPagination(totalData) {
   const totalPage = Math.ceil(totalData / PAGE_SIZE);
 
-  const container = document.getElementById("paginationValidasi"); // 🔥 FIX
+  const container = document.getElementById("paginationValidasi");
   if (!container) return;
+
+  // 🔥 kalau cuma 1 halaman, tetap tampilkan info
+  if (totalPage <= 1) {
+    container.innerHTML = `<span style="font-size:12px;color:#666;">
+      Total ${totalData} data
+    </span>`;
+    return;
+  }
 
   container.innerHTML = "";
 
@@ -179,32 +193,19 @@ function renderPagination(totalData) {
 
     btn.onclick = () => {
       currentPage = i;
-      renderValidasi(dataValidasiGlobal);
+      renderValidasi(dataView);
     };
 
     container.appendChild(btn);
   }
 }
 
-function openCoklitByIndex(index) {
-  const data = dataValidasiGlobal[index];
-  if (!data) return;
-
-  openCoklitDirect(data);
-}
-
 function openCoklitDirect(data) {
   currentNIK = data["NIK"];
 
-  // isi sama kayak openCoklit kamu
+  const detail = document.getElementById("detailPemilih");
 
-  function openCoklit(el) {
-    const data = JSON.parse(el.getAttribute("data-item"));
-    currentNIK = data["NIK"];
-
-    const detail = document.getElementById("detailPemilih");
-
-    detail.innerHTML = `
+  detail.innerHTML = `
 
 <div class="form-grid">
 
@@ -296,7 +297,6 @@ function openCoklitDirect(data) {
 <input id="f_ibu" value="${data["Ibu Kandung"]}">
 </div>
 
-<!-- 🔥 TAMBAHAN BARU -->
 <div style="grid-column: span 2;">
 <label>📞 No HP (Kepala Keluarga)</label>
 <input id="f_nohp" placeholder="Contoh Format 628xxxxxxxxxx">
@@ -305,36 +305,30 @@ function openCoklitDirect(data) {
 </div>
 `;
 
-    // set status coklit
-    // set status coklit dari data dulu
-    document.getElementById("statusCoklit").value = data["Status"] || "";
-    document.getElementById("ketCoklit").value = data["Keterangan"] || "";
+  // ✅ SET STATUS
+  document.getElementById("statusCoklit").value = data["Status"] || "";
+  document.getElementById("ketCoklit").value = data["Keterangan"] || "";
 
-    // 🔥 BARU HITUNG UMUR
-    const umur = hitungUmur(formatDateInput(data["Tanggal Lahir"]));
+  // 🔥 AUTO RULE UMUR
+  const umur = hitungUmur(formatDateInput(data["Tanggal Lahir"]));
 
-    if (umur < 17) {
-      document.getElementById("statusCoklit").value = "Tersaring";
-      document.getElementById("ketCoklit").value = "Dibawah Umur";
-
-      toggleKeterangan();
-
-      console.log("AUTO SET TERARING (UMUR <17)");
-    }
-
-    document.getElementById("modalCoklit").style.display = "flex";
-
-    // 🔥 LOAD NO HP DARI SHEET KEPALA KELUARGA
-    apiGet("getNoHP", { noKK: data["NO KK"] })
-      .then((res) => {
-        if (res && res.nohp !== undefined) {
-          document.getElementById("f_nohp").value = res.nohp || "";
-        }
-      })
-      .catch((err) => {
-        console.warn("No HP tidak ditemukan (aman)", err);
-      });
+  if (umur < 17) {
+    document.getElementById("statusCoklit").value = "Tersaring";
+    document.getElementById("ketCoklit").value = "Dibawah Umur";
+    toggleKeterangan();
   }
+
+  // 🔥 TAMPILKAN MODAL
+  document.getElementById("modalCoklit").style.display = "flex";
+
+  // 🔥 LOAD NO HP
+  apiGet("getNoHP", { noKK: data["NO KK"] })
+    .then((res) => {
+      if (res && res.nohp !== undefined) {
+        document.getElementById("f_nohp").value = res.nohp || "";
+      }
+    })
+    .catch(() => {});
 }
 
 function formatDateInput(val) {
@@ -364,8 +358,6 @@ function toggleKeterangan() {
 
 window.simpanCoklit = function () {
   try {
-    console.log("🔥 CLICK SIMPAN");
-
     const val = (id) => {
       const el = document.getElementById(id);
       return el ? el.value : "";
@@ -376,8 +368,6 @@ window.simpanCoklit = function () {
 
     const tgl = val("f_tgl");
     const umur = hitungUmur(tgl);
-
-    console.log("UMUR:", umur);
 
     // ✅ VALIDASI NO HP
     // ✅ VALIDASI NO HP (opsional)
@@ -399,8 +389,6 @@ window.simpanCoklit = function () {
       document.getElementById("ketCoklit").value = ket;
 
       toggleKeterangan();
-
-      console.log("AUTO SET: UMUR < 17");
     }
 
     // ✅ VALIDASI STATUS SETELAH RULE
@@ -435,14 +423,10 @@ window.simpanCoklit = function () {
       nohp: nohp,
     };
 
-    console.log("📤 DATA DIKIRIM:", data);
-
     if (typeof showLoading === "function") showLoading();
 
     apiPost("updateFullData", data)
       .then((res) => {
-        console.log("📥 RESPONSE:", res);
-
         if (typeof hideLoading === "function") hideLoading();
 
         if (!res || !res.success) {

@@ -1,4 +1,4 @@
-let currentPage = 1;
+let currentPageTervalidasi = 1;
 const rowsPerPage = 10;
 const maxPageShow = 5;
 
@@ -60,7 +60,7 @@ function loadTervalidasi() {
 let searchTimer;
 
 function searchTervalidasi() {
-  currentPage = 1; // 🔥 reset halaman
+  currentPageTervalidasi = 1; // 🔥 reset halaman
 
   const keyword = document
     .getElementById("searchTervalidasi")
@@ -108,7 +108,7 @@ function renderTervalidasi(data) {
   }
 
   // 🔥 PAGINATION CORE
-  const start = (currentPage - 1) * rowsPerPage;
+  const start = (currentPageTervalidasi - 1) * rowsPerPage;
   const end = start + rowsPerPage;
   const paginatedData = data.slice(start, end);
 
@@ -363,61 +363,58 @@ function exportPDFTervalidasi() {
 }
 
 function renderPagination(totalData) {
-  const totalPages = Math.ceil(totalData / rowsPerPage);
-  const container = document.getElementById("pagination");
-
+  const totalPage = Math.ceil(totalData / PAGE_SIZE);
+  const container = document.getElementById("paginationValidasi");
   if (!container) return;
 
-  let html = "";
+  container.innerHTML = "";
 
-  // 🔥 PREV
-  html += `
-    <button 
-      class="page-btn"
-      ${currentPage === 1 ? "disabled" : ""}
-      onclick="goPage(${currentPage - 1})">
-      ⬅ Prev
-    </button>
-  `;
+  if (totalPage <= 1) return;
 
-  // 🔥 HITUNG RANGE PAGE
-  let startPage = Math.max(1, currentPage - Math.floor(maxPageShow / 2));
-  let endPage = startPage + maxPageShow - 1;
+  const maxShow = 5;
 
-  if (endPage > totalPages) {
-    endPage = totalPages;
-    startPage = Math.max(1, endPage - maxPageShow + 1);
+  let start = Math.max(1, currentPage - Math.floor(maxShow / 2));
+  let end = start + maxShow - 1;
+
+  if (end > totalPage) {
+    end = totalPage;
+    start = Math.max(1, end - maxShow + 1);
   }
 
+  // 🔥 PREV
+  const prev = document.createElement("button");
+  prev.innerText = "⬅";
+  prev.disabled = currentPage === 1;
+  prev.onclick = () => {
+    currentPage--;
+    renderValidasi(dataView);
+  };
+  container.appendChild(prev);
+
   // 🔥 PAGE NUMBER
-  for (let i = startPage; i <= endPage; i++) {
-    html += `
-      <button 
-        class="page-btn ${i === currentPage ? "active" : ""}"
-        onclick="goPage(${i})">
-        ${i}
-      </button>
-    `;
+  for (let i = start; i <= end; i++) {
+    const btn = document.createElement("button");
+    btn.innerText = i;
+
+    if (i === currentPage) btn.classList.add("active");
+
+    btn.onclick = () => {
+      currentPage = i;
+      renderValidasi(dataView);
+    };
+
+    container.appendChild(btn);
   }
 
   // 🔥 NEXT
-  html += `
-    <button 
-      class="page-btn"
-      ${currentPage === totalPages ? "disabled" : ""}
-      onclick="goPage(${currentPage + 1})">
-      Next ➡
-    </button>
-  `;
-
-  // 🔥 INFO
-  html += `
-    <div class="page-info">
-      Halaman ${currentPage} dari ${totalPages}
-    </div>
-  `;
-
-  container.innerHTML = html;
+  const next = document.createElement("button");
+  next.innerText = "➡";
+  next.disabled = currentPage === totalPage;
+  next.onclick = () => {
+    currentPage++;
+    renderValidasi(dataView);
+  };
+  container.appendChild(next);
 }
 
 function goPage(page) {
@@ -447,7 +444,7 @@ function goPage(page) {
   if (page < 1) page = 1;
   if (page > totalPages) page = totalPages;
 
-  currentPage = page;
+  currentPageTervalidasi = page;
 
   renderTervalidasi(filtered);
 }
