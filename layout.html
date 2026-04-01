@@ -248,14 +248,14 @@
       <h2>✔ Daftar Coklit Pemilih</h2>
       <p class="lead">Kelompok per Kartu Keluarga (KK)</p>
 
-      <div class="search-validasi">
-        <input
-          type="text"
-          id="searchValidasi"
-          placeholder="Cari Nama atau NIK..."
-        />
-        <button onclick="doSearch()">🔍 Cari</button>
-      </div>
+      <input
+        type="text"
+        id="searchValidasi"
+        placeholder="Cari Nama atau NIK..."
+        onkeydown="handleSearch(event)"
+      />
+
+      <button onclick="doSearch()">🔍 Cari</button>
 
       <div class="filter-validasi">
         <button class="filter-btn active" onclick="setFilter('SEMUA', this)">

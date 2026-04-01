@@ -1,11 +1,13 @@
 let currentNIK = null;
 let filterStatus = "SEMUA";
 let dataValidasiGlobal = [];
+let currentKeyword = "";
 let currentPage = 1;
 const PAGE_SIZE = 5;
 let dataView = [];
 
 function loadValidasi(page = 1, keyword = "") {
+  currentKeyword = keyword;
   showLoading();
 
   const session = JSON.parse(localStorage.getItem("userSession") || "{}");
@@ -63,7 +65,8 @@ function setFilter(status, btn) {
     data = data.filter((d) => d["Status"] === "Sudah Coklit");
   }
 
-  renderValidasi(data);
+  dataView = data;
+  renderValidasi(dataView);
 }
 
 function searchValidasi() {
@@ -74,6 +77,12 @@ function searchValidasi() {
   searchTimer = setTimeout(() => {
     loadValidasi(1, keyword); // 🔥 kirim ke server
   }, 400); // debounce biar gak spam
+}
+
+function handleSearch(e) {
+  if (e.key === "Enter") {
+    doSearch();
+  }
 }
 
 function doSearch() {
@@ -205,7 +214,7 @@ function renderPaginationServer(totalData) {
   if (currentPage > 1) {
     const prev = document.createElement("button");
     prev.innerText = "⬅️";
-    prev.onclick = () => loadValidasi(currentPage - 1);
+    prev.onclick = () => loadValidasi(currentPage - 1, currentKeyword);
     container.appendChild(prev);
   }
 
@@ -236,7 +245,7 @@ function renderPaginationServer(totalData) {
       btn.classList.add("active");
     }
 
-    btn.onclick = () => loadValidasi(i);
+    btn.onclick = () => loadValidasi(i, currentKeyword);
 
     container.appendChild(btn);
   }
@@ -259,7 +268,7 @@ function renderPaginationServer(totalData) {
   if (currentPage < totalPage) {
     const next = document.createElement("button");
     next.innerText = "➡️";
-    next.onclick = () => loadValidasi(currentPage + 1);
+    next.onclick = () => loadValidasi(currentPage + 1, currentKeyword);
     container.appendChild(next);
   }
 }
