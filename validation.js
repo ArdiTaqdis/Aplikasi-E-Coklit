@@ -82,27 +82,19 @@ function searchValidasi() {
 }
 
 function renderValidasi(data) {
-  dataView = data;
   const box = document.getElementById("validasiList");
   if (!box) return;
 
   box.innerHTML = "";
 
-  // 🔥 PAGINATION
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const end = start + PAGE_SIZE;
-  const pageData = data.slice(start, end);
-
-  // 🔥 GROUP PER KK (hanya data per halaman)
   let group = {};
 
-  pageData.forEach((w) => {
+  data.forEach((w) => {
     const kk = w["NO KK"];
     if (!group[kk]) group[kk] = [];
     group[kk].push(w);
   });
 
-  // 🔥 RENDER
   Object.keys(group).forEach((kk) => {
     const anggota = group[kk];
 
@@ -129,9 +121,7 @@ function renderValidasi(data) {
       </div>
     `;
 
-    anggota.forEach((a, i) => {
-      const index = start + i; // 🔥 index global
-
+    anggota.forEach((a) => {
       const row = document.createElement("div");
       row.className = "anggota-item";
 
@@ -163,8 +153,6 @@ function renderValidasi(data) {
 
     box.appendChild(card);
   });
-
-  renderPagination(data.length);
 }
 
 function openCoklitByNIK(nik) {
