@@ -206,17 +206,68 @@ function renderPaginationServer(totalData) {
 
   container.innerHTML = "";
 
-  for (let i = 1; i <= totalPage; i++) {
+  if (totalPage <= 1) return;
+
+  // 🔥 PREV BUTTON
+  if (currentPage > 1) {
+    const prev = document.createElement("button");
+    prev.innerText = "⬅️";
+    prev.onclick = () => loadValidasi(currentPage - 1);
+    container.appendChild(prev);
+  }
+
+  // 🔥 RANGE (BIAR GAK PENUH)
+  let start = Math.max(1, currentPage - 2);
+  let end = Math.min(totalPage, currentPage + 2);
+
+  // 🔥 DOT AWAL
+  if (start > 1) {
+    const first = document.createElement("button");
+    first.innerText = "1";
+    first.onclick = () => loadValidasi(1);
+    container.appendChild(first);
+
+    if (start > 2) {
+      const dots = document.createElement("span");
+      dots.innerText = "...";
+      container.appendChild(dots);
+    }
+  }
+
+  // 🔥 PAGE NUMBER
+  for (let i = start; i <= end; i++) {
     const btn = document.createElement("button");
     btn.innerText = i;
 
-    if (i === currentPage) btn.classList.add("active");
+    if (i === currentPage) {
+      btn.classList.add("active");
+    }
 
-    btn.onclick = () => {
-      loadValidasi(i); // 🔥 langsung request server
-    };
+    btn.onclick = () => loadValidasi(i);
 
     container.appendChild(btn);
+  }
+
+  // 🔥 DOT AKHIR
+  if (end < totalPage) {
+    if (end < totalPage - 1) {
+      const dots = document.createElement("span");
+      dots.innerText = "...";
+      container.appendChild(dots);
+    }
+
+    const last = document.createElement("button");
+    last.innerText = totalPage;
+    last.onclick = () => loadValidasi(totalPage);
+    container.appendChild(last);
+  }
+
+  // 🔥 NEXT BUTTON
+  if (currentPage < totalPage) {
+    const next = document.createElement("button");
+    next.innerText = "➡️";
+    next.onclick = () => loadValidasi(currentPage + 1);
+    container.appendChild(next);
   }
 }
 
