@@ -738,6 +738,11 @@ td button {
   color: white;
 }
 
+.pagination span {
+  padding: 6px;
+  color: #999;
+}
+
 /* responsive */
 #cardTervalidasi {
   display: none;

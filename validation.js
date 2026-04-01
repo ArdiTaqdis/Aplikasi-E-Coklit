@@ -1,6 +1,7 @@
 let currentNIK = null;
 let filterStatus = "SEMUA";
 let dataValidasiGlobal = [];
+let searchTimer;
 let currentPage = 1;
 const PAGE_SIZE = 5;
 let dataView = [];
@@ -14,6 +15,7 @@ function loadValidasi(page = 1) {
     username: session.username,
     page: page,
     limit: 5,
+    search: keyword, //
   })
     .then((res) => {
       console.log("HASIL SERVER:", res);
@@ -66,26 +68,13 @@ function setFilter(status, btn) {
 }
 
 function searchValidasi() {
-  const keyword = document.getElementById("searchValidasi").value.toLowerCase();
+  const keyword = document.getElementById("searchValidasi").value;
 
-  let data = dataValidasiGlobal;
+  clearTimeout(searchTimer);
 
-  if (filterStatus === "BELUM") {
-    data = data.filter((d) => d["Status"] !== "Sudah Coklit");
-  }
-
-  if (filterStatus === "SUDAH") {
-    data = data.filter((d) => d["Status"] === "Sudah Coklit");
-  }
-
-  data = data.filter(
-    (d) =>
-      String(d["Nama Lengkap"]).toLowerCase().includes(keyword) ||
-      String(d["NIK"]).toLowerCase().includes(keyword),
-  );
-
-  currentPage = 1; // 🔥 WAJIB
-  renderValidasi(data);
+  searchTimer = setTimeout(() => {
+    loadValidasi(1, keyword); // 🔥 kirim ke server
+  }, 400); // debounce biar gak spam
 }
 
 function renderValidasi(data) {
