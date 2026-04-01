@@ -16,9 +16,16 @@ function loadValidasi(page = 1) {
     limit: 5,
   })
     .then((res) => {
+      console.log("HASIL SERVER:", res);
+
       hideLoading();
 
-      if (!res || !res.data) return;
+      if (!res || !res.data) {
+        console.log("❌ DATA KOSONG");
+        return;
+      }
+
+      console.log("JUMLAH DATA:", res.data.length);
 
       dataValidasiGlobal = res.data;
       currentPage = res.page;
