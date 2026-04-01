@@ -1,12 +1,11 @@
 let currentNIK = null;
 let filterStatus = "SEMUA";
 let dataValidasiGlobal = [];
-let searchTimer;
 let currentPage = 1;
 const PAGE_SIZE = 5;
 let dataView = [];
 
-function loadValidasi(page = 1) {
+function loadValidasi(page = 1, keyword = "") {
   showLoading();
 
   const session = JSON.parse(localStorage.getItem("userSession") || "{}");
@@ -15,7 +14,7 @@ function loadValidasi(page = 1) {
     username: session.username,
     page: page,
     limit: 5,
-    search: keyword, //
+    search: keyword, // ✅ sekarang aman
   })
     .then((res) => {
       console.log("HASIL SERVER:", res);
