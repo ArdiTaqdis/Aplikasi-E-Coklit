@@ -5,25 +5,30 @@ let currentPage = 1;
 const PAGE_SIZE = 5;
 let dataView = [];
 
-function loadValidasi() {
+function loadValidasi(page = 1) {
   showLoading();
 
   const session = JSON.parse(localStorage.getItem("userSession") || "{}");
 
   apiGet("getValidasi", {
-    username: session.username, // 🔥 WAJIB
+    username: session.username,
+    page: page,
+    limit: 5,
   })
     .then((res) => {
       hideLoading();
 
-      dataValidasiGlobal = res || [];
+      if (!res || !res.data) return;
 
-      renderValidasi(dataValidasiGlobal);
+      dataValidasiGlobal = res.data;
+      currentPage = res.page;
+
+      renderValidasi(res.data);
+      renderPaginationServer(res.total);
     })
     .catch((err) => {
       hideLoading();
       console.error(err);
-      toastError("Gagal load data validasi");
     });
 }
 
@@ -194,6 +199,26 @@ function renderPagination(totalData) {
     btn.onclick = () => {
       currentPage = i;
       renderValidasi(dataView);
+    };
+
+    container.appendChild(btn);
+  }
+}
+
+function renderPaginationServer(totalData) {
+  const totalPage = Math.ceil(totalData / PAGE_SIZE);
+  const container = document.getElementById("paginationValidasi");
+
+  container.innerHTML = "";
+
+  for (let i = 1; i <= totalPage; i++) {
+    const btn = document.createElement("button");
+    btn.innerText = i;
+
+    if (i === currentPage) btn.classList.add("active");
+
+    btn.onclick = () => {
+      loadValidasi(i); // 🔥 langsung request server
     };
 
     container.appendChild(btn);
