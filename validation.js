@@ -76,6 +76,11 @@ function searchValidasi() {
   }, 400); // debounce biar gak spam
 }
 
+function doSearch() {
+  const keyword = document.getElementById("searchValidasi").value;
+  loadValidasi(1, keyword);
+}
+
 function renderValidasi(data) {
   const box = document.getElementById("validasiList");
   if (!box) return;
