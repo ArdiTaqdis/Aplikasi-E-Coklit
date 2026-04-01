@@ -17,6 +17,7 @@ function loadValidasi(page = 1, keyword = "") {
     page: page,
     limit: 5,
     search: keyword, // ✅ sekarang aman
+    status: filterStatus,
   })
     .then((res) => {
       console.log("HASIL SERVER:", res);
@@ -67,16 +68,6 @@ function setFilter(status, btn) {
 
   dataView = data;
   renderValidasi(dataView);
-}
-
-function searchValidasi() {
-  const keyword = document.getElementById("searchValidasi").value;
-
-  clearTimeout(searchTimer);
-
-  searchTimer = setTimeout(() => {
-    loadValidasi(1, keyword); // 🔥 kirim ke server
-  }, 400); // debounce biar gak spam
 }
 
 function handleSearch(e) {
