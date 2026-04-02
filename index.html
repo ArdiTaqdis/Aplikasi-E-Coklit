@@ -65,7 +65,6 @@
     <script src="wilayah.js"></script>
     <script src="modal.js"></script>
     <script src="utils.js"></script>
-    <script src="summary.js"></script>
     <script src="kk.js"></script>
     <script src="validation.js"></script>
     <script src="tervalidasi.js"></script>
@@ -228,17 +227,7 @@ RENDER USER
 INIT APP (LOAD DATA)
 ========================= */
       function initApp() {
-        apiGet("getSummary").then((res) => {
-          if (!res) return;
-
-          if (sm_total) sm_total.innerText = res.total || 0;
-          if (sm_laki) sm_laki.innerText = res.laki || 0;
-          if (sm_perempuan) sm_perempuan.innerText = res.perempuan || 0;
-
-          if (sm_asli) sm_asli.innerText = res.asli || 0;
-          if (sm_domisili) sm_domisili.innerText = res.domisili || 0;
-          if (sm_kos) sm_kos.innerText = res.kos || 0;
-        });
+        console.log("🚀 App loaded tanpa summary");
       }
 
       /* =========================

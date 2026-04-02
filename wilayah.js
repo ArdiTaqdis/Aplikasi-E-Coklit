@@ -1,131 +1,48 @@
-/* ======================================================
- * wilayah.js — CLEAN VERSION (GITHUB READY)
- * ====================================================== */
+const RW_RT = {
+  1: ["01", "02", "03"],
+  2: ["04", "05", "06"],
+  3: ["01", "02", "03"],
+  4: ["04", "06", "07"],
+  5: ["05", "08", "09"],
+  6: ["01", "02", "03"],
+  7: ["04", "05", "12"],
+  8: ["06", "07", "08"],
+  9: ["09", "10", "11"],
+  10: ["15", "16", "21"],
+  11: ["17", "18", "19"],
+  12: ["13", "14", "20"],
+  13: ["22", "23", "24"],
+  14: ["07", "08", "09", "10"],
+  15: ["25", "26", "27"],
+  16: ["01", "02"],
+  17: ["03", "04"],
+  18: ["01", "02"],
+  19: ["01", "02", "03"],
+  20: ["01", "02", "03"],
+  21: ["01", "02"],
+};
 
-(function () {
-  let WILAYAH_DATA = {};
+function initWilayahStaticKK() {
+  const rwSelect = document.getElementById("kk_rw");
+  const rtSelect = document.getElementById("kk_rt");
 
-  const qs = (id) => document.getElementById(id);
+  rwSelect.innerHTML = `<option value="">Pilih RW</option>`;
+  rtSelect.innerHTML = `<option value="">Pilih RT</option>`;
 
-  function setOptions(select, list, placeholder = "-- Pilih --") {
-    if (!select) return;
+  Object.keys(RW_RT).forEach((rw) => {
+    const label = String(rw).padStart(2, "0");
 
-    select.innerHTML =
-      `<option value="">${placeholder}</option>` +
-      (list || []).map((v) => `<option value="${v}">${v}</option>`).join("");
-  }
-
-  function loadWilayah() {
-    return apiGet("getWilayah")
-      .then((res) => {
-        WILAYAH_DATA = res || {};
-        console.log("✅ wilayah loaded", WILAYAH_DATA);
-      })
-      .catch((err) => {
-        console.error("❌ gagal load wilayah", err);
-      });
-  }
-
-  /* =====================
-   * INIT CASCADE
-   * ===================== */
-  function initCascade(prefix) {
-    const prov = qs(prefix + "provinsi");
-    const kab = qs(prefix + "kabupaten");
-    const kec = qs(prefix + "kecamatan");
-    const des = qs(prefix + "desa");
-    const rw = qs(prefix + "rw");
-    const rt = qs(prefix + "rt");
-
-    if (!prov) return;
-
-    // INIT PROVINSI
-    setOptions(prov, Object.keys(WILAYAH_DATA), "Pilih Provinsi");
-
-    // =====================
-    // PROVINSI
-    // =====================
-    prov.onchange = () => {
-      setOptions(kab, Object.keys(WILAYAH_DATA[prov.value] || {}), "Pilih Kab");
-      setOptions(kec, []);
-      setOptions(des, []);
-      setOptions(rw, []);
-      setOptions(rt, []);
-    };
-
-    // =====================
-    // KABUPATEN
-    // =====================
-    kab.onchange = () => {
-      setOptions(
-        kec,
-        Object.keys(WILAYAH_DATA[prov.value]?.[kab.value] || {}),
-        "Pilih Kecamatan",
-      );
-      setOptions(des, []);
-      setOptions(rw, []);
-      setOptions(rt, []);
-    };
-
-    // =====================
-    // KECAMATAN
-    // =====================
-    kec.onchange = () => {
-      setOptions(
-        des,
-        Object.keys(WILAYAH_DATA[prov.value]?.[kab.value]?.[kec.value] || {}),
-        "Pilih Desa",
-      );
-      setOptions(rw, []);
-      setOptions(rt, []);
-    };
-
-    // =====================
-    // DESA → RW
-    // =====================
-    des.onchange = () => {
-      const data =
-        WILAYAH_DATA[prov.value]?.[kab.value]?.[kec.value]?.[des.value] || {};
-
-      // 🔥 FIX: pastikan string + sort
-      const rwList = Object.keys(data)
-        .map((v) => String(v))
-        .sort((a, b) => Number(a) - Number(b));
-
-      setOptions(rw, rwList, "Pilih RW");
-      setOptions(rt, []);
-
-      // =====================
-      // RW → RT
-      // =====================
-      rw.onchange = () => {
-        const rtList = (data[rw.value] || [])
-          .map((v) => String(v))
-          .sort((a, b) => Number(a) - Number(b));
-
-        setOptions(rt, rtList, "Pilih RT");
-      };
-    };
-  }
-
-  /* =====================
-   * PUBLIC INIT
-   * ===================== */
-  window.initWilayah = async function () {
-    // LOAD DATA CUMA SEKALI
-    if (!window.__wilayahDataLoaded) {
-      await loadWilayah();
-      window.__wilayahDataLoaded = true;
-    }
-
-    // 🔥 INIT CASCADE SELALU DIJALANKAN
-    initCascade("sel_");
-    initCascade("edtA_");
-  };
-  /* =====================
-   * AUTO LOAD
-   * ===================== */
-  document.addEventListener("DOMContentLoaded", () => {
-    initWilayah();
+    rwSelect.innerHTML += `<option value="${rw}">RW ${label}</option>`;
   });
-})();
+
+  rwSelect.onchange = function () {
+    const rw = Number(this.value);
+    const listRT = RW_RT[rw] || [];
+
+    rtSelect.innerHTML = `<option value="">Pilih RT</option>`;
+
+    listRT.forEach((rt) => {
+      rtSelect.innerHTML += `<option value="${rt}">RT ${rt}</option>`;
+    });
+  };
+}

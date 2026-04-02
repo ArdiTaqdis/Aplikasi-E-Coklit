@@ -53,16 +53,17 @@
    * MODAL KK
    * ===================== */
 
-  window.openModal = async function () {
+  window.openModal = function () {
     const modal = $("modalKK");
 
     showLoading();
 
     resetForm(modal?.querySelector("form") || modal);
 
-    show(modal); // 🔥 PINDAH KE SINI DULU
+    show(modal);
 
-    await initWilayah(); // baru init setelah tampil
+    // 🔥 FIX DI SINI
+    initWilayahStaticKK();
 
     hideLoading();
 

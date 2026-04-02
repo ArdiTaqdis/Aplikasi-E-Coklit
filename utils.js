@@ -378,9 +378,8 @@ function openTab(tabId, el) {
 
   // 🔥 AUTO LOAD
   if (tabId === "tabValidasi") {
-    loadValidasi();
+    console.log("tab validasi dibuka (belum load)");
   }
-
   if (tabId === "tabTervalidasi") {
     loadTervalidasi();
   }

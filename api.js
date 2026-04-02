@@ -2,7 +2,7 @@
 BASE URL (WAJIB GANTI)
 ========================= */
 const BASE_URL =
-  "https://script.google.com/macros/s/AKfycby-bRz5uo1IQOb9za7DwKX3VACBWtpZNDRMxKBe6NJgyLJlT8tK_h7d0gtGpaWvLeHJ/exec";
+  "https://script.google.com/macros/s/AKfycbwvfie6iaAgkrjKOVmHgxIpNWsNdDzy16fndvA-y9QChfdWpwL5GB_GUSy7ZPyOEahX/exec";
 
 /* =========================
 CORE API
@@ -80,46 +80,6 @@ API OBJECT
 ========================= */
 
 const API = {
-  /* =====================
-   * WILAYAH
-   * ===================== */
-  getWilayah(cb) {
-    showLoading();
-
-    apiGet("getWilayah")
-      .then((res) => {
-        hideLoading();
-        state.wilayah = res || {};
-        cb && cb(res);
-      })
-      .catch(() => {
-        hideLoading();
-        toastError("Gagal ambil wilayah");
-      });
-  },
-
-  /* =====================
-   * KELUARGA
-   * ===================== */
-  getKeluarga(noKK, cb) {
-    showLoading();
-
-    apiGet("getKeluarga", { noKK })
-      .then((res) => {
-        hideLoading();
-
-        state.noKKAktif = noKK;
-        state.kepala = res?.kepala || null;
-        state.anggota = res?.anggota || [];
-
-        cb && cb(res);
-      })
-      .catch(() => {
-        hideLoading();
-        toastError("Gagal ambil data keluarga");
-      });
-  },
-
   /* =====================
    * SIMPAN KK
    * ===================== */
@@ -248,15 +208,6 @@ const API = {
         hideLoading();
         toastError("Gagal hapus");
       });
-  },
-
-  /* =====================
-   * SUMMARY
-   * ===================== */
-  getSummary(cb) {
-    apiGet("getSummary")
-      .then((res) => cb && cb(res))
-      .catch(() => toastError("Gagal load statistik"));
   },
 
   /* =====================
