@@ -108,37 +108,6 @@
 
         <div id="kkMessage" class="muted" style="margin-top: 8px"></div>
       </div>
-      <!-- ===================== VALIDASI (UTAMA) ===================== -->
-      <div class="card">
-        <h2>✔ Daftar Coklit Pemilih</h2>
-        <p class="lead">Kelompok per Kartu Keluarga (KK)</p>
-
-        <input
-          type="text"
-          id="searchValidasi"
-          placeholder="Cari Nama atau NIK..."
-          onkeydown="handleSearch(event)"
-        />
-
-        <button onclick="doSearch()">🔍 Cari</button>
-
-        <div class="filter-validasi">
-          <button class="filter-btn active" onclick="setFilter('SEMUA', this)">
-            Semua
-          </button>
-
-          <button class="filter-btn" onclick="setFilter('BELUM', this)">
-            Belum Coklit
-          </button>
-
-          <button class="filter-btn" onclick="setFilter('SUDAH', this)">
-            Sudah Coklit
-          </button>
-        </div>
-
-        <div id="validasiList"></div>
-        <div id="paginationValidasi" class="pagination"></div>
-      </div>
 
       <!-- ===================== DATA ANGGOTA ===================== -->
       <!-- 🔥 hidden biar tidak berat -->
@@ -187,6 +156,38 @@
             </tbody>
           </table>
         </div>
+      </div>
+
+      <!-- ===================== VALIDASI (UTAMA) ===================== -->
+      <div class="card">
+        <h2>✔ Daftar Coklit Pemilih</h2>
+        <p class="lead">Kelompok per Kartu Keluarga (KK)</p>
+
+        <input
+          type="text"
+          id="searchValidasi"
+          placeholder="Cari Nama atau NO.KK / NIK..."
+          onkeydown="handleSearch(event)"
+        />
+
+        <button onclick="doSearch()">🔍 Cari</button>
+
+        <div class="filter-validasi">
+          <button class="filter-btn active" onclick="setFilter('SEMUA', this)">
+            Semua
+          </button>
+
+          <button class="filter-btn" onclick="setFilter('BELUM', this)">
+            Belum Coklit
+          </button>
+
+          <button class="filter-btn" onclick="setFilter('SUDAH', this)">
+            Sudah Coklit
+          </button>
+        </div>
+
+        <div id="validasiList"></div>
+        <div id="paginationValidasi" class="pagination"></div>
       </div>
     </div>
   </div>

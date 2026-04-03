@@ -3,7 +3,7 @@ let filterStatus = "SEMUA";
 let dataValidasiGlobal = [];
 let currentKeyword = "";
 let currentPage = 1;
-const PAGE_SIZE = 100;
+const PAGE_SIZE = 50;
 let dataView = [];
 let cacheValidasi = {};
 
@@ -25,7 +25,7 @@ function loadValidasi(page = 1, keyword = "") {
   apiGet("getValidasi", {
     username: session.username,
     page,
-    limit: 100,
+    limit: 50,
     search: keyword,
     status: filterStatus,
   })
@@ -62,7 +62,11 @@ function handleSearch(e) {
 }
 
 function doSearch() {
-  const keyword = document.getElementById("searchValidasi").value;
+  const keyword = document.getElementById("searchValidasi").value.trim();
+
+  console.log("🔍 SEARCH:", keyword);
+
+  // 🔥 SEMUA SEARCH LANGSUNG KE BACKEND
   loadValidasi(1, keyword);
 }
 
