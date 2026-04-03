@@ -3,7 +3,7 @@ let filterStatus = "SEMUA";
 let dataValidasiGlobal = [];
 let currentKeyword = "";
 let currentPage = 1;
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 100;
 let dataView = [];
 let cacheValidasi = {};
 
@@ -25,7 +25,7 @@ function loadValidasi(page = 1, keyword = "") {
   apiGet("getValidasi", {
     username: session.username,
     page,
-    limit: 5,
+    limit: 100,
     search: keyword,
     status: filterStatus,
   })
@@ -88,7 +88,8 @@ function renderValidasi(data) {
     let selesai = 0;
 
     anggota.forEach((a) => {
-      if (a["Status"] === "Sudah Coklit") selesai++;
+      const status = a["Status"] || "Belum Coklit";
+      if (status === "Sudah Coklit") selesai++;
     });
 
     const persen = total ? (selesai / total) * 100 : 0;
@@ -124,7 +125,7 @@ function renderValidasi(data) {
           <div>
             ${
               a["Status"] !== "Sudah Coklit"
-                ? `<button onclick="openCoklitByNIK('${a["NIK"]}')" class="btn-coklit">✔ Coklit</button>`
+                ? `<button onclick="openCoklitByNIK('${String(a["NIK"]).replace(/\.0$/, "")}')" class="btn-coklit">✔ Coklit</button>`
                 : ""
             }
           </div>
@@ -139,8 +140,21 @@ function renderValidasi(data) {
 }
 
 function openCoklitByNIK(nik) {
-  const data = dataValidasiGlobal.find((d) => d["NIK"] == nik);
-  if (!data) return;
+  const modal = document.getElementById("modalCoklit");
+
+  // 🔥 kalau belum ada → tunggu sebentar
+  if (!modal) {
+    console.warn("⏳ Modal belum siap, retry...");
+    setTimeout(() => openCoklitByNIK(nik), 300);
+    return;
+  }
+
+  const data = dataValidasiGlobal.find((d) => String(d["NIK"]) === String(nik));
+
+  if (!data) {
+    alert("Data tidak ditemukan!");
+    return;
+  }
 
   openCoklitDirect(data);
 }
@@ -219,7 +233,15 @@ function renderPaginationServer(totalData) {
 function openCoklitDirect(data) {
   currentNIK = data["NIK"];
 
+  const modal = document.getElementById("modalCoklit");
   const detail = document.getElementById("detailPemilih");
+
+  if (!modal || !detail) {
+    console.error("❌ Modal / detail tidak ditemukan!");
+    return;
+  }
+
+  modal.style.display = "flex";
 
   detail.innerHTML = `
 

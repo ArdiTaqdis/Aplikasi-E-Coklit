@@ -91,40 +91,73 @@ LOADER HTML (FIX)
       }
     </script>
 
-    <!-- =========================
-APP LOGIC
-========================= -->
     <script>
       /* =========================
 SESSION
 ========================= */
+      let modalReady = false;
       function checkSession() {
+        console.group("🔐 CHECK SESSION");
+
         const session = localStorage.getItem("userSession");
+        console.log("📦 Session:", session);
 
         if (session) {
+          console.log("✅ Session ditemukan, masuk APP");
+
           // 🔥 MATIKAN MODE LOGIN
           document.body.classList.remove("login-mode");
 
           loginWrapper.style.display = "none";
           appSection.style.display = "block";
 
+          // 🔥 STEP 1: LOAD LAYOUT
           loadHTML("layout", "layout.html", () => {
+            console.log("✅ layout.html loaded");
+
             renderUser();
 
-            loadHTML("modalLayout", "modal_layout.html", () => {
-              loadHTML("modalValidasi", "modal_validasi.html", () => {
-                console.log("🔥 SEMUA MODAL LOADED");
-                initWilayah();
-                initApp();
+            // 🔥 STEP 2: LOAD MODAL VALIDASI DULU (PENTING)
+            loadHTML("modalValidasi", "modal_validasi.html", () => {
+              console.log("🔥 modal_validasi SIAP");
+
+              // 🔥 STEP 3: LOAD MODAL LAIN
+              loadHTML("modalLayout", "modal_layout.html", () => {
+                console.log("🔥 modal_layout SIAP");
+
+                // 🔥 FINAL: semua siap
+                modalReady = true;
+                console.log("🚀 SEMUA MODAL READY:", modalReady);
+
+                // 🔥 INIT APP
+                try {
+                  initWilayah();
+                  console.log("✅ initWilayah OK");
+                } catch (e) {
+                  console.error("❌ initWilayah error:", e);
+                }
+
+                try {
+                  initApp();
+                  console.log("✅ initApp OK");
+                } catch (e) {
+                  console.error("❌ initApp error:", e);
+                }
+
+                console.groupEnd();
               });
             });
           });
         } else {
+          console.warn("❌ Tidak ada session, kembali ke login");
+
           // 🔥 AKTIFKAN MODE LOGIN
           document.body.classList.add("login-mode");
 
-          loginWrapper.style.display = "flex"; // 🔥 bukan block
+          loginWrapper.style.display = "flex";
           appSection.style.display = "none";
+
+          console.groupEnd();
         }
       }
 
