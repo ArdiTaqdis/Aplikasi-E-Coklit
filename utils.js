@@ -19,10 +19,9 @@ window.showLoading = () => {
 };
 
 window.hideLoading = () => {
-  loadingCount--;
+  loadingCount = Math.max(loadingCount - 1, 0);
 
-  if (loadingCount <= 0) {
-    loadingCount = 0;
+  if (loadingCount === 0) {
     const el = $("loadingOverlay");
     if (el) el.classList.remove("show");
   }
@@ -160,12 +159,12 @@ window.cariKeluarga = function (skipLoading = false) {
     .then((res) => {
       if (!skipLoading) hideLoading();
 
-      if (!res || !res.kepala) {
+      if (!res || !res.kk) {
         toastError("Data tidak ditemukan");
         return;
       }
 
-      renderKepalaKeluarga(res.kepala);
+      renderKepalaKeluarga(res.kk);
       renderAnggotaKeluarga(res.anggota || []);
     })
     .catch(() => {
@@ -363,52 +362,68 @@ function toggleAlamatAsal() {
     box.style.display = "none";
   }
 }
+let isLoadingTab = false;
+let validasiLoaded = false;
 
 function openTab(tabId, el) {
-  document
-    .querySelectorAll(".tab-content")
-    .forEach((tab) => tab.classList.remove("active"));
+  // 🔥 ambil fresh setiap klik (ANTI BUG)
+  const tabs = document.querySelectorAll(".tab-content");
+  const btns = document.querySelectorAll(".tab-btn");
 
-  document
-    .querySelectorAll(".tab-btn")
-    .forEach((btn) => btn.classList.remove("active"));
+  // 🔥 reset semua tab
+  tabs.forEach((tab) => tab.classList.remove("active"));
+  btns.forEach((btn) => btn.classList.remove("active"));
 
-  document.getElementById(tabId).classList.add("active");
+  // 🔥 aktifkan tab yang dipilih
+  const tab = document.getElementById(tabId);
+  if (tab) tab.classList.add("active");
+
   if (el) el.classList.add("active");
 
-  // 🔥 AUTO LOAD
+  // 🔥 simpan last tab
+  localStorage.setItem("lastTab", tabId);
+
+  // =========================
+  // 🔥 HANDLE TAB
+  // =========================
+
   if (tabId === "tabValidasi") {
-    console.log("tab validasi dibuka (belum load)");
-  }
-  if (tabId === "tabTervalidasi") {
+    if (!validasiLoaded) {
+      setTimeout(() => {
+        loadValidasi(1, "");
+        validasiLoaded = true;
+      }, 80);
+    }
+  } else if (tabId === "tabTervalidasi") {
     loadTervalidasi();
-  }
-
-  if (tabId === "tabPetugas") {
-    loadRWRT(); // 🔥 load dropdown
-    loadUsers(); // 🔥 load tabel user
-  }
-
-  if (tabId === "tabPengaturan") {
+  } else if (tabId === "tabPetugas") {
+    loadRWRT();
+    loadUsers();
+  } else if (tabId === "tabPengaturan") {
     setTimeout(() => {
-      initPengaturan(); // 🔥 pasang event
-      loadPengaturan(); // 🔥 isi form
-      loadTableConfig(); // 🔥 isi table
-    }, 200);
+      initPengaturan();
+      loadPengaturan();
+      loadTableConfig();
+    }, 100);
   }
 }
-
 /* =========================
 INIT
 ========================= */
 
+let tabs = [];
+let btns = [];
+
 document.addEventListener("DOMContentLoaded", () => {
+  // 🔥 ambil sekali saja
+  tabs = document.querySelectorAll(".tab-content");
+  btns = document.querySelectorAll(".tab-btn");
+
   ["kk_no", "kk_nik", "kk_nama"].forEach((id) => {
     const el = $(id);
-    if (el) el.addEventListener("input", syncKepalaToAnggota); // ✅ FIX
+    if (el) el.addEventListener("input", syncKepalaToAnggota);
   });
 
-  // 🔥 TAMBAHAN WAJIB
   initValidationWatcher();
   updateButtonState();
 

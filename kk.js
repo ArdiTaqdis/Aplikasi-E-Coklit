@@ -79,6 +79,8 @@ if (app && !localStorage.getItem("userSession")) {
         renderKK(res.kk);
         renderAnggota(res.anggota);
 
+        document.getElementById("cardAnggota").style.display = "block";
+
         document.getElementById("btnTambahAnggota").style.display =
           "inline-block";
         document.getElementById("btnHapusKK").style.display = "inline-block";

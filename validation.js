@@ -5,48 +5,46 @@ let currentKeyword = "";
 let currentPage = 1;
 const PAGE_SIZE = 5;
 let dataView = [];
+let cacheValidasi = {};
 
 function loadValidasi(page = 1, keyword = "") {
+  currentPage = page;
   currentKeyword = keyword;
+  const key = `${page}_${keyword}_${filterStatus}`;
+
+  if (cacheValidasi[key]) {
+    renderValidasi(cacheValidasi[key].data);
+    renderPaginationServer(cacheValidasi[key].total);
+    return;
+  }
+
   showLoading();
 
   const session = JSON.parse(localStorage.getItem("userSession") || "{}");
 
   apiGet("getValidasi", {
     username: session.username,
-    page: page,
+    page,
     limit: 5,
-    search: keyword, // ✅ sekarang aman
+    search: keyword,
     status: filterStatus,
   })
     .then((res) => {
-      console.log("HASIL SERVER:", res);
-
       hideLoading();
 
-      if (!res || !res.data) {
-        console.log("❌ DATA KOSONG");
-        return;
-      }
+      if (!res || !res.data) return;
 
-      console.log("JUMLAH DATA:", res.data.length);
-
+      cacheValidasi[key] = res;
       dataValidasiGlobal = res.data;
-      currentPage = res.page;
 
       renderValidasi(res.data);
       renderPaginationServer(res.total);
     })
-    .catch((err) => {
-      hideLoading();
-      console.error(err);
-    });
+    .catch(() => hideLoading());
 }
 
 function setFilter(status, btn) {
   filterStatus = status;
-
-  /* aktifkan tombol */
 
   document
     .querySelectorAll(".filter-btn")
@@ -54,20 +52,7 @@ function setFilter(status, btn) {
 
   btn.classList.add("active");
 
-  /* filter data */
-
-  let data = dataValidasiGlobal;
-
-  if (status === "BELUM") {
-    data = data.filter((d) => d["Status"] !== "Sudah Coklit");
-  }
-
-  if (status === "SUDAH") {
-    data = data.filter((d) => d["Status"] === "Sudah Coklit");
-  }
-
-  dataView = data;
-  renderValidasi(dataView);
+  loadValidasi(1, currentKeyword); // 🔥 reload dari server
 }
 
 function handleSearch(e) {
@@ -85,74 +70,72 @@ function renderValidasi(data) {
   const box = document.getElementById("validasiList");
   if (!box) return;
 
-  box.innerHTML = "";
-
+  let html = "";
   let group = {};
 
-  data.forEach((w) => {
+  for (let i = 0; i < data.length; i++) {
+    const w = data[i];
     const kk = w["NO KK"];
+
     if (!group[kk]) group[kk] = [];
     group[kk].push(w);
-  });
+  }
 
-  Object.keys(group).forEach((kk) => {
+  for (let kk in group) {
     const anggota = group[kk];
 
     const total = anggota.length;
-    const selesai = anggota.filter(
-      (a) => a["Status"] === "Sudah Coklit",
-    ).length;
+    let selesai = 0;
+
+    anggota.forEach((a) => {
+      if (a["Status"] === "Sudah Coklit") selesai++;
+    });
 
     const persen = total ? (selesai / total) * 100 : 0;
 
-    const card = document.createElement("div");
-    card.className = "kk-group";
+    html += `
+      <div class="kk-group">
+        <div class="kk-header">
+          <div>
+            <div class="kk-title">🏠 No KK : ${kk}</div>
+            <div class="kk-progress">Progress : ${selesai}/${total}</div>
 
-    card.innerHTML = `
-      <div class="kk-header">
-        <div>
-          <div class="kk-title">🏠 No KK : ${kk}</div>
-          <div class="kk-progress">Progress : ${selesai}/${total}</div>
-
-          <div class="progress-bar">
-            <div class="progress-fill" style="width:${persen}%"></div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:${persen}%"></div>
+            </div>
           </div>
         </div>
-      </div>
     `;
 
     anggota.forEach((a) => {
-      const row = document.createElement("div");
-      row.className = "anggota-item";
+      html += `
+        <div class="anggota-item">
+          <div class="anggota-info">
+            <div class="anggota-name">${a["Nama Lengkap"]}</div>
+            <div>NIK : ${a["NIK"]}</div>
 
-      row.innerHTML = `
-        <div class="anggota-info">
-          <div class="anggota-name">${a["Nama Lengkap"]}</div>
-          <div>NIK : ${a["NIK"]}</div>
+            ${
+              a["Status"] === "Sudah Coklit"
+                ? `<span class="badge-selesai">✔ Sudah</span>`
+                : `<span class="badge-belum">Belum</span>`
+            }
+          </div>
 
-          ${
-            a["Status"] === "Sudah Coklit"
-              ? `<span class="badge-selesai">✔ Sudah</span>`
-              : `<span class="badge-belum">Belum</span>`
-          }
-        </div>
-
-        <div>
-          ${
-            a["Status"] === "Sudah Coklit"
-              ? ""
-              : `<button onclick="openCoklitByNIK('${a["NIK"]}')" class="btn-coklit">
-                  ✔ Coklit
-                </button>`
-          }
+          <div>
+            ${
+              a["Status"] !== "Sudah Coklit"
+                ? `<button onclick="openCoklitByNIK('${a["NIK"]}')" class="btn-coklit">✔ Coklit</button>`
+                : ""
+            }
+          </div>
         </div>
       `;
-
-      card.appendChild(row);
     });
 
-    box.appendChild(card);
-  });
+    html += `</div>`;
+  }
+
+  box.innerHTML = html;
 }
 
 function openCoklitByNIK(nik) {
@@ -160,37 +143,6 @@ function openCoklitByNIK(nik) {
   if (!data) return;
 
   openCoklitDirect(data);
-}
-
-function renderPagination(totalData) {
-  const totalPage = Math.ceil(totalData / PAGE_SIZE);
-
-  const container = document.getElementById("paginationValidasi");
-  if (!container) return;
-
-  // 🔥 kalau cuma 1 halaman, tetap tampilkan info
-  if (totalPage <= 1) {
-    container.innerHTML = `<span style="font-size:12px;color:#666;">
-      Total ${totalData} data
-    </span>`;
-    return;
-  }
-
-  container.innerHTML = "";
-
-  for (let i = 1; i <= totalPage; i++) {
-    const btn = document.createElement("button");
-    btn.innerText = i;
-
-    if (i === currentPage) btn.classList.add("active");
-
-    btn.onclick = () => {
-      currentPage = i;
-      renderValidasi(dataView);
-    };
-
-    container.appendChild(btn);
-  }
 }
 
 function renderPaginationServer(totalData) {
@@ -502,11 +454,17 @@ window.simpanCoklit = function () {
 
         // 🔥 PRIORITAS UI
         closeModalCoklit();
+        cacheValidasi = {};
 
         // 🔥 PROSES BERAT DI BELAKANG
-        setTimeout(() => {
-          loadValidasi();
-        }, 200);
+        // update local data saja
+        const idx = dataValidasiGlobal.findIndex((d) => d["NIK"] == currentNIK);
+
+        if (idx !== -1) {
+          dataValidasiGlobal[idx]["Status"] = status;
+        }
+
+        renderValidasi(dataValidasiGlobal);
       })
       .catch((err) => {
         if (typeof hideLoading === "function") hideLoading();

@@ -22,44 +22,62 @@
 
   <!-- ================= TAB MENU ================= -->
   <div class="tab-menu">
-    <button class="tab-btn active" onclick="openTab('tabData', this)">
-      📋 Data Warga
-    </button>
-
-    <button class="tab-btn" onclick="openTab('tabValidasi', this)">
-      ✔️ Validasi
+    <button class="tab-btn active" onclick="openTab('tabValidasi', this)">
+      ✔ Validasi
     </button>
 
     <button class="tab-btn" onclick="openTab('tabTervalidasi', this)">
       ✅ Data Tervalidasi
     </button>
 
-    <button
-      id="menuPetugas"
-      class="tab-btn"
-      onclick="openTab('tabPetugas', this)"
-    >
+    <button class="tab-btn" onclick="openTab('tabPetugas', this)">
       👮 Petugas
     </button>
 
-    <button
-      id="menuPengaturan"
-      class="tab-btn"
-      onclick="openTab('tabPengaturan', this)"
-    >
-      ⚙️ Pengaturan
-    </button>
-
-    <button class="tab-btn" onclick="openTab('tabStatistik', this)">
-      📊 Statistik
+    <button class="tab-btn" onclick="openTab('tabPengaturan', this)">
+      ⚙ Pengaturan
     </button>
   </div>
 </div>
 
-<!-- ===================== TABULASI DATA WARGA ===================== -->
-<div class="tab-content active page-coklit" id="tabData">
+<!-- ================= TAB VALIDASI ================= -->
+
+<!-- ================= TAB VALIDASI (FINAL) ================= -->
+<div class="tab-content active page-validasi" id="tabValidasi">
   <div class="container">
     <div class="main-content">
+      <!-- ===================== VALIDASI (UTAMA) ===================== -->
+      <div class="card">
+        <h2>✔ Daftar Coklit Pemilih</h2>
+        <p class="lead">Kelompok per Kartu Keluarga (KK)</p>
+
+        <input
+          type="text"
+          id="searchValidasi"
+          placeholder="Cari Nama atau NIK..."
+          onkeydown="handleSearch(event)"
+        />
+
+        <button onclick="doSearch()">🔍 Cari</button>
+
+        <div class="filter-validasi">
+          <button class="filter-btn active" onclick="setFilter('SEMUA', this)">
+            Semua
+          </button>
+
+          <button class="filter-btn" onclick="setFilter('BELUM', this)">
+            Belum Coklit
+          </button>
+
+          <button class="filter-btn" onclick="setFilter('SUDAH', this)">
+            Sudah Coklit
+          </button>
+        </div>
+
+        <div id="validasiList"></div>
+        <div id="paginationValidasi" class="pagination"></div>
+      </div>
+
       <!-- ===================== KEPALA KELUARGA ===================== -->
       <div class="card">
         <div class="header-kk">
@@ -73,8 +91,8 @@
           </button>
         </div>
 
-        <!-- ===================== SEARCH KK ===================== -->
-        <div class="card card-search-kk">
+        <!-- SEARCH KK -->
+        <div class="search-kk">
           <h3 class="card-title">🔎 Pencarian Kartu Keluarga</h3>
 
           <div class="search-row">
@@ -118,22 +136,14 @@
           >
             🗑️ Hapus Kepala Keluarga
           </button>
-
-          <!-- <button
-            id="btnEditKK"
-            class="btn ghost"
-            style="display: none"
-            onclick="editKepalaKeluarga()"
-          >
-            ✏️ Edit Kepala Keluarga
-          </button> -->
         </div>
 
         <div id="kkMessage" class="muted" style="margin-top: 8px"></div>
       </div>
 
       <!-- ===================== DATA ANGGOTA ===================== -->
-      <div class="card">
+      <!-- 🔥 hidden biar tidak berat -->
+      <div class="card" id="cardAnggota" style="display: none">
         <header class="header">
           <div class="brand">👨‍👩‍👧</div>
 
@@ -179,44 +189,6 @@
           </table>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===================== TABULASI VALIDASI ===================== -->
-
-<!-- ================= TAB VALIDASI ================= -->
-
-<div class="tab-content page-validasi" id="tabValidasi">
-  <div class="container">
-    <div class="card">
-      <h2>✔ Daftar Coklit Pemilih</h2>
-      <p class="lead">Kelompok per Kartu Keluarga (KK)</p>
-
-      <input
-        type="text"
-        id="searchValidasi"
-        placeholder="Cari Nama atau NIK..."
-        onkeydown="handleSearch(event)"
-      />
-
-      <button onclick="doSearch()">🔍 Cari</button>
-
-      <div class="filter-validasi">
-        <button class="filter-btn active" onclick="setFilter('SEMUA', this)">
-          Semua
-        </button>
-
-        <button class="filter-btn" onclick="setFilter('BELUM', this)">
-          Belum Coklit
-        </button>
-
-        <button class="filter-btn" onclick="setFilter('SUDAH', this)">
-          Sudah Coklit
-        </button>
-      </div>
-      <div id="validasiList"></div>
-      <div id="paginationValidasi" class="pagination"></div>
     </div>
   </div>
 </div>

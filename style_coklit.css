@@ -21,6 +21,7 @@ HEADER
   background: linear-gradient(135deg, #7f1d1d, #b91c1c, #dc2626);
   color: white;
   padding: 14px;
+  min-height: 60px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -720,16 +721,15 @@ MODAL ANIMATION
   gap: 10px;
   padding: 10px 14px;
 
-  background: linear-gradient(135deg, #7f1d1d, #dc2626); /* 🔥 nyatu header */
+  background: linear-gradient(135deg, #7f1d1d, #dc2626);
 
   overflow-x: auto;
   white-space: nowrap;
 
   position: sticky;
-  top: 80px;
+  top: 60px; /* 🔥 SESUAI HEADER */
+
   z-index: 800;
-  scrollbar-width: none;
-  scroll-snap-type: x mandatory;
 }
 
 /* hide scrollbar chrome */
@@ -795,7 +795,14 @@ MODAL ANIMATION
 }
 
 /* ================= ANIMATION ================= */
+.tab-menu .tab-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
 
+  width: auto !important;
+  flex: 0 0 auto;
+}
 @keyframes tabFade {
   from {
     opacity: 0;
