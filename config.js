@@ -220,34 +220,35 @@ function hapusTPS(rw, rt) {
 }
 
 function loadRWRTOnly() {
-  apiGet("getWilayah").then((res) => {
-    const data = res || {};
+  const rwEl = document.getElementById("kk_rw");
+  const rtEl = document.getElementById("kk_rt");
 
-    // 🔥 ambil langsung lokasi kamu
-    const rwData =
-      data["Jawa Barat"]?.["Bekasi"]?.["Babelan"]?.["Kedung Jaya"] || {};
+  if (!rwEl || !rtEl) {
+    console.warn("RW/RT belum siap broo...");
+    return;
+  }
 
-    const rwEl = document.getElementById("kk_rw");
-    const rtEl = document.getElementById("kk_rt");
+  // reset
+  rwEl.innerHTML = '<option value="">Pilih RW</option>';
+  rtEl.innerHTML = '<option value="">Pilih RT</option>';
 
-    if (!rwEl || !rtEl) return;
-
-    // 🔥 isi RW
-    rwEl.innerHTML =
-      '<option value="">Pilih RW</option>' +
-      Object.keys(rwData)
-        .map((rw) => `<option value="${rw}">${rw}</option>`)
-        .join("");
-
-    // 🔥 onchange RW → isi RT
-    rwEl.onchange = () => {
-      const listRT = rwData[rwEl.value] || [];
-
-      rtEl.innerHTML =
-        '<option value="">Pilih RT</option>' +
-        listRT.map((rt) => `<option value="${rt}">${rt}</option>`).join("");
-
-      generateTPS(); // 🔥 langsung update TPS
-    };
+  // isi RW dari static
+  Object.keys(RW_RT).forEach((rw) => {
+    const label = String(rw).padStart(2, "0");
+    rwEl.innerHTML += `<option value="${rw}">RW ${label}</option>`;
   });
+
+  // onchange RW → isi RT
+  rwEl.onchange = () => {
+    const rw = Number(rwEl.value);
+    const listRT = RW_RT[rw] || [];
+
+    rtEl.innerHTML = '<option value="">Pilih RT</option>';
+
+    listRT.forEach((rt) => {
+      rtEl.innerHTML += `<option value="${rt}">RT ${rt}</option>`;
+    });
+
+    generateTPS(); // 🔥 auto update TPS
+  };
 }

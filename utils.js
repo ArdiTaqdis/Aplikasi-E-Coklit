@@ -413,7 +413,7 @@ function openTab(tabId, el) {
   } else if (tabId === "tabTervalidasi") {
     loadTervalidasi();
   } else if (tabId === "tabPetugas") {
-    loadRWRT();
+    initWilayahPetugas();
     loadUsers();
   } else if (tabId === "tabPengaturan") {
     setTimeout(() => {

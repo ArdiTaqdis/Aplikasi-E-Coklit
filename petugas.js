@@ -168,35 +168,34 @@ window.tambahPetugas = function () {
 
 let DATA_WILAYAH = {};
 
-function loadRWRT() {
-  apiGet("getWilayah").then((res) => {
-    DATA_WILAYAH = res || {};
+function initWilayahPetugas() {
+  const selRW = document.getElementById("sel_rw");
+  const selRT = document.getElementById("sel_rt");
 
-    const rwData =
-      DATA_WILAYAH["Jawa Barat"]?.["Bekasi"]?.["Babelan"]?.["Kedung Jaya"] ||
-      {};
+  if (!selRW || !selRT) {
+    console.warn("RW/RT belum siap di DOM");
+    return;
+  }
 
-    const selRW = document.getElementById("sel_rw");
-    const selRT = document.getElementById("sel_rt");
+  // reset
+  selRW.innerHTML = '<option value="">Pilih RW</option>';
+  selRT.innerHTML = '<option value="">Pilih RT</option>';
 
-    // 🔥 CEK DULU (INI FIX UTAMA)
-    if (!selRW || !selRT) {
-      console.warn("Element RW/RT belum ada di DOM");
-      return;
-    }
-
-    selRW.innerHTML =
-      '<option value="">Pilih RW</option>' +
-      Object.keys(rwData)
-        .map((rw) => `<option value="${rw}">${rw}</option>`)
-        .join("");
-
-    selRW.onchange = () => {
-      const listRT = rwData[selRW.value] || [];
-
-      selRT.innerHTML =
-        '<option value="">Pilih RT</option>' +
-        listRT.map((rt) => `<option value="${rt}">${rt}</option>`).join("");
-    };
+  // isi RW
+  Object.keys(RW_RT).forEach((rw) => {
+    const label = String(rw).padStart(2, "0");
+    selRW.innerHTML += `<option value="${rw}">RW ${label}</option>`;
   });
+
+  // onchange RW → isi RT
+  selRW.onchange = function () {
+    const rw = this.value;
+    const listRT = RW_RT[rw] || [];
+
+    selRT.innerHTML = '<option value="">Pilih RT</option>';
+
+    listRT.forEach((rt) => {
+      selRT.innerHTML += `<option value="${rt}">RT ${rt}</option>`;
+    });
+  };
 }
