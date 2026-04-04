@@ -236,25 +236,11 @@ RENDER USER
       function renderUser() {
         const session = JSON.parse(localStorage.getItem("userSession") || "{}");
 
-        if (session.username) {
-          const el = document.getElementById("userInfo");
+        if (!session.username) return;
 
-          if (el) {
-            el.innerText = `👤 ${session.username} (${session.role}) | RW ${session.rw} RT ${session.rt}`;
-          }
-
-          // 🔥 BATASI MENU UNTUK PETUGAS
-          setTimeout(() => {
-            if (session.role !== "ADMIN") {
-              // ❌ sembunyikan menu petugas
-              const menuPetugas = document.getElementById("menuPetugas");
-              if (menuPetugas) menuPetugas.style.display = "none";
-
-              // ❌ (opsional) sembunyikan pengaturan
-              const menuPengaturan = document.getElementById("menuPengaturan");
-              if (menuPengaturan) menuPengaturan.style.display = "none";
-            }
-          }, 300); // tunggu layout load dulu
+        const el = document.getElementById("userInfo");
+        if (el) {
+          el.innerText = `👤 ${session.username} (${session.role}) | RW ${session.rw} RT ${session.rt}`;
         }
       }
 
@@ -263,13 +249,20 @@ INIT APP (LOAD DATA)
 ========================= */
       function initApp() {
         console.log("🚀 App loaded");
+        const session = JSON.parse(localStorage.getItem("userSession") || "{}");
+
+        if (session.role === "PETUGAS") {
+          document.body.classList.add("role-petugas");
+        }
+
+        setTimeout(() => {
+          applyRoleUI();
+        }, 100);
 
         const lastTab = localStorage.getItem("lastTab") || "tabValidasi";
 
-        // cari tombol tab
         const btn = document.querySelector(`.tab-btn[onclick*="${lastTab}"]`);
 
-        // fallback kalau gak ketemu
         if (!btn) {
           openTab("tabValidasi", document.querySelector(".tab-btn"));
           return;
@@ -278,14 +271,40 @@ INIT APP (LOAD DATA)
         openTab(lastTab, btn);
       }
 
+      function applyRoleUI() {
+        const session = JSON.parse(localStorage.getItem("userSession") || "{}");
+        if (!session.role) return;
+
+        const role = session.role;
+
+        // ambil semua tombol tab
+        const tabs = document.querySelectorAll(".tab-btn");
+
+        tabs.forEach((btn) => {
+          const text = btn.innerText.toLowerCase();
+
+          if (role === "PETUGAS") {
+            // hanya izinkan validasi & statistik
+            if (!text.includes("validasi") && !text.includes("statistik")) {
+              btn.style.display = "none"; // 🔥 hide total
+            }
+          }
+        });
+      }
+
       /* =========================
 LOGOUT
 ========================= */
       function logout() {
-        if (!confirm("Yakin logout?")) return;
-
+        // 🔥 hapus semua session
         localStorage.removeItem("userSession");
-        checkSession();
+        localStorage.removeItem("lastTab");
+
+        // 🔥 reset class role di body
+        document.body.classList.remove("role-petugas");
+
+        // 🔥 redirect ke login / reload
+        location.reload();
       }
 
       /* =========================

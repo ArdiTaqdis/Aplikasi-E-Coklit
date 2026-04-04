@@ -374,6 +374,14 @@ let validasiLoaded = false;
 let statistikLoaded = false;
 
 function openTab(tabId, el) {
+  // 🔒 LOCK PETUGAS
+  const session = JSON.parse(localStorage.getItem("userSession") || "{}");
+  if (session.role === "PETUGAS") {
+    if (tabId !== "tabValidasi" && tabId !== "tabStatistik") {
+      return;
+    }
+  }
+
   // 🔥 ambil fresh setiap klik (ANTI BUG)
   const tabs = document.querySelectorAll(".tab-content");
   const btns = document.querySelectorAll(".tab-btn");

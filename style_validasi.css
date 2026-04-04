@@ -933,3 +933,10 @@ canvas {
   background: linear-gradient(90deg, #22c55e, #16a34a);
   transition: 0.5s;
 }
+
+/* 🔥 hide tab tertentu untuk petugas */
+.role-petugas .tab-btn:nth-child(2),
+.role-petugas .tab-btn:nth-child(3),
+.role-petugas .tab-btn:nth-child(4) {
+  display: none !important;
+}

@@ -4,8 +4,8 @@ function initPengaturan() {
   if (isInitPengaturan) return;
   isInitPengaturan = true;
 
-  const rwEl = document.getElementById("set_rw");
-  const rtEl = document.getElementById("set_rt");
+  const rwEl = document.getElementById("kk_rw");
+  const rtEl = document.getElementById("kk_rt");
 
   if (!rwEl || !rtEl) {
     console.warn("Form belum siap broo...");
@@ -21,11 +21,11 @@ function initPengaturan() {
 }
 
 function generateTPS() {
-  const rw = document.getElementById("set_rw").value;
-  const rt = document.getElementById("set_rt").value;
+  const rw = document.getElementById("kk_rw").value;
+  const rt = document.getElementById("kk_rt").value;
 
   if (!rw || !rt) {
-    document.getElementById("set_tps").value = "";
+    document.getElementById("kk_tps").value = "";
     return;
   }
 
@@ -51,8 +51,8 @@ function loadPengaturan() {
         const rwVal = String(parseInt(tps.substring(0, 2)));
         const rtVal = String(parseInt(tps.substring(2, 4)));
 
-        const rwEl = document.getElementById("set_rw");
-        const rtEl = document.getElementById("set_rt");
+        const rwEl = document.getElementById("kk_rw");
+        const rtEl = document.getElementById("kk_rt");
 
         // 🔥 tunggu RW sudah keisi (tanpa delay)
         const checkReady = setInterval(() => {
@@ -87,8 +87,8 @@ function loadPengaturan() {
 }
 
 function simpanPengaturan() {
-  const rw = document.getElementById("set_rw").value.trim();
-  const rt = document.getElementById("set_rt").value.trim();
+  const rw = document.getElementById("kk_rw").value.trim();
+  const rt = document.getElementById("kk_rt").value.trim();
   const lokasi = document.getElementById("set_lokasi").value.trim();
   const waktu = document
     .getElementById("set_waktu")
@@ -227,8 +227,8 @@ function loadRWRTOnly() {
     const rwData =
       data["Jawa Barat"]?.["Bekasi"]?.["Babelan"]?.["Kedung Jaya"] || {};
 
-    const rwEl = document.getElementById("set_rw");
-    const rtEl = document.getElementById("set_rt");
+    const rwEl = document.getElementById("kk_rw");
+    const rtEl = document.getElementById("kk_rt");
 
     if (!rwEl || !rtEl) return;
 
