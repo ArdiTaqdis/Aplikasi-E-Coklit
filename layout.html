@@ -37,153 +37,179 @@
     <button class="tab-btn" onclick="openTab('tabPengaturan', this)">
       ⚙ Pengaturan
     </button>
+
+    <!-- 🔥 TAMBAHAN -->
+    <button class="tab-btn" onclick="openTab('tabStatistik', this)">
+      📊 Statistik
+    </button>
   </div>
 </div>
-
-<!-- ================= TAB VALIDASI ================= -->
 
 <!-- ================= TAB VALIDASI (FINAL) ================= -->
 <div class="tab-content active page-validasi" id="tabValidasi">
   <div class="container">
     <div class="main-content">
       <!-- ===================== KEPALA KELUARGA ===================== -->
+      <!-- ===================== KEPALA KELUARGA ===================== -->
       <div class="card">
-        <div class="header-kk">
+        <!-- 🔥 HEADER (CLICKABLE) -->
+        <div class="header-kk toggle-header" onclick="toggleKK()">
           <div>
             <h2>👨‍👩‍👧 Kepala Keluarga</h2>
             <p>Kelola data kartu keluarga warga</p>
           </div>
 
-          <button class="btn-primary" onclick="openModal()">
-            + Tambah Kepala Keluarga
-          </button>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <button
+              class="btn-primary"
+              onclick="
+                event.stopPropagation();
+                openModal();
+              "
+            >
+              + Tambah Kepala Keluarga
+            </button>
+
+            <span id="iconToggleKK" class="icon-toggle">⏬</span>
+          </div>
         </div>
 
-        <!-- SEARCH KK -->
-        <div class="search-kk">
-          <h3 class="card-title">🔎 Pencarian Kartu Keluarga</h3>
+        <!-- 🔥 CONTENT YANG BISA COLLAPSE -->
+        <div id="kkContent">
+          <!-- SEARCH KK -->
+          <div class="search-kk">
+            <h3 class="card-title">🔎 Pencarian Kartu Keluarga</h3>
 
-          <div class="search-row">
-            <input
-              type="text"
-              id="searchKK"
-              placeholder="Masukkan Nomor KK"
-              class="input-kk"
-            />
+            <div class="search-row">
+              <input
+                type="text"
+                id="searchKK"
+                placeholder="Masukkan Nomor KK"
+                class="input-kk"
+              />
 
-            <button
-              id="btnCariKK"
-              type="button"
-              class="btn btn-cari"
-              onclick="cariKeluarga()"
-            >
-              Cari
-            </button>
+              <button
+                id="btnCariKK"
+                type="button"
+                class="btn btn-cari"
+                onclick="cariKeluarga()"
+              >
+                Cari
+              </button>
+            </div>
+
+            <div class="action-row">
+              <button
+                id="btnTambahAnggota"
+                class="btn ghost"
+                style="display: none"
+                onclick="tambahAnggota()"
+              >
+                👨‍👩‍👧 Tambah Anggota Keluarga
+              </button>
+            </div>
           </div>
 
-          <div class="action-row">
+          <div id="kkResult" class="kk-info" style="display: none"></div>
+
+          <div style="margin-top: 10px">
             <button
-              id="btnTambahAnggota"
+              id="btnHapusKK"
               class="btn ghost"
-              style="display: none"
-              onclick="tambahAnggota()"
+              style="display: none; color: #e11d48; border-color: #e11d48"
+              onclick="hapusKepalaKeluarga()"
             >
-              👨‍👩‍👧 Tambah Anggota Keluarga
+              🗑️ Hapus Kepala Keluarga
             </button>
           </div>
+
+          <div id="kkMessage" class="muted" style="margin-top: 8px"></div>
+
+          <div class="card" id="cardAnggota" style="display: none">
+            <header class="header">
+              <div class="brand">👨‍👩‍👧</div>
+
+              <div>
+                <h1>Data Anggota Keluarga</h1>
+                <p class="lead">
+                  Menampilkan data dari sheet <b>"Anggota Keluarga"</b>
+                </p>
+              </div>
+            </header>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>NO.KK</th>
+                    <th>NIK</th>
+                    <th>Nama Lengkap</th>
+                    <th>Hubungan dlm Klg</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Tempat Lahir</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Agama</th>
+                    <th>Pendidikan</th>
+                    <th>Jenis Pekerjaan</th>
+                    <th>Status Perkawinan</th>
+                    <th>Kewarganegaraan</th>
+                    <th>No Paspor</th>
+                    <th>No KITAP/KITAS</th>
+                    <th>Ayah Kandung</th>
+                    <th>Ibu Kandung</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+
+                <tbody id="tbody">
+                  <tr>
+                    <td colspan="17" style="text-align: center; color: #777">
+                      Silakan cari Nomor KK terlebih dahulu.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-
-        <div id="kkResult" class="kk-info" style="display: none"></div>
-
-        <div style="margin-top: 10px">
-          <button
-            id="btnHapusKK"
-            class="btn ghost"
-            style="display: none; color: #e11d48; border-color: #e11d48"
-            onclick="hapusKepalaKeluarga()"
-          >
-            🗑️ Hapus Kepala Keluarga
-          </button>
-        </div>
-
-        <div id="kkMessage" class="muted" style="margin-top: 8px"></div>
       </div>
 
       <!-- ===================== DATA ANGGOTA ===================== -->
       <!-- 🔥 hidden biar tidak berat -->
-      <div class="card" id="cardAnggota" style="display: none">
-        <header class="header">
-          <div class="brand">👨‍👩‍👧</div>
-
-          <div>
-            <h1>Data Anggota Keluarga</h1>
-            <p class="lead">
-              Menampilkan data dari sheet <b>"Anggota Keluarga"</b>
-            </p>
-          </div>
-        </header>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>NO.KK</th>
-                <th>NIK</th>
-                <th>Nama Lengkap</th>
-                <th>Hubungan dlm Klg</th>
-                <th>Jenis Kelamin</th>
-                <th>Tempat Lahir</th>
-                <th>Tanggal Lahir</th>
-                <th>Agama</th>
-                <th>Pendidikan</th>
-                <th>Jenis Pekerjaan</th>
-                <th>Status Perkawinan</th>
-                <th>Kewarganegaraan</th>
-                <th>No Paspor</th>
-                <th>No KITAP/KITAS</th>
-                <th>Ayah Kandung</th>
-                <th>Ibu Kandung</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-
-            <tbody id="tbody">
-              <tr>
-                <td colspan="17" style="text-align: center; color: #777">
-                  Silakan cari Nomor KK terlebih dahulu.
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
 
       <!-- ===================== VALIDASI (UTAMA) ===================== -->
       <div class="card">
         <h2>✔ Daftar Coklit Pemilih</h2>
         <p class="lead">Kelompok per Kartu Keluarga (KK)</p>
 
-        <input
-          type="text"
-          id="searchValidasi"
-          placeholder="Cari Nama atau NO.KK / NIK..."
-          onkeydown="handleSearch(event)"
-        />
+        <div
+          class="filter-validasi"
+          style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center"
+        >
+          <!-- 🔽 DROPDOWN FILTER -->
+          <select
+            id="filterStatus"
+            onchange="changeFilter()"
+            style="padding: 6px 10px"
+          >
+            <option value="SEMUA">Semua</option>
+            <option value="BELUM">Belum Coklit</option>
+            <option value="SUDAH">Sudah Coklit</option>
+          </select>
+          <!-- 🔍 INPUT -->
+          <input
+            type="text"
+            id="searchValidasi"
+            placeholder="Cari Nama / NIK / No KK..."
+            onkeydown="handleSearch(event)"
+            style="flex: 1; min-width: 200px"
+          />
 
-        <button onclick="doSearch()">🔍 Cari</button>
+          <!-- 🔍 BUTTON CARI -->
+          <button onclick="doSearch()" class="btn-cari">🔍 Cari</button>
 
-        <div class="filter-validasi">
-          <button class="filter-btn active" onclick="setFilter('SEMUA', this)">
-            Semua
-          </button>
-
-          <button class="filter-btn" onclick="setFilter('BELUM', this)">
-            Belum Coklit
-          </button>
-
-          <button class="filter-btn" onclick="setFilter('SUDAH', this)">
-            Sudah Coklit
-          </button>
+          <!-- 🔄 RESET -->
+          <button onclick="resetSearch()" class="btn ghost">Reset</button>
         </div>
 
         <div id="validasiList"></div>
@@ -394,7 +420,96 @@
 <div class="tab-content" id="tabStatistik">
   <div class="container">
     <div class="card">
-      <h2>📊 Statistik Warga (Fitur belum tersedia)</h2>
+      <!-- HEADER -->
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 10px;
+        "
+      >
+        <div>
+          <h2>📊 Statistik Warga</h2>
+          <p class="muted">Data hasil coklit terbaru</p>
+        </div>
+
+        <button onclick="updateStatistik(this)" class="btn-primary">
+          🔄 Update Data Statistik
+        </button>
+      </div>
+
+      <p class="muted" style="margin-top: 6px">
+        ⚠️ Klik tombol untuk memperbarui data terbaru
+      </p>
+
+      <p class="muted" style="font-size: 12px">
+        🕒 Last Update: <span id="lastUpdate">-</span>
+      </p>
+
+      <!-- 🔥 CHART SECTION -->
+      <div class="chart-grid">
+        <!-- DONUT -->
+        <div class="card">
+          <h3>📊 Status Coklit</h3>
+          <canvas id="chartDonut"></canvas>
+        </div>
+
+        <!-- BAR -->
+        <div class="card">
+          <h3>📈 Per RW</h3>
+          <canvas id="chartRW"></canvas>
+        </div>
+      </div>
+
+      <!-- PROGRESS -->
+      <div class="card" style="margin-top: 15px">
+        <h3>⚡ Progress Coklit</h3>
+
+        <div class="progress-bar">
+          <div id="progressFill"></div>
+        </div>
+
+        <p style="margin-top: 6px"><b id="progressText">0%</b> selesai</p>
+      </div>
+      <!-- GRID -->
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-label">👨‍👩‍👧 Jumlah KK</div>
+          <div class="stat-value" id="totalKK">0</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">👤 Jumlah Warga</div>
+          <div class="stat-value" id="totalWarga">0</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">📝 Jumlah Pemilih</div>
+          <div class="stat-value" id="totalPemilih">0</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">⚰️ Meninggal</div>
+          <div class="stat-value" id="meninggal">0</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">🚚 Pindah</div>
+          <div class="stat-value" id="pindah">0</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">⚠️ Data Ganda</div>
+          <div class="stat-value" id="ganda">0</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">👶 Dibawah Umur</div>
+          <div class="stat-value" id="dibawahUmur">0</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

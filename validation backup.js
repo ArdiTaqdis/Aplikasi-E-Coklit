@@ -3,52 +3,71 @@ let filterStatus = "SEMUA";
 let dataValidasiGlobal = [];
 let currentKeyword = "";
 let currentPage = 1;
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 5;
 let dataView = [];
-let cacheValidasi = {};
 
 function loadValidasi(page = 1, keyword = "") {
-  currentPage = page;
   currentKeyword = keyword;
-  const key = `${page}_${keyword}_${filterStatus}`;
-
-  if (cacheValidasi[key]) {
-    renderValidasi(cacheValidasi[key].data);
-    renderPaginationServer(cacheValidasi[key].total);
-    return;
-  }
-
   showLoading();
 
   const session = JSON.parse(localStorage.getItem("userSession") || "{}");
 
   apiGet("getValidasi", {
     username: session.username,
-    page,
-    limit: 50,
-    search: keyword,
+    page: page,
+    limit: 5,
+    search: keyword, // ✅ sekarang aman
     status: filterStatus,
   })
     .then((res) => {
+      console.log("HASIL SERVER:", res);
+
       hideLoading();
 
-      if (!res || !res.data) return;
+      if (!res || !res.data) {
+        console.log("❌ DATA KOSONG");
+        return;
+      }
 
-      cacheValidasi[key] = res;
+      console.log("JUMLAH DATA:", res.data.length);
+
       dataValidasiGlobal = res.data;
+      currentPage = res.page;
 
       renderValidasi(res.data);
       renderPaginationServer(res.total);
     })
-    .catch(() => hideLoading());
+    .catch((err) => {
+      hideLoading();
+      console.error(err);
+    });
 }
 
-function changeFilter() {
-  const val = document.getElementById("filterStatus").value;
+function setFilter(status, btn) {
+  filterStatus = status;
 
-  filterStatus = val;
+  /* aktifkan tombol */
 
-  loadValidasi(1, currentKeyword);
+  document
+    .querySelectorAll(".filter-btn")
+    .forEach((b) => b.classList.remove("active"));
+
+  btn.classList.add("active");
+
+  /* filter data */
+
+  let data = dataValidasiGlobal;
+
+  if (status === "BELUM") {
+    data = data.filter((d) => d["Status"] !== "Sudah Coklit");
+  }
+
+  if (status === "SUDAH") {
+    data = data.filter((d) => d["Status"] === "Sudah Coklit");
+  }
+
+  dataView = data;
+  renderValidasi(dataView);
 }
 
 function handleSearch(e) {
@@ -57,30 +76,8 @@ function handleSearch(e) {
   }
 }
 
-function resetSearch() {
-  // 🔥 kosongkan input
-  document.getElementById("searchValidasi").value = "";
-
-  // 🔥 reset keyword
-  currentKeyword = "";
-
-  // 🔥 reset dropdown
-  document.getElementById("filterStatus").value = "SEMUA";
-  filterStatus = "SEMUA";
-
-  // 🔥 kosongkan data
-  document.getElementById("validasiList").innerHTML = "";
-  document.getElementById("paginationValidasi").innerHTML = "";
-
-  // 🔥 fokus ke input
-  document.getElementById("searchValidasi").focus();
-}
-
 function doSearch() {
-  const keyword = document.getElementById("searchValidasi").value.trim();
-
-  currentKeyword = keyword;
-
+  const keyword = document.getElementById("searchValidasi").value;
   loadValidasi(1, keyword);
 }
 
@@ -88,93 +85,112 @@ function renderValidasi(data) {
   const box = document.getElementById("validasiList");
   if (!box) return;
 
-  let html = "";
+  box.innerHTML = "";
+
   let group = {};
 
-  for (let i = 0; i < data.length; i++) {
-    const w = data[i];
+  data.forEach((w) => {
     const kk = w["NO KK"];
-
     if (!group[kk]) group[kk] = [];
     group[kk].push(w);
-  }
+  });
 
-  for (let kk in group) {
+  Object.keys(group).forEach((kk) => {
     const anggota = group[kk];
 
     const total = anggota.length;
-    let selesai = 0;
-
-    anggota.forEach((a) => {
-      const status = a["Status"] || "Belum Coklit";
-      if (status === "Sudah Coklit") selesai++;
-    });
+    const selesai = anggota.filter(
+      (a) => a["Status"] === "Sudah Coklit",
+    ).length;
 
     const persen = total ? (selesai / total) * 100 : 0;
 
-    html += `
-      <div class="kk-group">
-        <div class="kk-header">
-          <div>
-            <div class="kk-title">🏠 No KK : ${kk}</div>
-            <div class="kk-progress">Progress : ${selesai}/${total}</div>
+    const card = document.createElement("div");
+    card.className = "kk-group";
 
-            <div class="progress-bar">
-              <div class="progress-fill" style="width:${persen}%"></div>
-            </div>
+    card.innerHTML = `
+      <div class="kk-header">
+        <div>
+          <div class="kk-title">🏠 No KK : ${kk}</div>
+          <div class="kk-progress">Progress : ${selesai}/${total}</div>
+
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${persen}%"></div>
           </div>
         </div>
+      </div>
     `;
 
     anggota.forEach((a) => {
-      html += `
-        <div class="anggota-item">
-          <div class="anggota-info">
-            <div class="anggota-name">${a["Nama Lengkap"]}</div>
-            <div>NIK : ${a["NIK"]}</div>
+      const row = document.createElement("div");
+      row.className = "anggota-item";
 
-            ${
-              a["Status"] === "Sudah Coklit"
-                ? `<span class="badge-selesai">✔ Sudah</span>`
-                : `<span class="badge-belum">Belum</span>`
-            }
-          </div>
+      row.innerHTML = `
+        <div class="anggota-info">
+          <div class="anggota-name">${a["Nama Lengkap"]}</div>
+          <div>NIK : ${a["NIK"]}</div>
 
-          <div>
-            ${
-              a["Status"] !== "Sudah Coklit"
-                ? `<button onclick="openCoklitByNIK('${String(a["NIK"]).replace(/\.0$/, "")}')" class="btn-coklit">✔ Coklit</button>`
-                : ""
-            }
-          </div>
+          ${
+            a["Status"] === "Sudah Coklit"
+              ? `<span class="badge-selesai">✔ Sudah</span>`
+              : `<span class="badge-belum">Belum</span>`
+          }
+        </div>
+
+        <div>
+          ${
+            a["Status"] === "Sudah Coklit"
+              ? ""
+              : `<button onclick="openCoklitByNIK('${a["NIK"]}')" class="btn-coklit">
+                  ✔ Coklit
+                </button>`
+          }
         </div>
       `;
+
+      card.appendChild(row);
     });
 
-    html += `</div>`;
-  }
-
-  box.innerHTML = html;
+    box.appendChild(card);
+  });
 }
 
 function openCoklitByNIK(nik) {
-  const modal = document.getElementById("modalCoklit");
-
-  // 🔥 kalau belum ada → tunggu sebentar
-  if (!modal) {
-    console.warn("⏳ Modal belum siap, retry...");
-    setTimeout(() => openCoklitByNIK(nik), 300);
-    return;
-  }
-
-  const data = dataValidasiGlobal.find((d) => String(d["NIK"]) === String(nik));
-
-  if (!data) {
-    alert("Data tidak ditemukan!");
-    return;
-  }
+  const data = dataValidasiGlobal.find((d) => d["NIK"] == nik);
+  if (!data) return;
 
   openCoklitDirect(data);
+}
+
+function renderPagination(totalData) {
+  const totalPage = Math.ceil(totalData / PAGE_SIZE);
+
+  const container = document.getElementById("paginationValidasi");
+  if (!container) return;
+
+  // 🔥 kalau cuma 1 halaman, tetap tampilkan info
+  if (totalPage <= 1) {
+    container.innerHTML = `<span style="font-size:12px;color:#666;">
+      Total ${totalData} data
+    </span>`;
+    return;
+  }
+
+  container.innerHTML = "";
+
+  for (let i = 1; i <= totalPage; i++) {
+    const btn = document.createElement("button");
+    btn.innerText = i;
+
+    if (i === currentPage) btn.classList.add("active");
+
+    btn.onclick = () => {
+      currentPage = i;
+      renderValidasi(dataView);
+    };
+
+    container.appendChild(btn);
+  }
 }
 
 function renderPaginationServer(totalData) {
@@ -251,15 +267,7 @@ function renderPaginationServer(totalData) {
 function openCoklitDirect(data) {
   currentNIK = data["NIK"];
 
-  const modal = document.getElementById("modalCoklit");
   const detail = document.getElementById("detailPemilih");
-
-  if (!modal || !detail) {
-    console.error("❌ Modal / detail tidak ditemukan!");
-    return;
-  }
-
-  modal.style.display = "flex";
 
   detail.innerHTML = `
 
@@ -494,17 +502,11 @@ window.simpanCoklit = function () {
 
         // 🔥 PRIORITAS UI
         closeModalCoklit();
-        cacheValidasi = {};
 
         // 🔥 PROSES BERAT DI BELAKANG
-        // update local data saja
-        const idx = dataValidasiGlobal.findIndex((d) => d["NIK"] == currentNIK);
-
-        if (idx !== -1) {
-          dataValidasiGlobal[idx]["Status"] = status;
-        }
-
-        renderValidasi(dataValidasiGlobal);
+        setTimeout(() => {
+          loadValidasi();
+        }, 200);
       })
       .catch((err) => {
         if (typeof hideLoading === "function") hideLoading();
@@ -549,33 +551,4 @@ function hitungUmur(tglLahir) {
   }
 
   return umur;
-}
-
-let isKKOpen = true;
-
-function toggleKK() {
-  const content = document.getElementById("kkContent");
-  const icon = document.getElementById("iconToggleKK");
-
-  isKKOpen = !isKKOpen;
-
-  if (isKKOpen) {
-    content.style.display = "block";
-    icon.classList.add("open");
-  } else {
-    content.style.display = "none";
-    icon.classList.remove("open");
-  }
-}
-
-function openKKSection() {
-  const content = document.getElementById("kkContent");
-  const icon = document.getElementById("iconToggleKK");
-
-  if (!content || !icon) return;
-
-  content.style.display = "block";
-  icon.classList.add("open");
-
-  isKKOpen = true;
 }

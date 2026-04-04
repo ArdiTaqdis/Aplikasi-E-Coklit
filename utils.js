@@ -164,22 +164,28 @@ window.cariKeluarga = function (skipLoading = false) {
         return;
       }
 
+      // 🔥 RENDER DATA
       renderKepalaKeluarga(res.kk);
       renderAnggotaKeluarga(res.anggota || []);
+
+      // 🔥 INI BARU BENAR
+      openKKSection();
+      document.getElementById("kkContent")?.scrollIntoView({
+        behavior: "smooth",
+      });
     })
     .catch(() => {
       if (!skipLoading) hideLoading();
       toastError("Gagal mengambil data");
     });
 };
-
 /* =========================
 SIMPAN KK (FIX FETCH)
 ========================= */
 
 window.simpanKepalaDanAnggota = function () {
   if (!isValidFormKK()) {
-    toastError("Lengkapi semua data dulu broo 😅");
+    toastError("Lengkapi semua data terlebih dahulu");
     return;
   }
 
@@ -278,6 +284,7 @@ window.simpanKepalaDanAnggota = function () {
       syncKepalaToAnggota();
 
       closeModal();
+      openKKSection();
       updateButtonState();
     })
     .catch((err) => {
@@ -364,6 +371,7 @@ function toggleAlamatAsal() {
 }
 let isLoadingTab = false;
 let validasiLoaded = false;
+let statistikLoaded = false;
 
 function openTab(tabId, el) {
   // 🔥 ambil fresh setiap klik (ANTI BUG)
@@ -405,6 +413,11 @@ function openTab(tabId, el) {
       loadPengaturan();
       loadTableConfig();
     }, 100);
+  } else if (tabId === "tabStatistik") {
+    if (!statistikLoaded) {
+      loadStatistik();
+      statistikLoaded = true;
+    }
   }
 }
 /* =========================
