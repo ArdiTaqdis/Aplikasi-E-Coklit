@@ -23,8 +23,8 @@ const RW_RT = {
 };
 
 function initWilayahStaticKK() {
-  const rwSelect = document.getElementById("kk_rw");
-  const rtSelect = document.getElementById("kk_rt");
+  const rwSelect = document.getElementById("kk_rw_modal");
+  const rtSelect = document.getElementById("kk_rt_modal");
 
   rwSelect.innerHTML = `<option value="">Pilih RW</option>`;
   rtSelect.innerHTML = `<option value="">Pilih RT</option>`;

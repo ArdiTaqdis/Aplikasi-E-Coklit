@@ -62,8 +62,10 @@
 
     show(modal);
 
-    // 🔥 FIX DI SINI
-    initWilayahStaticKK();
+    // 🔥 init wilayah (tanpa debug)
+    setTimeout(() => {
+      initWilayahStaticKK();
+    }, 100);
 
     hideLoading();
 

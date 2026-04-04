@@ -940,3 +940,13 @@ canvas {
 .role-petugas .tab-btn:nth-child(4) {
   display: none !important;
 }
+
+#kk_rw,
+#kk_rt {
+  height: 42px;
+  line-height: 42px;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  appearance: auto; /* 🔥 penting */
+}

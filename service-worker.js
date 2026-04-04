@@ -1,4 +1,4 @@
-const CACHE_NAME = "ecoklit-v2";
+const CACHE_NAME = "ecoklit-v3";
 
 const STATIC_ASSETS = [
   "./",

@@ -63,8 +63,8 @@
 
     <!-- JS MODULE -->
     <script src="state.js"></script>
-    <script src="wilayah.js"></script>
     <script src="modal.js"></script>
+    <script src="wilayah.js"></script>
     <script src="utils.js"></script>
     <script src="kk.js"></script>
     <script src="validation.js"></script>
@@ -130,14 +130,6 @@ SESSION
                 // 🔥 FINAL: semua siap
                 modalReady = true;
                 console.log("🚀 SEMUA MODAL READY:", modalReady);
-
-                // 🔥 INIT APP
-                try {
-                  initWilayah();
-                  console.log("✅ initWilayah OK");
-                } catch (e) {
-                  console.error("❌ initWilayah error:", e);
-                }
 
                 try {
                   initApp();
