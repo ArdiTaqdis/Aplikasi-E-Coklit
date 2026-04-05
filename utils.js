@@ -196,8 +196,8 @@ window.simpanKepalaDanAnggota = function () {
     NIK: val("kk_nik"),
     "Nama Kepala Klg": val("kk_nama"),
     Alamat: val("kk_alamat"),
-    RT: val("kk_rt"),
-    RW: val("kk_rw"),
+    RT: val("kk_rt_modal"),
+    RW: val("kk_rw_modal"),
     Desa_Kelurahan: val("sel_desa"),
     Kecamatan: val("sel_kecamatan"),
     Kabupaten_Kota: val("sel_kabupaten"),
@@ -309,8 +309,8 @@ function isValidFormKK() {
   if (!val("sel_kabupaten")) return false;
   if (!val("sel_kecamatan")) return false;
   if (!val("sel_desa")) return false;
-  if (!val("kk_rw")) return false;
-  if (!val("kk_rt")) return false;
+  if (!val("kk_rw_modal")) return false;
+  if (!val("kk_rt_modal")) return false;
 
   // anggota minimal
   if (!val("b_kelamin")) return false;
@@ -343,8 +343,8 @@ function initValidationWatcher() {
     "sel_kabupaten",
     "sel_kecamatan",
     "sel_desa",
-    "kk_rw",
-    "kk_rt",
+    "kk_rw_modal",
+    "kk_rt_modal",
     "b_kelamin",
   ];
 

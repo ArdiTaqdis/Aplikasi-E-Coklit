@@ -58,26 +58,55 @@
 
     showLoading();
 
-    resetForm(modal?.querySelector("form") || modal);
+    // 🔥 RESET SEKALI SAJA
+    resetModalKK();
 
     show(modal);
 
-    // 🔥 init wilayah (tanpa debug)
-    setTimeout(() => {
-      initWilayahStaticKK();
-    }, 100);
+    // 🔥 init ulang wilayah
+    initWilayahStaticKK();
 
     hideLoading();
 
-    const hub = document.getElementById("b_hubungan");
+    // default hubungan
+    const hub = $("b_hubungan");
     if (hub) hub.value = "Kepala Keluarga";
+
+    // 🔥 VALIDATION RESET
+    updateButtonState();
 
     initAutoSyncKK();
     initValidationWatcher();
-    updateButtonState();
   };
 
+  function resetModalKK() {
+    const modal = $("modalKK");
+    const form = modal?.querySelector("form");
+
+    if (form) form.reset();
+
+    // 🔥 reset RW/RT
+    const rw = $("kk_rw_modal");
+    const rt = $("kk_rt_modal");
+
+    if (rw) rw.value = "";
+    if (rt) rt.innerHTML = '<option value="">Pilih RT</option>';
+
+    // 🔥 reset kode pos (WAJIB)
+    const kodepos = $("kk_kodepos");
+    if (kodepos) kodepos.value = "17610";
+
+    // 🔥 reset TPS (kalau ada)
+    const tps = $("set_tps");
+    if (tps) tps.value = "";
+
+    // 🔥 sembunyikan alamat asal
+    const asalGroup = $("kk_asalktp_group");
+    if (asalGroup) asalGroup.style.display = "none";
+  }
+
   window.closeModal = function () {
+    resetModalKK();
     hide($("modalKK"));
   };
 
