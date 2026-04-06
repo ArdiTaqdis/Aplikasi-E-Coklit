@@ -248,6 +248,19 @@ function renderPaginationServer(totalData) {
   }
 }
 
+function generateOption(list, selectedValue) {
+  selectedValue = selectedValue || "";
+  return list
+    .map(
+      (item) => `
+    <option value="${item}" ${item === selectedValue ? "selected" : ""}>
+      ${item}
+    </option>
+  `,
+    )
+    .join("");
+}
+
 function openCoklitDirect(data) {
   currentNIK = data["NIK"];
 
@@ -262,104 +275,151 @@ function openCoklitDirect(data) {
   modal.style.display = "flex";
 
   detail.innerHTML = `
+  <div class="form-grid">
 
-<div class="form-grid">
+    <div>
+      <label>No KK</label>
+      <input id="f_nokk" value="${data["NO KK"] || ""}" readonly>
+    </div>
 
-<div>
-<label>No KK</label>
-<input id="f_nokk" value="${data["NO KK"]}" readonly>
-</div>
+    <div>
+      <label>NIK</label>
+      <input id="f_nik" value="${data["NIK"] || ""}" readonly>
+    </div>
 
-<div>
-<label>NIK</label>
-<input id="f_nik" value="${data["NIK"]}" readonly>
-</div>
+    <div>
+      <label>Nama Lengkap</label>
+      <input id="f_nama" value="${data["Nama Lengkap"] || ""}">
+    </div>
 
-<div>
-<label>Nama Lengkap</label>
-<input id="f_nama" value="${data["Nama Lengkap"]}">
-</div>
+    <div>
+      <label>Hubungan</label>
+      <select id="f_hubungan">
+        ${generateOption(
+          [
+            "Kepala keluarga",
+            "Istri",
+            "Suami",
+            "Anak",
+            "Menantu",
+            "Mertua",
+            "Pembantu",
+            "Famili Lain",
+            "Lainnya",
+          ],
+          data["Hubungan dlm Klg"],
+        )}
+      </select>
+    </div>
 
-<div>
-<label>Hubungan</label>
-<input id="f_hubungan" value="${data["Hubungan dlm Klg"]}">
-</div>
+    <div>
+      <label>Jenis Kelamin</label>
+      <select id="f_jk">
+        <option ${data["Jenis Kelamin"] == "Laki-laki" ? "selected" : ""}>Laki-laki</option>
+        <option ${data["Jenis Kelamin"] == "Perempuan" ? "selected" : ""}>Perempuan</option>
+      </select>
+    </div>
 
-<div>
-<label>Jenis Kelamin</label>
-<select id="f_jk">
-  <option ${data["Jenis Kelamin"] == "Laki-laki" ? "selected" : ""}>Laki-laki</option>
-  <option ${data["Jenis Kelamin"] == "Perempuan" ? "selected" : ""}>Perempuan</option>
-</select>
-</div>
+    <div>
+      <label>Tempat Lahir</label>
+      <input id="f_tempat" value="${data["Tempat Lahir"] || ""}">
+    </div>
 
-<div>
-<label>Tempat Lahir</label>
-<input id="f_tempat" value="${data["Tempat Lahir"]}">
-</div>
+    <div>
+      <label>Tanggal Lahir</label>
+      <input type="date" id="f_tgl" value="${formatDateInput(data["Tanggal Lahir"])}">
+    </div>
 
-<div>
-<label>Tanggal Lahir</label>
-<input type="date" id="f_tgl" value="${formatDateInput(data["Tanggal Lahir"])}">
-</div>
+    <div>
+      <label>Agama</label>
+      <select id="f_agama">
+        ${generateOption(
+          [
+            "Islam",
+            "Kristen Protestan",
+            "Katholik",
+            "Hindu",
+            "Budha",
+            "Konghucu",
+          ],
+          data["Agama"],
+        )}
+      </select>
+    </div>
 
-<div>
-<label>Agama</label>
-<input id="f_agama" value="${data["Agama"]}">
-</div>
+    <div>
+      <label>Pendidikan</label>
+      <select id="f_pendidikan">
+        ${generateOption(
+          [
+            "Tidak/Belum Sekolah",
+            "SD/Sederajat",
+            "SMP/Sederajat",
+            "SMA/Sederajat",
+            "Paket A",
+            "Paket B",
+            "Paket C",
+            "D1",
+            "D2",
+            "D3",
+            "S1",
+            "S2",
+            "S3",
+          ],
+          data["Pendidikan"],
+        )}
+      </select>
+    </div>
 
-<div>
-<label>Pendidikan</label>
-<input id="f_pendidikan" value="${data["Pendidikan"]}">
-</div>
+    <div>
+      <label>Pekerjaan</label>
+      <input id="f_pekerjaan" value="${data["Jenis Pekerjaan"] || ""}">
+    </div>
 
-<div>
-<label>Pekerjaan</label>
-<input id="f_pekerjaan" value="${data["Jenis Pekerjaan"]}">
-</div>
+    <div>
+      <label>Status Perkawinan</label>
+      <select id="f_kawin">
+        <option ${data["Status Perkawinan"] == "Belum Kawin" ? "selected" : ""}>Belum Kawin</option>
+        <option ${data["Status Perkawinan"] == "Kawin" ? "selected" : ""}>Kawin</option>
+        <option ${data["Status Perkawinan"] == "Cerai Hidup" ? "selected" : ""}>Cerai Hidup</option>
+        <option ${data["Status Perkawinan"] == "Cerai Mati" ? "selected" : ""}>Cerai Mati</option>
+      </select>
+    </div>
 
-<div>
-<label>Status Perkawinan</label>
-<select id="f_kawin">
-  <option ${data["Status Perkawinan"] == "Belum Kawin" ? "selected" : ""}>Belum Kawin</option>
-  <option ${data["Status Perkawinan"] == "Kawin" ? "selected" : ""}>Kawin</option>
-  <option ${data["Status Perkawinan"] == "Cerai Hidup" ? "selected" : ""}>Cerai Hidup</option>
-  <option ${data["Status Perkawinan"] == "Cerai Mati" ? "selected" : ""}>Cerai Mati</option>
-</select>
-</div>
+    <div>
+      <label>Kewarganegaraan</label>
+      <select id="f_warga">
+        ${generateOption(["WNI", "WNA"], data["Kewarganegaraan"])}
+      </select>
+    </div>
 
-<div>
-<label>Kewarganegaraan</label>
-<input id="f_warga" value="${data["Kewarganegaraan"]}">
-</div>
+    <div>
+      <label>No Paspor</label>
+      <input id="f_paspor" value="${data["No Paspor"] || ""}">
+    </div>
 
-<div>
-<label>No Paspor</label>
-<input id="f_paspor" value="${data["No Paspor"]}">
-</div>
+    <div>
+      <label>No KITAP/KITAS</label>
+      <input id="f_kitap" value="${data["No KITAP_KITAS"] || ""}">
+    </div>
 
-<div>
-<label>No KITAP/KITAS</label>
-<input id="f_kitap" value="${data["No KITAP_KITAS"]}">
-</div>
+    <div>
+      <label>Ayah Kandung</label>
+      <input id="f_ayah" value="${data["Ayah Kandung"] || ""}">
+    </div>
 
-<div>
-<label>Ayah Kandung</label>
-<input id="f_ayah" value="${data["Ayah Kandung"]}">
-</div>
+    <div>
+      <label>Ibu Kandung</label>
+      <input id="f_ibu" value="${data["Ibu Kandung"] || ""}">
+    </div>
 
-<div>
-<label>Ibu Kandung</label>
-<input id="f_ibu" value="${data["Ibu Kandung"]}">
-</div>
+    <div style="grid-column: span 2;">
+      <label>📞 No HP (Kepala Keluarga)</label>
+      <input id="f_nohp" placeholder="Contoh Format 628xxxxxxxxxx">
+    </div>
 
-<div style="grid-column: span 2;">
-<label>📞 No HP (Kepala Keluarga)</label>
-<input id="f_nohp" placeholder="Contoh Format 628xxxxxxxxxx">
-</div>
-
-</div>
-`;
+  </div>
+  `;
 
   // ✅ SET STATUS
   document.getElementById("statusCoklit").value = data["Status"] || "";
@@ -373,9 +433,6 @@ function openCoklitDirect(data) {
     document.getElementById("ketCoklit").value = "Dibawah Umur";
     toggleKeterangan();
   }
-
-  // 🔥 TAMPILKAN MODAL
-  document.getElementById("modalCoklit").style.display = "flex";
 
   // 🔥 LOAD NO HP
   apiGet("getNoHP", { noKK: data["NO KK"] })
